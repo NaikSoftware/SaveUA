@@ -1,0 +1,54 @@
+package ua.naiksoftware.waronline;
+
+import ua.naiksoftware.utils.bind.ParcelableBinder;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+
+import com.badlogic.gdx.maps.tiled.TiledMap;
+
+;
+
+public class AndroidLauncher extends Activity {
+
+	public static final String MAP = "map";
+
+	private int screen;
+	private static final int SCREEN_MENU = 1;
+	private static final int SCREEN_SETTINGS = 2;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		screen = SCREEN_MENU;
+		setContentView(R.layout.menu);
+	}
+
+	public void onClickPAP(View v) {
+		Intent i = new Intent(this, GdxLauncher.class);
+		startActivityForResult(i, 0);
+	}
+
+	public void onClickSettings(View v) {
+		screen = SCREEN_SETTINGS;
+		setContentView(R.layout.settings);
+	}
+
+	public void startMapEditor() {
+		Intent i = new Intent(this, GdxLauncher.class);
+		i.putExtra(GdxLauncher.MODE, GdxLauncher.EDIT);
+		i.putExtra(MAP, new ParcelableBinder<TiledMap>(null));
+		startActivityForResult(i, 0);
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (screen == SCREEN_SETTINGS) {
+			screen = SCREEN_MENU;
+			setContentView(R.layout.menu);
+		} else {
+			super.onBackPressed();
+		}
+	}
+}
