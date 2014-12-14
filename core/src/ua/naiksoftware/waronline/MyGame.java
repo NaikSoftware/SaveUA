@@ -55,8 +55,8 @@ public class MyGame extends Game {
 	 */
 	@Override
 	public void dispose() {
-		ResKeeper.disposeAll();
-		MapUtils.disposeTileAtlas();
 		super.dispose();
+		getScreen().dispose();
+		ResKeeper.disposeAll();
 	}
 }

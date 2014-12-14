@@ -25,8 +25,9 @@ public class PlatformDirectEditorRunner extends Game implements EditorReceiver {
 	}
 
 	@Override
-	public void onEditMapComplete(TiledMap map) {
+	public void onEditMapComplete(TiledMap map, EditorHandler editor) {
 		map.dispose();
+		editor.dispose();
 		MyGame.getInstance().showMenu();
 	}
 }

@@ -3,6 +3,8 @@ package ua.naiksoftware.waronline.game;
 import ua.naiksoftware.waronline.MapUtils;
 import ua.naiksoftware.waronline.MyGame;
 import ua.naiksoftware.waronline.ScrollMap;
+import ua.naiksoftware.waronline.res.ResKeeper;
+import ua.naiksoftware.waronline.res.id.AtlasId;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
@@ -23,7 +25,8 @@ public class GameHandler extends ScrollMap {
 	private int screenW, screenH, mapW, mapH;
 
 	public GameHandler(String pathToMap) {
-		super(tileMap = MapUtils.loadTileMap(pathToMap));
+		//super(tileMap = MapUtils.loadTileMap(pathToMap));
+		super(tileMap = MapUtils.genVoidMap(30, 40));
 		font = new BitmapFont();
 		batch = new SpriteBatch();
 		Label.LabelStyle style = new Label.LabelStyle();
@@ -71,6 +74,6 @@ public class GameHandler extends ScrollMap {
 	public void dispose() {
 		super.dispose();
 		tileMap.dispose();
-		MapUtils.disposeTileAtlas();
+		ResKeeper.dispose(AtlasId.MAP_TILES);
 	}
 }

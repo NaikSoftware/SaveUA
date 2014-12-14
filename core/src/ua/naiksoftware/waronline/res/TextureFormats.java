@@ -1,9 +1,12 @@
 package ua.naiksoftware.waronline.res;
 
+import ua.naiksoftware.waronline.res.id.TextureId;
+
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
+
 import static com.badlogic.gdx.graphics.Pixmap.Format.*;
-import static ua.naiksoftware.waronline.res.TextureId.*;
+import static ua.naiksoftware.waronline.res.id.TextureId.*;
 
 public class TextureFormats {
 

@@ -258,7 +258,7 @@ public abstract class ScrollMap implements Screen {
 			this.camera = camera;
 			mapW = map.getProperties().get(MapUtils.CELL_W_PROP, Integer.class);
 			mapH = map.getProperties().get(MapUtils.CELL_H_PROP, Integer.class);
-			cellSize = map.getProperties().get(MapUtils.CELL_SIZE,
+			cellSize = map.getProperties().get(MapUtils.CELL_SIZE_PROP,
 					Integer.class);
 
 			renderer = new OrthogonalTiledMapRenderer(map, 1f/* / cellSize */);

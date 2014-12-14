@@ -6,12 +6,16 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+
+import ua.naiksoftware.waronline.game.editor.EditorHandler;
+import ua.naiksoftware.waronline.game.editor.EditorReceiver;
 import ua.naiksoftware.waronline.res.ResKeeper;
-import ua.naiksoftware.waronline.res.TextureId;
+import ua.naiksoftware.waronline.res.id.TextureId;
 
 /**
  * Экран настроек
@@ -19,7 +23,7 @@ import ua.naiksoftware.waronline.res.TextureId;
  * @author Naik
  *
  */
-public class SettingsScreen implements Screen {
+public class SettingsScreen implements Screen, EditorReceiver {
 
 	private Stage stage;
 	private Texture logo;
@@ -85,6 +89,12 @@ public class SettingsScreen implements Screen {
 	@Override
 	public void dispose() {
 		stage.dispose();
-		ResKeeper.dispose(logo);
+		ResKeeper.dispose(TextureId.LOGO);
+	}
+
+	@Override
+	public void onEditMapComplete(TiledMap map, EditorHandler editor) {
+		map.dispose();
+		editor.dispose();
 	}
 }

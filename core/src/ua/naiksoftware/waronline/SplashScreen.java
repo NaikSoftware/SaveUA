@@ -12,11 +12,12 @@ import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
 import ua.naiksoftware.waronline.MyGame;
 import ua.naiksoftware.waronline.res.ResKeeper;
-import ua.naiksoftware.waronline.res.TextureId;
-
+import ua.naiksoftware.waronline.res.id.TextureId;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
+
 import com.badlogic.gdx.graphics.Color;
 
 /**
@@ -97,7 +98,7 @@ public class SplashScreen implements Screen {
 	@Override
 	public void dispose() {
 		stage.dispose();
-		ResKeeper.dispose(logo);
+		ResKeeper.dispose(TextureId.LOGO);
 		font.dispose();
 	}
 
