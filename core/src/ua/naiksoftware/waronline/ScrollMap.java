@@ -237,10 +237,8 @@ public abstract class ScrollMap implements Screen {
 		}
 
 		public boolean scrolled(int amount) {
-			if (amount != 0) { // Иногда прилетает 0, баг?
-				zoomChanged(zoom * (amount < 0 ? 0.99f : 1.01f));
-			}
-			return false;
+			zoomChanged(zoom * (amount < 0 ? 0.99f : 1.01f));
+			return true;
 		}
 	};
 

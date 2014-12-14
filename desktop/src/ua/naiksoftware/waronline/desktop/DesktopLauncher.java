@@ -1,13 +1,15 @@
 package ua.naiksoftware.waronline.desktop;
 
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 import ua.naiksoftware.waronline.MyGame;
 
-import java.awt.*;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 public class DesktopLauncher {
-	public static void main (String... arg) {
+	public static void main(String... arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		config.width = (int) screenSize.getWidth();

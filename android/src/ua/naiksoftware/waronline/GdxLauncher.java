@@ -2,6 +2,8 @@ package ua.naiksoftware.waronline;
 
 import ua.naiksoftware.utils.bind.ParcelableBinder;
 import ua.naiksoftware.waronline.game.editor.PlatformDirectEditorRunner;
+import ua.naiksoftware.waronline.res.Lng;
+import ua.naiksoftware.waronline.res.Words;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -13,6 +15,7 @@ public class GdxLauncher extends AndroidApplication {
 
 	public static final String MODE = "m";
 	
+	public static final short SPLASH = 0;
 	public static final short PLAY = 1;
 	public static final short EDIT = 2;
 	
@@ -26,6 +29,9 @@ public class GdxLauncher extends AndroidApplication {
 		
 		Intent i = getIntent();
 		switch (i.getShortExtra(MODE, (short) 1)) {
+		case SPLASH:
+			initialize(new SplashScreen.SplashRunner());
+			break;
 		case PLAY:
 			initialize(MyGame.getInstance(), config);
 			break;

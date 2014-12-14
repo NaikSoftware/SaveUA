@@ -66,4 +66,11 @@ public class GameHandler extends ScrollMap {
 			MyGame.getInstance().showMenu();
 		}
 	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		tileMap.dispose();
+		MapUtils.disposeTileAtlas();
+	}
 }

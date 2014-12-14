@@ -1,35 +1,30 @@
 package ua.naiksoftware.waronline;
 
-import ua.naiksoftware.waronline.game.GameHandler;
-import ua.naiksoftware.waronline.game.editor.EditorReceiver;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import ua.naiksoftware.waronline.game.GameHandler;
+import ua.naiksoftware.waronline.game.editor.EditorReceiver;
+import ua.naiksoftware.waronline.res.Lng;
+import ua.naiksoftware.waronline.res.ResKeeper;
+import ua.naiksoftware.waronline.res.TextureId;
+import ua.naiksoftware.waronline.res.Words;
 
 /**
  * Used instead of native menu on the same platforms, like desktop
@@ -38,9 +33,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
  */
 public class GdxMenu implements Screen, EditorReceiver {
 
-	private static final String tag = GdxMenu.class.getName();
 	private Stage stage;
-	private Texture bg, logo, btn, wndBg;
+	private Texture bg, logo, btn;
 	private Table root;
 	private TextButton btnPAP, btnOnline, btnSettings, btnAbout;
 	private OrthographicCamera cam;
@@ -55,8 +49,7 @@ public class GdxMenu implements Screen, EditorReceiver {
 		font.setScale(Math.min(Gdx.graphics.getWidth(),
 				Gdx.graphics.getHeight())
 				/ 10 / font.getLineHeight());
-		btn = new Texture(Gdx.files.internal("btn_off.png"),
-				Pixmap.Format.RGBA8888, false);
+		btn =  ResKeeper.get(TextureId.BTN);
 		NinePatchDrawable npBtnOff = new NinePatchDrawable(new NinePatch(btn,
 				25, 25, 15, 25)); // рамка r,l,t,b
 		NinePatchDrawable npBtnOn = new NinePatchDrawable(new NinePatch(
@@ -73,14 +66,9 @@ public class GdxMenu implements Screen, EditorReceiver {
 		btnAbout = new TextButton(lng.get(Words.ABOUT), tbStyle);
 		btnAbout.addListener(btnListener);
 
-		bg = new Texture(Gdx.files.internal("bg.jpg"), Pixmap.Format.RGB888,
-				false);
-		logo = new Texture(Gdx.files.internal("logo.png"),
-				Pixmap.Format.RGBA8888, false);
+		logo = ResKeeper.get(TextureId.LOGO);
 		logo.setFilter(Texture.TextureFilter.Linear,
 				Texture.TextureFilter.Linear);
-		wndBg = new Texture(Gdx.files.internal("window_bg.png"),
-				Pixmap.Format.RGB888, false);
 
 		Table tableMenu = new Table();
 		tableMenu.defaults().pad(Gdx.graphics.getHeight() / 90).expand().fill();
@@ -103,8 +91,6 @@ public class GdxMenu implements Screen, EditorReceiver {
 		stage.addActor(root);
 
 		dialogInfo = new Dialog("", skin);
-		dialogInfo.setBackground(new NinePatchDrawable(new NinePatch(wndBg, 32,
-				31, 32, 31)));
 		dialogInfo.button("BtnTest");
 		dialogInfo.text("Test text rgsrg rgsdrg srgsrtqwweffffffffffffffffffffffff\n SDRGRG АПЕРАЕ  іерівер вр\n\n  парчрывры ыр ывр ыв \nры  чвр ывр ");
 	}
@@ -127,6 +113,7 @@ public class GdxMenu implements Screen, EditorReceiver {
 
 	@Override
 	public void show() {
+		bg = ResKeeper.get(TextureId.BG);
 		InputMultiplexer im = new InputMultiplexer(stage);
 		im.addProcessor(new HardInputProcessor() {
 			@Override
@@ -143,7 +130,7 @@ public class GdxMenu implements Screen, EditorReceiver {
 
 	@Override
 	public void hide() {
-		// TODO: Implement this method
+		ResKeeper.dispose(TextureId.BG);
 	}
 
 	@Override
@@ -165,7 +152,7 @@ public class GdxMenu implements Screen, EditorReceiver {
 				MyGame.getInstance().setScreen(new GameHandler("atlas/tile_map.atlas"));
 			} else if (a == btnOnline) {
 			} else if (a == btnSettings) {
-				MyGame.getInstance().setScreen(new Settings());
+				MyGame.getInstance().setScreen(new SettingsScreen());
 			} else if (a == btnAbout) {
 				dialogInfo.show(stage);
 			}
@@ -175,10 +162,9 @@ public class GdxMenu implements Screen, EditorReceiver {
 	@Override
 	public void dispose() {
 		stage.dispose();
-		bg.dispose();
-		logo.dispose();
-		btn.dispose();
-		wndBg.dispose();
+		ResKeeper.dispose(bg);
+		ResKeeper.dispose(logo);
+		ResKeeper.dispose(btn);
 	}
 
 	@Override

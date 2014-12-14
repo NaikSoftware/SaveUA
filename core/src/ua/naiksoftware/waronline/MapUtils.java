@@ -15,9 +15,11 @@ public class MapUtils {
 	public static final String CELL_W_PROP = "cellw";
 	public static final String CELL_H_PROP = "cellh";
 	public static final String CELL_SIZE = "cellsize";
+	
+	private static TextureAtlas tileAtlas;
 
 	public static TiledMap loadTileMap(String path) {
-		TextureAtlas tileAtlas = new TextureAtlas(Gdx.files.internal(path));
+		tileAtlas = new TextureAtlas(Gdx.files.internal(path));
 		Array<TextureAtlas.AtlasRegion> tiles = tileAtlas.getRegions();
 		TiledMap map = new TiledMap();
 		MapLayers layers = map.getLayers();
@@ -46,5 +48,10 @@ public class MapUtils {
 			layers.add(layer);
 		}
 		return map;
+	}
+	
+	public static void disposeTileAtlas() {
+		if (tileAtlas == null) return;
+		tileAtlas.dispose();
 	}
 }

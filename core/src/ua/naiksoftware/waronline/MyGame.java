@@ -4,8 +4,9 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-
 import ua.naiksoftware.waronline.game.GameHandler;
+import ua.naiksoftware.waronline.res.Lng;
+import ua.naiksoftware.waronline.res.ResKeeper;
 
 public class MyGame extends Game {
 
@@ -25,14 +26,13 @@ public class MyGame extends Game {
 	public LaunchMode mode;
 	public Lng lng;
 	public Skin skin;
-	private GdxMenu gdxMenu;
 	private boolean desktop;
 
 	@Override
 	public void create() {
 		desktop = Gdx.app.getType() == ApplicationType.Desktop;
 		if (desktop) {
-			showMenu();
+			setScreen(new SplashScreen());
 		} else {
 			setScreen(new GameHandler("atlas/tile_map.atlas"));
 		}
@@ -45,7 +45,18 @@ public class MyGame extends Game {
 			}
 			setScreen(new GdxMenu());
 		} else {
-			Gdx.app.exit();
+			Gdx.app.exit(); // закрыть Gdx, и вернуться к нативному меню, если такое реализовано на данной платформе (напр. на Android)
 		}
+	}
+
+	/**
+	 * Если верить документации, то этот метод вызывается
+	 * всегда при закрытии программы, поэтому чистим здесь видеопамять и др.
+	 */
+	@Override
+	public void dispose() {
+		ResKeeper.disposeAll();
+		MapUtils.disposeTileAtlas();
+		super.dispose();
 	}
 }

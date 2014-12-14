@@ -15,14 +15,24 @@ public class AndroidLauncher extends Activity {
 	public static final String MAP = "map";
 
 	private int screen;
+	private static final int SCREEN_SPLASH = 0;
 	private static final int SCREEN_MENU = 1;
 	private static final int SCREEN_SETTINGS = 2;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		screen = SCREEN_MENU;
-		setContentView(R.layout.menu);
+		Intent i = new Intent(this, GdxLauncher.class);
+		i.putExtra(GdxLauncher.MODE, GdxLauncher.SPLASH);
+		startActivityForResult(i, 0);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (screen == SCREEN_SPLASH) {
+			screen = SCREEN_MENU;
+			setContentView(R.layout.menu);
+		}
 	}
 
 	public void onClickPAP(View v) {

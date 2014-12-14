@@ -1,4 +1,4 @@
-package ua.naiksoftware.waronline;
+package ua.naiksoftware.waronline.res;
 
 public interface Lng {
     

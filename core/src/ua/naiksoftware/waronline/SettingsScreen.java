@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import ua.naiksoftware.waronline.res.ResKeeper;
+import ua.naiksoftware.waronline.res.TextureId;
 
 /**
  * Экран настроек
@@ -17,13 +19,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
  * @author Naik
  *
  */
-public class Settings implements Screen {
+public class SettingsScreen implements Screen {
 
 	private Stage stage;
 	private Texture logo;
 
-	public Settings() {
-		logo = new Texture(Gdx.files.internal("logo.png"));
+	public SettingsScreen() {
+		logo = ResKeeper.get(TextureId.LOGO);
 		stage = new Stage();
 		Table root = new Table();
 		root.setFillParent(true);
@@ -83,6 +85,6 @@ public class Settings implements Screen {
 	@Override
 	public void dispose() {
 		stage.dispose();
-		logo.dispose();
+		ResKeeper.dispose(logo);
 	}
 }
