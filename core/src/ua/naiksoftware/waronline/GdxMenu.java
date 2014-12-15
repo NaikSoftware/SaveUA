@@ -5,6 +5,7 @@ import ua.naiksoftware.waronline.res.Lng;
 import ua.naiksoftware.waronline.res.ResKeeper;
 import ua.naiksoftware.waronline.res.Words;
 import ua.naiksoftware.waronline.res.id.TextureId;
+import ua.naiksoftware.waronline.screenmanager.DesktopManager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -39,6 +41,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
  */
 public class GdxMenu implements Screen {
 
+	private DesktopManager manager;
 	private Stage stage;
 	private Texture bg, logo, btn;
 	private Table root;
@@ -46,11 +49,12 @@ public class GdxMenu implements Screen {
 	private OrthographicCamera cam;
 	private Dialog dialogInfo;
 
-	public GdxMenu() {
-		MyGame game = MyGame.getInstance();
+	public GdxMenu(DesktopManager manager) {
+		this.manager = manager;
 		cam = new OrthographicCamera();
 		stage = new Stage(new ScreenViewport(cam));
-		Skin skin = game.skin;
+		Skin skin = manager.skin;
+		Lng lng = manager.lng;
 		BitmapFont font = skin.getFont("default-font");
 		font.setScale(Math.min(Gdx.graphics.getWidth(),
 				Gdx.graphics.getHeight())
@@ -62,7 +66,6 @@ public class GdxMenu implements Screen {
 				npBtnOff.getPatch(), Color.YELLOW));
 		TextButton.TextButtonStyle tbStyle = new TextButton.TextButtonStyle(
 				npBtnOff, npBtnOn, null, font);
-		Lng lng = game.lng;
 		btnPAP = new TextButton(lng.get(Words.PASS_AND_PLAY), tbStyle);
 		btnPAP.addListener(btnListener);
 		btnOnline = new TextButton(lng.get(Words.PLAY_ONLINE), tbStyle);
@@ -155,10 +158,12 @@ public class GdxMenu implements Screen {
 		public void changed(ChangeListener.ChangeEvent ev, Actor a) {
 			if (a == btnPAP) {
 				dispose();
-				MyGame.getInstance().setScreen(new GameHandler("atlas/tile_map.atlas"));
+				// TODO: show select map dialog in future
+				TiledMap map = MapUtils.loadTileMap(null, true);
+				manager.setScreen(new GameHandler(manager, map));
 			} else if (a == btnOnline) {
 			} else if (a == btnSettings) {
-				MyGame.getInstance().setScreen(new SettingsScreen());
+				manager.setScreen(new SettingsScreen(manager));
 			} else if (a == btnAbout) {
 				dialogInfo.show(stage);
 			}
@@ -167,7 +172,6 @@ public class GdxMenu implements Screen {
 
 	@Override
 	public void dispose() {
-		//stage.dispose();
 		ResKeeper.dispose(TextureId.BG);
 		ResKeeper.dispose(TextureId.LOGO);
 		ResKeeper.dispose(TextureId.BTN);

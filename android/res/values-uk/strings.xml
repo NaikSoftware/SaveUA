@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Save UA</string>
+	
     <string name="pass_and_play">Передай-i-Грай</string>
     <string name="play_online">Грати Онлайн</string>
     <string name="settings">Налаштування</string>
     <string name="about">Про гру</string>
+	
+	<string name="select_map">Виберіть мапу</string>
+	<string name="music">Музика</string>
+	<string name="sound_effects">Звукові ефекти</string>
+	
 </resources>

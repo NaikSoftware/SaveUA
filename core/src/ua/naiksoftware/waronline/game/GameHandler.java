@@ -1,12 +1,10 @@
 package ua.naiksoftware.waronline.game;
 
-import ua.naiksoftware.waronline.MapUtils;
-import ua.naiksoftware.waronline.MyGame;
 import ua.naiksoftware.waronline.ScrollMap;
 import ua.naiksoftware.waronline.res.ResKeeper;
 import ua.naiksoftware.waronline.res.id.AtlasId;
+import ua.naiksoftware.waronline.screenmanager.Manager;
 
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -14,25 +12,26 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
 
 public class GameHandler extends ScrollMap {
 
+	private Manager manager;
 	private static TiledMap tileMap;
 	private BitmapFont font;
 	private SpriteBatch batch;
 	private int screenW, screenH, mapW, mapH;
 
-	public GameHandler(String pathToMap) {
-		//super(tileMap = MapUtils.loadTileMap(pathToMap));
-		super(tileMap = MapUtils.genVoidMap(30, 40));
+	public GameHandler(Manager manager, TiledMap map) {
+		super(tileMap = map);
+		this.manager = manager;
+		
 		font = new BitmapFont();
 		batch = new SpriteBatch();
-		Label.LabelStyle style = new Label.LabelStyle();
-		style.font = font;
-		Label label = new Label("Test label", style);
-		addWidget(label, Side.TOP, Align.center);
+		/*
+		 * Label.LabelStyle style = new Label.LabelStyle(); style.font = font;
+		 * Label label = new Label("Test label", style); addWidget(label,
+		 * Side.TOP, Align.center);
+		 */
 	}
 
 	@Override
@@ -66,7 +65,7 @@ public class GameHandler extends ScrollMap {
 	protected void hardKeyUp(int key) {
 		if (key == Keys.BACKSPACE) {
 			dispose();
-			MyGame.getInstance().showMenu();
+			manager.showMenu();
 		}
 	}
 

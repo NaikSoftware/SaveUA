@@ -43,7 +43,16 @@ public class MapUtils {
 		return map;
 	}
 
-	public static TiledMap loadTileMap(String path) {
+	/**
+	 * Загружает тайловую карту.
+	 * 
+	 * @param path
+	 *            - путь к файлу карты
+	 * @param internal
+	 *            - предустановленная ли карта, или созданная пользователем
+	 * @return загруженную карту
+	 */
+	public static TiledMap loadTileMap(String path, boolean internal) {
 		TextureAtlas tileAtlas = ResKeeper.get(AtlasId.MAP_TILES);
 		Array<TextureAtlas.AtlasRegion> tiles = tileAtlas.getRegions();
 		TiledMap map = new TiledMap();
@@ -78,4 +87,8 @@ public class MapUtils {
 		}
 		return map;
 	}
+
+	public static void saveMap(TiledMap map) {
+	}
+
 }

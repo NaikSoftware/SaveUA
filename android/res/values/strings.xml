@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	
     <string name="app_name">Save UA</string>
     <string name="pass_and_play">Pass-and-Play</string>
     <string name="play_online">Play Online</string>
     <string name="settings">Settings</string>
     <string name="about">About</string>
+	
+	<string name="select_map">Select map</string>
+	<string name="music">Music</string>
+	<string name="sound_effects">Sound effects</string>
+		
 </resources>

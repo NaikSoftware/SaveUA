@@ -3,7 +3,7 @@ package ua.naiksoftware.waronline.desktop;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
-import ua.naiksoftware.waronline.MyGame;
+import ua.naiksoftware.waronline.screenmanager.DesktopManager;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
@@ -16,7 +16,7 @@ public class DesktopLauncher {
 		config.height = (int) screenSize.getHeight();
 		config.fullscreen = true;
 		config.samples = 2; // MSAA
-		MyGame.getInstance().lng = new Language();
-		new LwjglApplication(MyGame.getInstance(), config);
+		DesktopManager manager = new DesktopManager(new Language());
+		new LwjglApplication(manager, config);
 	}
 }

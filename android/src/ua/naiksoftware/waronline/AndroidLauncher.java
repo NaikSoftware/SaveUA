@@ -1,14 +1,9 @@
 package ua.naiksoftware.waronline;
 
-import ua.naiksoftware.utils.bind.ParcelableBinder;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-
-import com.badlogic.gdx.maps.tiled.TiledMap;
-
-;
 
 public class AndroidLauncher extends Activity {
 
@@ -44,11 +39,19 @@ public class AndroidLauncher extends Activity {
 		screen = SCREEN_SETTINGS;
 		setContentView(R.layout.settings);
 	}
-
-	public void startMapEditor() {
+	
+	public void onClickDeleteMap(View v) {
+		
+	}
+	
+	public void onClickEditMap(View v) {
+		
+	}
+	
+	public void onClickMakeMap(View v) {
 		Intent i = new Intent(this, GdxLauncher.class);
 		i.putExtra(GdxLauncher.MODE, GdxLauncher.EDIT);
-		i.putExtra(MAP, new ParcelableBinder<TiledMap>(null));
+		//TODO: put map params, e.g. width and height
 		startActivityForResult(i, 0);
 	}
 

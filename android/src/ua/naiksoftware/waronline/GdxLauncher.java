@@ -1,43 +1,49 @@
 package ua.naiksoftware.waronline;
 
-import ua.naiksoftware.utils.bind.ParcelableBinder;
-import ua.naiksoftware.waronline.game.editor.PlatformDirectEditorRunner;
 import ua.naiksoftware.waronline.res.Lng;
 import ua.naiksoftware.waronline.res.Words;
+import ua.naiksoftware.waronline.screenmanager.AndroidManager;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 
 public class GdxLauncher extends AndroidApplication {
 
 	public static final String MODE = "m";
-	
+
 	public static final short SPLASH = 0;
 	public static final short PLAY = 1;
 	public static final short EDIT = 2;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		config.numSamples = 2; // MSAA
-		MyGame.getInstance().lng = lng;
-		
+
 		Intent i = getIntent();
+
+		// TODO: get from intent
+		int wMap = 20;
+		int hMap = 30;
+		String pathToMap = null;
+		boolean internalMap = true;
+
 		switch (i.getShortExtra(MODE, (short) 1)) {
 		case SPLASH:
-			initialize(new SplashScreen.SplashRunner());
+			initialize(new AndroidManager(
+					AndroidManager.LaunchMode.SPLASH_SCREEEN, lng), config);
 			break;
 		case PLAY:
-			initialize(MyGame.getInstance(), config);
+			initialize(new AndroidManager(AndroidManager.LaunchMode.PLAY, lng,
+					pathToMap, internalMap), config);
 			break;
 		case EDIT:
-			TiledMap map = ((ParcelableBinder<TiledMap>) i.getParcelableExtra(AndroidLauncher.MAP)).getObj();
-			initialize(new PlatformDirectEditorRunner(map), config);
+			initialize(new AndroidManager(AndroidManager.LaunchMode.MAP_EDITOR,
+					lng, wMap, hMap), config);
 		}
 	}
 

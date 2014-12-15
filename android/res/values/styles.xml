@@ -7,6 +7,7 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowFullscreen">true</item>
+		<item name="android:textColor">#cccccc</item>
     </style>
     
     <style name="MenuButtonStyle" parent="@android:style/Widget.Button">

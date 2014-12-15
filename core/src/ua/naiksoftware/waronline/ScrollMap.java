@@ -58,8 +58,7 @@ public abstract class ScrollMap implements Screen {
 		scrollPane.setOverscroll(false, false);
 		root = new Table();
 		root.setFillParent(true);
-		root.add(scrollPane).fill().pad(padTop, padLeft, padBottom, padRight)
-				.expand();
+		root.add(scrollPane).fill().expand();
 		stage = new Stage(stageViewport);
 		stage.addActor(root);
 	}
@@ -119,6 +118,7 @@ public abstract class ScrollMap implements Screen {
 		root.invalidate();
 	}
 
+	@Override
 	public void resize(int newX, int newY) {
 		mapCamera.setToOrtho(false, newX, newY);
 		stageViewport.update(newX, newY, true);
@@ -254,7 +254,7 @@ public abstract class ScrollMap implements Screen {
 		private int mapW, mapH;
 		private int cellSize;
 
-		MapHolder(OrthographicCamera camera, TiledMap map) {
+		public MapHolder(OrthographicCamera camera, TiledMap map) {
 			this.camera = camera;
 			mapW = map.getProperties().get(MapUtils.CELL_W_PROP, Integer.class);
 			mapH = map.getProperties().get(MapUtils.CELL_H_PROP, Integer.class);

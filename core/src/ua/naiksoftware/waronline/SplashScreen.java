@@ -1,8 +1,17 @@
 package ua.naiksoftware.waronline;
 
-import com.badlogic.gdx.Game;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.alpha;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.parallel;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.scaleTo;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
+import ua.naiksoftware.waronline.res.ResKeeper;
+import ua.naiksoftware.waronline.res.id.TextureId;
+import ua.naiksoftware.waronline.screenmanager.Manager;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -13,13 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import ua.naiksoftware.waronline.MyGame;
-import ua.naiksoftware.waronline.res.ResKeeper;
-import ua.naiksoftware.waronline.res.id.TextureId;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
-
-import com.badlogic.gdx.graphics.Color;
-
 /**
  * Заставка запуска, на таких платформах, как Android реализовано нативное меню
  * и заставка
@@ -29,13 +31,15 @@ import com.badlogic.gdx.graphics.Color;
  */
 public class SplashScreen implements Screen {
 
+	private Manager manager;
 	private Stage stage;
 	private Texture logo;
 	private Image logoImage;
 	private BitmapFont font;
 	private Label label;
 
-	public SplashScreen() {
+	public SplashScreen(Manager manager) {
+		this.manager = manager;
 		font = new BitmapFont(Gdx.files.internal("fonts/normal.fnt"));
 		font.setScale(0.5f);
 		Label.LabelStyle style = new Label.LabelStyle();
@@ -69,7 +73,7 @@ public class SplashScreen implements Screen {
 				delay(0.5f), parallel(alpha(0, 0.7f)), new RunnableAction() {
 					@Override
 					public void run() {
-						MyGame.getInstance().showMenu();
+						manager.showMenu();
 					}
 				});
 		logoImage.addAction(act);
@@ -100,23 +104,5 @@ public class SplashScreen implements Screen {
 		stage.dispose();
 		ResKeeper.dispose(TextureId.LOGO);
 		font.dispose();
-	}
-
-	/** Класс для прямого запуска заставки из платформы, минуя MyGame класс. */
-	public static class SplashRunner extends Game {
-
-		private SplashScreen splashScreen;
-
-		@Override
-		public void create() {
-			splashScreen = new SplashScreen();
-			setScreen(splashScreen);
-		}
-
-		@Override
-		public void dispose() {
-			splashScreen.dispose();
-			super.dispose();
-		}
 	}
 }
