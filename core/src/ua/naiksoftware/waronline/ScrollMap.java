@@ -39,6 +39,7 @@ public abstract class ScrollMap implements Screen {
 	private int screenW, screenH, mapW, mapH;
 	private float zoom = 1f;
 	private float lastZoom;
+	private final float minZoom = 1f / 5f;
 	private int padTop, padLeft, padBottom, padRight;
 
 	public static enum Side {
@@ -142,8 +143,7 @@ public abstract class ScrollMap implements Screen {
 				- padTop - padBottom))
 				&& zoom > this.zoom) {
 			return;
-		} else if ((mapHolder.getWidth() > Short.MAX_VALUE || mapHolder
-				.getHeight() > Short.MAX_VALUE) && zoom < this.zoom) {
+		} else if (zoom < minZoom) {
 			return;
 		}
 		mapCamera.zoom = zoom;

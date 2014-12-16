@@ -1,0 +1,50 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+	android:gravity="center"
+	android:background="@drawable/window_bg">
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/input_map_name"
+		android:maxLength="15"
+		android:layout_marginBottom="7dp"/>
+	<EditText
+		android:id="@+id/dialog_new_mapEditText_name"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="15dp"/>
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/input_map_size"
+		android:layout_marginBottom="7dp"/>
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:padding="10dp"
+		android:layout_marginBottom="15dp">
+		<EditText
+			android:id="@+id/dialog_new_mapEditText_w"
+			android:layout_width="0px"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:inputType="numberDecimal"/>
+		<ua.naiksoftware.waronline.MyTextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="X"
+			android:padding="5dp"/>
+		<EditText
+			android:id="@+id/dialog_new_mapEditText_h"
+			android:layout_width="0px"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:inputType="numberDecimal"/>
+	</LinearLayout>
+
+</LinearLayout>

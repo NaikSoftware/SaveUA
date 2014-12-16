@@ -9,5 +9,10 @@
 	<string name="select_map">Выберите карту</string>
 	<string name="music">Музыка</string>
 	<string name="sound_effects">Звуковые эффекты</string>
+	<string name="input_map_name">Введите имя карты</string>
+	<string name="input_map_size">Введите размер карты</string>
+
+	<string name="calcel">Отмена</string>
+	<string name="ok">Принять</string>
 	
 </resources>

@@ -36,6 +36,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 /**
  * Used instead of native menu on the same platforms, like desktop
+ * 
  * @author Naik
  *
  */
@@ -59,7 +60,7 @@ public class GdxMenu implements Screen {
 		font.setScale(Math.min(Gdx.graphics.getWidth(),
 				Gdx.graphics.getHeight())
 				/ 10 / font.getLineHeight());
-		btn =  ResKeeper.get(TextureId.BTN);
+		btn = ResKeeper.get(TextureId.BTN);
 		NinePatchDrawable npBtnOff = new NinePatchDrawable(new NinePatch(btn,
 				25, 25, 15, 25)); // рамка r,l,t,b
 		NinePatchDrawable npBtnOn = new NinePatchDrawable(new NinePatch(
@@ -101,7 +102,8 @@ public class GdxMenu implements Screen {
 
 		dialogInfo = new Dialog("", skin);
 		dialogInfo.button("BtnTest");
-		dialogInfo.text("Test text rgsrg rgsdrg srgsrtqwweffffffffffffffffffffffff\n SDRGRG АПЕРАЕ  іерівер вр\n\n  парчрывры ыр ывр ыв \nры  чвр ывр ");
+		dialogInfo
+				.text("Test text rgsrg rgsdrg srgsrtqwweffffffffffffffffffffffff\n SDRGRG АПЕРАЕ  іерівер вр\n\n  парчрывры ыр ывр ыв \nры  чвр ывр ");
 	}
 
 	@Override

@@ -38,7 +38,6 @@
 				<TextView
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:textSize="20sp"
 					android:text="@string/select_map"
 					android:layout_marginBottom="7dp"/>
 				<Spinner
@@ -96,7 +95,6 @@
 					<TextView
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:textSize="20sp"
 						android:text="@string/music"
 						android:layout_alignParentLeft="true"/>
 					<CheckBox
@@ -114,7 +112,6 @@
 					<TextView
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:textSize="20sp"
 						android:text="@string/sound_effects"
 						android:layout_alignParentLeft="true"/>
 					<CheckBox

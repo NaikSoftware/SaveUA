@@ -9,5 +9,10 @@
 	<string name="select_map">Виберіть мапу</string>
 	<string name="music">Музика</string>
 	<string name="sound_effects">Звукові ефекти</string>
+	<string name="input_map_name">Введіть ім\'я карти</string>
+	<string name="input_map_size">Введіть розмір карти</string>
+
+	<string name="calcel">Скасувати</string>
+	<string name="ok">Прийняти</string>
 	
 </resources>

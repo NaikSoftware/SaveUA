@@ -10,5 +10,10 @@
 	<string name="select_map">Select map</string>
 	<string name="music">Music</string>
 	<string name="sound_effects">Sound effects</string>
+	<string name="input_map_name">Input map name</string>
+	<string name="input_map_size">Input map size</string>
+	
+	<string name="calcel">Cancel</string>
+	<string name="ok">Apply</string>
 		
 </resources>

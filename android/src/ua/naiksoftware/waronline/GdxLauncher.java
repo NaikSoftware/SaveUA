@@ -17,6 +17,11 @@ public class GdxLauncher extends AndroidApplication {
 	public static final short PLAY = 1;
 	public static final short EDIT = 2;
 
+	public static final String MAP_NAME = "mapname";
+	public static final String MAP_W = "mapw";
+	public static final String MAP_H = "maph";
+	public static final String MAP_PATH = "mappath";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -26,10 +31,10 @@ public class GdxLauncher extends AndroidApplication {
 
 		Intent i = getIntent();
 
-		// TODO: get from intent
-		int wMap = 20;
-		int hMap = 30;
-		String pathToMap = null;
+		int wMap = i.getIntExtra(MAP_W, 10);
+		int hMap = i.getIntExtra(MAP_H, 10);
+		String mapName = i.getStringExtra(MAP_NAME);
+		String pathToMap = i.getStringExtra(MAP_PATH);
 		boolean internalMap = true;
 
 		switch (i.getShortExtra(MODE, (short) 1)) {
@@ -43,7 +48,7 @@ public class GdxLauncher extends AndroidApplication {
 			break;
 		case EDIT:
 			initialize(new AndroidManager(AndroidManager.LaunchMode.MAP_EDITOR,
-					lng, wMap, hMap), config);
+					lng, wMap, hMap, mapName), config);
 		}
 	}
 

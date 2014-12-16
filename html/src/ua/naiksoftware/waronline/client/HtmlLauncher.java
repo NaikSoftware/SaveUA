@@ -1,9 +1,10 @@
 package ua.naiksoftware.waronline.client;
 
+import ua.naiksoftware.waronline.screenmanager.DesktopManager;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import ua.naiksoftware.waronline.MyGame;
 
 public class HtmlLauncher extends GwtApplication {
 
@@ -14,6 +15,6 @@ public class HtmlLauncher extends GwtApplication {
 
         @Override
         public ApplicationListener getApplicationListener () {
-                return MyGame.getInstance();
+                return new DesktopManager(new Language());
         }
 }

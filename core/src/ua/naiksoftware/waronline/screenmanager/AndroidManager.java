@@ -16,7 +16,7 @@ public class AndroidManager extends Manager {
 	}
 
 	private LaunchMode mode;
-	private String pathToMap;
+	private String pathToMap, mapName;
 	private boolean internalMap;
 	private int wMap, hMap;
 
@@ -24,10 +24,12 @@ public class AndroidManager extends Manager {
 		this(mode, lng, null, false);
 	}
 
-	public AndroidManager(LaunchMode mode, Lng lng, int wMap, int hMap) {
+	public AndroidManager(LaunchMode mode, Lng lng, int wMap, int hMap,
+			String mapName) {
 		this(mode, lng, null, false);
 		this.wMap = wMap;
 		this.hMap = hMap;
+		this.mapName = mapName;
 	}
 
 	public AndroidManager(LaunchMode mode, Lng lng, String pathToMap,
@@ -57,7 +59,7 @@ public class AndroidManager extends Manager {
 			break;
 		case MAP_EDITOR:
 			if (pathToMap == null) {
-				map = MapUtils.genVoidMap(wMap, hMap);
+				map = MapUtils.genVoidMap(wMap, hMap, mapName);
 			} else {
 				map = MapUtils.loadTileMap(pathToMap, internalMap);
 			}
