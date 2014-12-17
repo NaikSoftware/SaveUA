@@ -7,7 +7,6 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -30,8 +29,9 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
  */
 public abstract class ScrollMap implements Screen {
 
-	private MapHolder mapHolder;
+	private TiledMapRenderer mapRenderer;
 	private OrthographicCamera mapCamera;
+	private Actor mapHolder;
 	private ScreenViewport stageViewport;
 	private Stage stage;
 	private ScrollPane scrollPane;
@@ -41,6 +41,9 @@ public abstract class ScrollMap implements Screen {
 	private float lastZoom;
 	private final float minZoom = 1f / 5f;
 	private int padTop, padLeft, padBottom, padRight;
+	private Actor actTop, actLeft, actBottom, actRight;
+	private int alTop, alLeft, alBottom, alRight;
+	private int cellSize;
 
 	public static enum Side {
 		TOP, LEFT, BOTTOM, RIGHT
@@ -51,10 +54,18 @@ public abstract class ScrollMap implements Screen {
 
 	public ScrollMap(TiledMap tileMap) {
 		mapCamera = new OrthographicCamera();
+		mapRenderer = new OrthogonalTiledMapRenderer(tileMap, 1f/* / cellSize */);
 		stageViewport = new ScreenViewport(new OrthographicCamera());
-		mapHolder = new MapHolder(mapCamera, tileMap);
-		mapW = (int) mapHolder.getWidth();
-		mapH = (int) mapHolder.getHeight();
+		cellSize = tileMap.getProperties().get(MapUtils.CELL_SIZE_PROP,
+				Integer.class);
+		mapW = cellSize
+				* tileMap.getProperties().get(MapUtils.CELL_W_PROP,
+						Integer.class);
+		mapH = cellSize
+				* tileMap.getProperties().get(MapUtils.CELL_H_PROP,
+						Integer.class);
+		mapHolder = new Actor();
+		mapHolder.setSize(mapW, mapH);
 		scrollPane = new ScrollPane(mapHolder);
 		scrollPane.setOverscroll(false, false);
 		root = new Table();
@@ -74,6 +85,10 @@ public abstract class ScrollMap implements Screen {
 				+ screenW / 2 * (zoom - 1) - padLeft * zoom;
 		mapCamera.position.y = (-scrollPane.getScrollY() * zoom + mapH - screenH / 2)
 				- screenH / 2 * (zoom - 1) + padTop * zoom;
+
+		mapCamera.update();
+		mapRenderer.setView(mapCamera);
+		mapRenderer.render();
 
 		stage.act(deltaTime);
 		stage.draw();
@@ -95,27 +110,48 @@ public abstract class ScrollMap implements Screen {
 		scrollPane.setScrollY(scrollPane.getScrollY() - scrY);
 	}
 
-	public void addWidget(Actor a, Side side, int align) {
+	public void setWidget(Actor a, Side side, int align) {
 		root.clear();
-		if (side == Side.TOP) {
+		switch (side) {
+		case TOP:
 			padTop = (int) a.getHeight();
-			root.add(a).align(align);
-			root.row();
-			root.add(scrollPane).fill().expand();
-		} else if (side == Side.LEFT) {
+			actTop = a;
+			alTop = align;
+			break;
+		case LEFT:
 			padLeft = (int) a.getWidth();
-			root.add(a).align(align);
-			root.add(scrollPane).fill().expand();
-		} else if (side == Side.BOTTOM) {
+			actLeft = a;
+			alLeft = align;
+			break;
+		case BOTTOM:
 			padBottom = (int) a.getHeight();
-			root.add(scrollPane).fill().expand();
-			root.row();
-			root.add(a).align(align);
-		} else {
+			actBottom = a;
+			alBottom = align;
+			break;
+		default:
 			padRight = (int) a.getWidth();
-			root.add(scrollPane).fill().expand();
-			root.add(a).align(align);
+			actRight = a;
+			alRight = align;
 		}
+
+		if (actTop != null) {
+			root.add(actTop).align(alTop);
+			root.row();
+		}
+		if (actLeft != null) {
+			root.add(actLeft).align(alLeft);
+		}
+
+		root.add(scrollPane).fill().expand();
+
+		if (actRight != null) {
+			root.add(actRight).align(alRight);
+		}
+		if (actBottom != null) {
+			root.row();
+			root.add(actBottom).align(alBottom);
+		}
+
 		root.invalidate();
 	}
 
@@ -245,31 +281,5 @@ public abstract class ScrollMap implements Screen {
 	@Override
 	public void dispose() {
 		stage.dispose();
-	}
-
-	private static class MapHolder extends Actor {
-
-		private TiledMapRenderer renderer;
-		private OrthographicCamera camera;
-		private int mapW, mapH;
-		private int cellSize;
-
-		public MapHolder(OrthographicCamera camera, TiledMap map) {
-			this.camera = camera;
-			mapW = map.getProperties().get(MapUtils.CELL_W_PROP, Integer.class);
-			mapH = map.getProperties().get(MapUtils.CELL_H_PROP, Integer.class);
-			cellSize = map.getProperties().get(MapUtils.CELL_SIZE_PROP,
-					Integer.class);
-
-			renderer = new OrthogonalTiledMapRenderer(map, 1f/* / cellSize */);
-			setSize(mapW * cellSize, mapH * cellSize);
-		}
-
-		@Override
-		public void draw(Batch batch, float alphaParent) {
-			camera.update();
-			renderer.setView(camera);
-			renderer.render();
-		}
 	}
 }

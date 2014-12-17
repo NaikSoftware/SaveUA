@@ -6,8 +6,6 @@ import java.util.Comparator;
 import ua.naiksoftware.waronline.game.Gamer;
 import ua.naiksoftware.waronline.game.Node;
 
-import com.badlogic.gdx.graphics.g2d.freetype.FreeType.Bitmap;
-
 public class Unit {
 
     public static final int UNIT_COUNT = 8;
@@ -30,7 +28,7 @@ public class Unit {
     private static final int ANIM_DELAY = 200;
     private long startMove;
     private long startAnim;
-    private Bitmap[] anim;
+//    private Bitmap[] anim;
     private int passability, usedPassability;
     private ArrayList<Node> path; // move path
     private int life;
@@ -418,9 +416,9 @@ public class Unit {
     }
 
     // Для отрисовки юнита как картинки (в меню например)
-    public Bitmap getBitmap() {
-        return anim[0];
-    }
+ //   public Bitmap getBitmap() {
+ //       return anim[0];
+ //   }
 
     public int getColor() {
         return lifeColor;

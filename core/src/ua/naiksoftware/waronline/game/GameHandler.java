@@ -1,17 +1,18 @@
 package ua.naiksoftware.waronline.game;
 
-import ua.naiksoftware.waronline.ScrollMap;
-import ua.naiksoftware.waronline.res.ResKeeper;
-import ua.naiksoftware.waronline.res.id.AtlasId;
-import ua.naiksoftware.waronline.screenmanager.Manager;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import ua.naiksoftware.waronline.ScrollMap;
+import ua.naiksoftware.waronline.res.ResKeeper;
+import ua.naiksoftware.waronline.res.id.AtlasId;
+import ua.naiksoftware.waronline.screenmanager.Manager;
 
 public class GameHandler extends ScrollMap {
 
@@ -27,11 +28,12 @@ public class GameHandler extends ScrollMap {
 		
 		font = new BitmapFont();
 		batch = new SpriteBatch();
-		/*
-		 * Label.LabelStyle style = new Label.LabelStyle(); style.font = font;
-		 * Label label = new Label("Test label", style); addWidget(label,
-		 * Side.TOP, Align.center);
-		 */
+		
+		 //Label.LabelStyle style = new Label.LabelStyle();
+		 //style.font = font;
+		 //Label label = new Label("Test label", style);
+		 //addWidget(label, Side.TOP, Align.center);
+		 
 	}
 
 	@Override

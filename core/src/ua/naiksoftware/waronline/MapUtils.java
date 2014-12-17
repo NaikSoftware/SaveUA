@@ -97,7 +97,7 @@ public class MapUtils {
 	public static void saveMap(TiledMap map) {
 	}
 
-	private static Cell getCell(TileCode code) {
+	public static Cell getCell(TileCode code) {
 		Cell cell = cells.get(code);
 		if (cell == null) {
 
