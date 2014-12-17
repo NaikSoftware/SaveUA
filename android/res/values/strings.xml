@@ -15,5 +15,9 @@
 	
 	<string name="calcel">Cancel</string>
 	<string name="ok">Apply</string>
+	<string name="back">Back</string>
+	<string name="next">Next</string>
+	
+	<string name="build_map">Build map</string>
 		
 </resources>

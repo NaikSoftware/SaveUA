@@ -54,7 +54,7 @@ public class GdxMenu implements Screen {
 		this.manager = manager;
 		cam = new OrthographicCamera();
 		stage = new Stage(new ScreenViewport(cam));
-		Skin skin = manager.skin;
+		Skin skin = manager.getSkin();
 		Lng lng = manager.lng;
 		BitmapFont font = skin.getFont("default-font");
 		font.setScale(Math.min(Gdx.graphics.getWidth(),

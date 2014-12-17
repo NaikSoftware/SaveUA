@@ -4,5 +4,10 @@ public enum Words {
     PASS_AND_PLAY,
     PLAY_ONLINE,
     SETTINGS,
-    ABOUT
+    ABOUT,
+    
+    BACK,
+    NEXT,
+    
+    BUILD_MAP
 }

@@ -14,5 +14,9 @@
 
 	<string name="calcel">Отмена</string>
 	<string name="ok">Принять</string>
+	<string name="back">Назад</string>
+	<string name="next">Далее</string>
+	
+	<string name="build_map">Постройте карту</string>
 	
 </resources>

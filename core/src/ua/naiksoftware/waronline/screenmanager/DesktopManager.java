@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class DesktopManager extends Manager {
 
-	public Skin skin;
+	private Skin skin;
 
 	public DesktopManager(Lng lng) {
 		super(lng);
@@ -28,9 +28,7 @@ public class DesktopManager extends Manager {
 	}
 
 	@Override
-	public void dispose() {
-		skin.dispose();
-		super.dispose();
+	public Skin getSkin() {
+		return skin;
 	}
-
 }

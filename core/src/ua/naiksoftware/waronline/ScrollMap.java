@@ -135,21 +135,21 @@ public abstract class ScrollMap implements Screen {
 		}
 
 		if (actTop != null) {
-			root.add(actTop).align(alTop);
+			root.add(actTop).align(alTop).expandX().fillX();
 			root.row();
 		}
 		if (actLeft != null) {
-			root.add(actLeft).align(alLeft);
+			root.add(actLeft).align(alLeft).expandY().fillY();
 		}
 
 		root.add(scrollPane).fill().expand();
 
 		if (actRight != null) {
-			root.add(actRight).align(alRight);
+			root.add(actRight).align(alRight).expandY().fillY();
 		}
 		if (actBottom != null) {
 			root.row();
-			root.add(actBottom).align(alBottom);
+			root.add(actBottom).align(alBottom).expandX().fillX();
 		}
 
 		root.invalidate();

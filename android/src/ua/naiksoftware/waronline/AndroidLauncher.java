@@ -1,12 +1,12 @@
 package ua.naiksoftware.waronline;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.app.AlertDialog;
 import android.view.LayoutInflater;
-import android.content.DialogInterface;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 

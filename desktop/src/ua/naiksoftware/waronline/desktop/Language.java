@@ -18,6 +18,9 @@ public class Language implements Lng {
 			put(Words.PLAY_ONLINE, "Play Online");
 			put(Words.SETTINGS, "Settings");
 			put(Words.ABOUT, "About");
+			put(Words.BACK, "Back");
+			put(Words.NEXT, "Next");
+			put(Words.BUILD_MAP, "Build map");
 		}
 	};
 
@@ -27,6 +30,10 @@ public class Language implements Lng {
 			put(Words.PLAY_ONLINE, "Грати Онлайн");
 			put(Words.SETTINGS, "Налаштування");
 			put(Words.ABOUT, "Про гру");
+			put(Words.BACK, "Назад");
+			put(Words.NEXT, "Далi");
+			put(Words.BUILD_MAP, "Побудуйте мапу");
+			
 		}
 	};
 
@@ -36,6 +43,9 @@ public class Language implements Lng {
 			put(Words.PLAY_ONLINE, "Играть Онлайн");
 			put(Words.SETTINGS, "Настройки");
 			put(Words.ABOUT, "Об игре");
+			put(Words.BACK, "Назад");
+			put(Words.NEXT, "Далее");
+			put(Words.BUILD_MAP, "Постройте карту");
 		}
 	};
 

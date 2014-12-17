@@ -7,7 +7,9 @@ import ua.naiksoftware.waronline.game.editor.EditorHandler;
 import ua.naiksoftware.waronline.res.Lng;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class AndroidManager extends Manager {
 
@@ -19,6 +21,7 @@ public class AndroidManager extends Manager {
 	private String pathToMap, mapName;
 	private boolean internalMap;
 	private int wMap, hMap;
+	private Skin skin;
 
 	public AndroidManager(LaunchMode mode, Lng lng) {
 		this(mode, lng, null, false);
@@ -43,6 +46,11 @@ public class AndroidManager extends Manager {
 	@Override
 	public void create() {
 		super.create();
+		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+		BitmapFont font = skin.getFont("default-font");
+		font.setScale((Math.max(Gdx.graphics.getHeight(),
+				Gdx.graphics.getWidth()) / 25)
+				/ font.getLineHeight());
 
 		TiledMap map;
 		switch (mode) {
@@ -76,4 +84,8 @@ public class AndroidManager extends Manager {
 		Gdx.app.exit();
 	}
 
+	@Override
+	public Skin getSkin() {
+		return skin;
+	}
 }

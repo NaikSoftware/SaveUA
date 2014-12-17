@@ -35,17 +35,12 @@ public class SplashScreen implements Screen {
 	private Stage stage;
 	private Texture logo;
 	private Image logoImage;
-	private BitmapFont font;
 	private Label label;
 
 	public SplashScreen(Manager manager) {
 		this.manager = manager;
-		font = new BitmapFont(Gdx.files.internal("fonts/normal.fnt"));
-		font.setScale(0.5f);
-		Label.LabelStyle style = new Label.LabelStyle();
-		style.font = font;
-		style.fontColor = Color.YELLOW;
-		label = new Label("NaikSoftware © 2014", style);
+		label = new Label("NaikSoftware © 2014", manager.getSkin());
+		label.setColor(Color.YELLOW);
 		logo = ResKeeper.get(TextureId.LOGO);
 		logoImage = new Image(logo);
 
@@ -64,12 +59,19 @@ public class SplashScreen implements Screen {
 	@Override
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height, true);
-		logoImage.setPosition(width / 2 - logoImage.getWidth() / 2, height / 2
-				- logoImage.getHeight() / 2);
+
+		float scale = Math.min(width, height) / (logoImage.getWidth() * 1.3f);
+		if (scale < 1) {
+			logoImage.setScale(scale);
+		} else {
+			scale = 1;
+		}
+		logoImage.setPosition(width / 2 - logoImage.getWidth() / 2 * scale,
+				height / 2 - logoImage.getHeight() / 2 * scale);
 		logoImage.clearActions();
 		logoImage.getColor().a = 0;
-		logoImage.setScale(1, 0.3f);
-		Action act = sequence(parallel(alpha(1, 3), scaleTo(1, 1, 2)),
+		logoImage.setScale(scale, 0.3f * scale);
+		Action act = sequence(parallel(alpha(1, 3), scaleTo(scale, scale, 2)),
 				delay(0.5f), parallel(alpha(0, 0.7f)), new RunnableAction() {
 					@Override
 					public void run() {
@@ -103,6 +105,5 @@ public class SplashScreen implements Screen {
 	public void dispose() {
 		stage.dispose();
 		ResKeeper.dispose(TextureId.LOGO);
-		font.dispose();
 	}
 }
