@@ -56,7 +56,7 @@ public class GdxMenu implements Screen {
 		stage = new Stage(new ScreenViewport(cam));
 		Skin skin = manager.getSkin();
 		Lng lng = manager.lng;
-		BitmapFont font = skin.getFont("default-font");
+		BitmapFont font = manager.getTitleFont();
 		font.setScale(Math.min(Gdx.graphics.getWidth(),
 				Gdx.graphics.getHeight())
 				/ 10 / font.getLineHeight());
@@ -177,5 +177,6 @@ public class GdxMenu implements Screen {
 		ResKeeper.dispose(TextureId.BG);
 		ResKeeper.dispose(TextureId.LOGO);
 		ResKeeper.dispose(TextureId.BTN);
+		manager.freeTitleFont();
 	}
 }

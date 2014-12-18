@@ -54,7 +54,7 @@ public class ResKeeper {
 		String path = null;
 		switch (id) {
 		case MAP_TILES:
-			path = "atlas/tile_map.atlas";
+			path = "atlas/tiles.atlas";
 			break;
 		}
 		return new TextureAtlas(Gdx.files.internal(path));

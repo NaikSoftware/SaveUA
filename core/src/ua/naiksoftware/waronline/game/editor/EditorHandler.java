@@ -13,10 +13,10 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
@@ -44,10 +44,12 @@ public class EditorHandler extends ScrollMap {
 		font = new BitmapFont();
 		batch = new SpriteBatch();
 
-		btnBack = new TextButton(manager.lng.get(Words.BACK), manager.getSkin());
-		btnNext = new TextButton(manager.lng.get(Words.NEXT), manager.getSkin());
-		headLabel = new Label(manager.lng.get(Words.BUILD_MAP), manager.getSkin());
-		
+		btnBack = new TextButton(null, manager.getSkin());
+		btnNext = new TextButton(null, manager.getSkin());
+		headLabel = new Label(null, manager.getSkin());
+
+		setUI(State.TILEMAP);
+
 		Table head = new Table();
 		head.add(btnBack).left();
 		head.add(headLabel).expandX().align(Align.center);
@@ -55,19 +57,6 @@ public class EditorHandler extends ScrollMap {
 		head.setHeight(head.getMinHeight());
 		head.setBackground(manager.getSkin().getDrawable("default-pane"));
 		setWidget(head, Side.TOP, Align.center);
-		
-		Table tilesTable = new Table();
-		tilesTable.setBackground(manager.getSkin().getDrawable("default-pane"));
-
-		ArrayMap<TileCode, Tile> tiles = initTiles();
-		for (int i = 0, n = tiles.size; i < n; i++) {
-			tilesTable.add(tiles.getValueAt(i));
-		}
-		ScrollPane scrollPane = new ScrollPane(tilesTable);
-		scrollPane.setHeight(scrollPane.getMinHeight());
-		setWidget(scrollPane, Side.BOTTOM, Align.left);
-		
-		state = State.TILEMAP;
 	}
 
 	@Override
@@ -88,15 +77,43 @@ public class EditorHandler extends ScrollMap {
 		}
 	}
 
+	private void setUI(State state) {
+
+		if (state == State.TILEMAP) {
+			btnBack.setText(manager.lng.get(Words.BACK));
+			btnNext.setText(manager.lng.get(Words.NEXT));
+			headLabel.setText(manager.lng.get(Words.BUILD_MAP));
+
+			Table tilesTable = new Table();
+			tilesTable.setBackground(manager.getSkin().getDrawable(
+					"default-pane"));
+
+			ArrayMap<TileCode, Tile> tiles = initTiles();
+			for (int i = 0, n = tiles.size; i < n; i++) {
+				tilesTable.add(tiles.getValueAt(i));
+			}
+			ScrollPane scrollPane = new ScrollPane(tilesTable);
+			scrollPane.setHeight(scrollPane.getMinHeight());
+			setWidget(scrollPane, Side.BOTTOM, Align.left);
+		}
+
+		this.state = state;
+	}
+
 	private ArrayMap<TileCode, Tile> initTiles() {
 		ArrayMap<TileCode, Tile> tiles = new ArrayMap<TileCode, Tile>();
-		TextureAtlas tileAtlas = ResKeeper.get(AtlasId.MAP_TILES);
-		tiles.put(TileCode.GRASS, new Tile(tileAtlas.findRegion("grass")));
-		tiles.put(TileCode.TREES, new Tile(tileAtlas.findRegion("trees")));
-		tiles.put(TileCode.BRIDGE_HORIZ,
-				new Tile(tileAtlas.findRegion("bridge")));
+
+		putTile(tiles, TileCode.GRASS);
+		putTile(tiles, TileCode.TREES);
+		putTile(tiles, TileCode.TREES_EDGE_DOWN);
+		putTile(tiles, TileCode.TREES_EDGE_RIGHT);
 
 		return tiles;
+	}
+
+	private void putTile(ArrayMap<TileCode, Tile> tiles, TileCode code) {
+		tiles.put(code, new Tile(MapUtils.getCell(code, false).getTile()
+				.getTextureRegion()));
 	}
 
 	@Override

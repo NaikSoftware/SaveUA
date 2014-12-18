@@ -1,180 +1,187 @@
 
-tile_map.png
-format: RGBA8888
-filter: Linear,Linear
+tiles.png
+format: RGB888
+filter: Nearest,Nearest
 repeat: none
-bridge
-  rotate: false
-  xy: 1, 403
-  size: 72, 72
-  orig: 72, 72
-  offset: 0, 0
-  index: -1
-bridge
-  rotate: false
-  xy: 1, 329
-  size: 72, 72
-  orig: 72, 72
-  offset: 0, 0
-  index: -1
-bridge
-  rotate: false
-  xy: 75, 403
-  size: 72, 72
-  orig: 72, 72
-  offset: 0, 0
-  index: -1
-died
-  rotate: false
-  xy: 1, 255
-  size: 72, 72
-  orig: 72, 72
-  offset: 0, 0
-  index: -1
-grass
-  rotate: false
-  xy: 75, 329
-  size: 72, 72
-  orig: 72, 72
-  offset: 0, 0
-  index: -1
-hide_mask
-  rotate: false
-  xy: 149, 403
-  size: 72, 72
-  orig: 72, 72
-  offset: 0, 0
-  index: -1
 reduit1
   rotate: false
-  xy: 1, 181
-  size: 72, 72
-  orig: 72, 72
-  offset: 0, 0
-  index: -1
-reduit2
-  rotate: false
-  xy: 75, 255
-  size: 72, 72
-  orig: 72, 72
-  offset: 0, 0
-  index: -1
-road_corner_right_up
-  rotate: false
-  xy: 149, 329
-  size: 72, 72
-  orig: 72, 72
-  offset: 0, 0
-  index: -1
-road_end_right
-  rotate: false
-  xy: 223, 403
-  size: 72, 72
-  orig: 72, 72
-  offset: 0, 0
-  index: -1
-road_horiz
-  rotate: false
-  xy: 1, 107
-  size: 72, 72
-  orig: 72, 72
-  offset: 0, 0
-  index: -1
-road_intersect
-  rotate: false
-  xy: 75, 181
-  size: 72, 72
-  orig: 72, 72
-  offset: 0, 0
-  index: -1
-trees
-  rotate: false
-  xy: 149, 255
+  xy: 1, 149
   size: 72, 72
   orig: 72, 72
   offset: 0, 0
   index: -1
 trees_corner_right_down
   rotate: false
-  xy: 223, 329
+  xy: 1, 75
   size: 72, 72
   orig: 72, 72
   offset: 0, 0
   index: -1
-trees_corner_right_up
+road_end_right
   rotate: false
-  xy: 297, 403
-  size: 72, 72
-  orig: 72, 72
-  offset: 0, 0
-  index: -1
-trees_edge_down
-  rotate: false
-  xy: 1, 33
-  size: 72, 72
-  orig: 72, 72
-  offset: 0, 0
-  index: -1
-trees_edge_right
-  rotate: false
-  xy: 75, 107
-  size: 72, 72
-  orig: 72, 72
-  offset: 0, 0
-  index: -1
-trees_incorner_right_down
-  rotate: false
-  xy: 149, 181
-  size: 72, 72
-  orig: 72, 72
-  offset: 0, 0
-  index: -1
-water
-  rotate: false
-  xy: 223, 255
-  size: 72, 72
-  orig: 72, 72
-  offset: 0, 0
-  index: -1
-water_corner1
-  rotate: false
-  xy: 297, 329
-  size: 72, 72
-  orig: 72, 72
-  offset: 0, 0
-  index: -1
-water_corner2
-  rotate: false
-  xy: 371, 403
-  size: 72, 72
-  orig: 72, 72
-  offset: 0, 0
-  index: -1
-water_down1
-  rotate: false
-  xy: 75, 33
+  xy: 75, 149
   size: 72, 72
   orig: 72, 72
   offset: 0, 0
   index: -1
 water_down2
   rotate: false
-  xy: 149, 107
+  xy: 1, 1
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+trees_edge_right
+  rotate: false
+  xy: 75, 75
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+water_down1
+  rotate: false
+  xy: 149, 149
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+trees_incorner_right_down
+  rotate: false
+  xy: 75, 1
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+trees_corner_right_up
+  rotate: false
+  xy: 149, 75
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+water_corner2
+  rotate: false
+  xy: 223, 149
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+grass
+  rotate: false
+  xy: 149, 1
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+bridge_down
+  rotate: false
+  xy: 223, 75
   size: 72, 72
   orig: 72, 72
   offset: 0, 0
   index: -1
 water_incorner_right_up
   rotate: false
-  xy: 223, 181
+  xy: 297, 149
   size: 72, 72
   orig: 72, 72
   offset: 0, 0
   index: -1
-mine
+road_corner_right_up
   rotate: false
-  xy: 1, 1
-  size: 30, 30
-  orig: 30, 30
+  xy: 223, 1
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+water
+  rotate: false
+  xy: 297, 75
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: 3
+reduit2
+  rotate: false
+  xy: 371, 149
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+trees
+  rotate: false
+  xy: 297, 1
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+water
+  rotate: false
+  xy: 371, 75
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: 1
+water_corner1
+  rotate: false
+  xy: 445, 149
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+water
+  rotate: false
+  xy: 371, 1
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: 5
+trees_edge_down
+  rotate: false
+  xy: 445, 75
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+road_intersect
+  rotate: false
+  xy: 519, 149
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+road_horiz
+  rotate: false
+  xy: 445, 1
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+water
+  rotate: false
+  xy: 519, 75
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: 2
+water
+  rotate: false
+  xy: 593, 149
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: 4
+bridge
+  rotate: false
+  xy: 519, 1
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+bridge_up
+  rotate: false
+  xy: 593, 75
+  size: 72, 72
+  orig: 72, 72
   offset: 0, 0
   index: -1

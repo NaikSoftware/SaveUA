@@ -25,7 +25,7 @@ public class MapUtils {
 	public static final String CELL_IMPASSABLE_PROP = "impassable_cell";
 
 	private static final int CELL_SIZE = 72;
-	private static final float ANIM_INTERVAL = 0.3f;
+	private static final float ANIM_INTERVAL = 0.1f;
 
 	private static TextureAtlas tileAtlas;
 	private static ArrayMap<TileCode, Cell> cells = new ArrayMap<TileCode, Cell>();
@@ -40,7 +40,7 @@ public class MapUtils {
 		mapProp.put(CELL_SIZE_PROP, CELL_SIZE);
 		TiledMapTileLayer layerBg = new TiledMapTileLayer(w, h, CELL_SIZE,
 				CELL_SIZE);
-		Cell cell = getCell(TileCode.GRASS);
+		Cell cell = getCell(TileCode.GRASS, true);
 		for (int i = 0; i < w; i++) {
 			for (int j = 0; j < h; j++) {
 				layerBg.setCell(i, j, cell);
@@ -78,15 +78,15 @@ public class MapUtils {
 			for (int y = 0; y < mapH; y++) {
 
 				if (x % 4 == 0)
-					code = TileCode.GRASS;
+					code = TileCode.WATER;
 				else if (x % 4 == 1)
 					code = TileCode.BRIDGE_HORIZ;
 				else if (y % 4 == 2)
-					code = TileCode.TREES;
+					code = TileCode.WATER;
 				else
-					code = TileCode.GRASS;
+					code = TileCode.WATER;
 
-				layer.setCell(x, y, getCell(code));
+				layer.setCell(x, y, getCell(code, true));
 			}
 		}
 		layers.add(layer);
@@ -97,7 +97,7 @@ public class MapUtils {
 	public static void saveMap(TiledMap map) {
 	}
 
-	public static Cell getCell(TileCode code) {
+	public static Cell getCell(TileCode code, boolean cache) {
 		Cell cell = cells.get(code);
 		if (cell == null) {
 
@@ -113,8 +113,17 @@ public class MapUtils {
 			case TREES:
 				name = "trees";
 				break;
+			case TREES_EDGE_DOWN:
+				name = "trees_edge_down";
+				break;
+			case TREES_EDGE_RIGHT:
+				name = "trees_edge_right";
+				break;
 			case BRIDGE_HORIZ:
 				name = "bridge";
+				break;
+			case WATER:
+				name = "water";
 				break;
 			}
 
@@ -133,8 +142,9 @@ public class MapUtils {
 			cell.setFlipHorizontally(flipHoriz);
 			cell.setFlipVertically(flipVert);
 			cell.setRotation(rotate);
-
-			cells.put(code, cell);
+			if (cache) {
+				cells.put(code, cell);
+			}
 		}
 		return cell;
 	}
