@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import ua.naiksoftware.waronline.res.ResKeeper;
 
 public class GdxLauncher extends AndroidApplication {
 
@@ -25,6 +26,8 @@ public class GdxLauncher extends AndroidApplication {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		ResKeeper.disposeAll(); // бывает после некоректного завершения ресурсы остаются неочищенными
 
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		config.numSamples = 2; // MSAA

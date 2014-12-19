@@ -23,6 +23,7 @@ public class MapUtils {
 	public static final String MAP_NAME_PROP = "mapname";
 
 	public static final String CELL_IMPASSABLE_PROP = "impassable_cell";
+	public static final String CELL_CODE_PROP = "code";
 
 	private static final int CELL_SIZE = 72;
 	private static final float ANIM_INTERVAL = 0.1f;
@@ -119,11 +120,163 @@ public class MapUtils {
 			case TREES_EDGE_RIGHT:
 				name = "trees_edge_right";
 				break;
-			case BRIDGE_HORIZ:
-				name = "bridge";
+			case TREES_EDGE_UP:
+				name = "trees_edge_right";
+				rotate = Cell.ROTATE_90;
+				break;
+			case TREES_EDGE_LEFT:
+				name = "trees_edge_right";
+				flipHoriz = true;
+				break;
+			case TREES_CORNER_RIGHT_DOWN:
+				name = "trees_corner_right_down";
+				break;
+			case TREES_CORNER_LEFT_DOWN:
+				name = "trees_corner_right_down";
+				flipHoriz = true;
+				break;
+			case TREES_CORNER_RIGHT_UP:
+				name = "trees_corner_right_up";
+				break;
+			case TREES_CORNER_LEFT_UP:
+				name = "trees_corner_right_up";
+				flipHoriz = true;
+				break;
+			case TREES_INCORNER_RIGHT_DOWN:
+				name = "trees_incorner_right_down";
+				break;
+			case TREES_INCORNER_LEFT_DOWN:
+				name = "trees_incorner_right_down";
+				flipHoriz = true;
+				break;
+			case ROAD_HORIZ:
+				name = "road_horiz";
+				break;
+			case ROAD_VERT:
+				name = "road_horiz";
+				rotate = Cell.ROTATE_90;
+				break;
+			case ROAD_INTERSECT:
+				name = "road_intersect";
+				break;
+			case ROAD_CORNER_RIGHT_UP:
+				name = "road_corner_right_up";
+				break;
+			case ROAD_CORNER_RIGHT_DOWN:
+				name = "road_corner_right_up";
+				flipVert = true;
+				break;
+			case ROAD_CORNER_LEFT_DOWN:
+				name = "road_corner_right_up";
+				flipHoriz = flipVert = true;
+				break;
+			case ROAD_CORNER_LEFT_UP:
+				name = "road_corner_right_up";
+				flipHoriz = true;
+				break;
+			case ROAD_END_RIGHT:
+				name = "road_end_right";
+				break;
+			case ROAD_END_LEFT:
+				name = "road_end_right";
+				flipHoriz = true;
+				break;
+			case ROAD_END_UP:
+				name = "road_end_right";
+				rotate = Cell.ROTATE_90;
+				break;
+			case ROAD_END_DOWN:
+				name = "road_end_right";
+				rotate = Cell.ROTATE_270;
 				break;
 			case WATER:
 				name = "water";
+				break;
+			case WATER_DOWN_1:
+				name = "water_down1";
+				break;
+			case WATER_DOWN_2:
+				name = "water_down2";
+				break;
+			case WATER_UP_1:
+				name = "water_down1";
+				flipVert = true;
+				break;
+			case WATER_UP_2:
+				name = "water_down2";
+				flipVert = true;
+				break;
+			case WATER_LEFT_1:
+				name = "water_down1";
+				rotate = Cell.ROTATE_270;
+				break;
+			case WATER_LEFT_2:
+				name = "water_down2";
+				rotate = Cell.ROTATE_270;
+				break;
+			case WATER_RIGHT_1:
+				name = "water_down1";
+				rotate = Cell.ROTATE_90;
+				break;
+			case WATER_RIGHT_2:
+				name = "water_down2";
+				rotate = Cell.ROTATE_90;
+				break;
+			case WATER_CORNER_RIGHT_DOWN:
+				name = "water_corner1";
+				break;
+			case WATER_CORNER_LEFT_DOWN:
+				name = "water_corner1";
+				flipHoriz = true;
+				break;
+			case WATER_CORNER_RIGHT_UP:
+				name = "water_corner2";
+				break;
+			case WATER_CORNER_LEFT_UP:
+				name = "water_corner2";
+				flipHoriz = true;
+				break;
+			case WATER_INCORNER_RIGHT_UP:
+				name = "water_incorner_right_up";
+				break;
+			case WATER_INCORNER_LEFT_UP:
+				name = "water_incorner_right_up";
+				rotate = Cell.ROTATE_90;
+				break;
+			case WATER_INCORNER_LEFT_DOWN:
+				name = "water_incorner_right_up";
+				rotate = Cell.ROTATE_180;
+				break;
+			case WATER_INCORNER_RIGHT_DOWN:
+				name = "water_incorner_right_up";
+				rotate = Cell.ROTATE_270;
+				break;
+			case BRIDGE_HORIZ:
+				name = "bridge";
+				break;
+			case BRIDGE_VERT:
+				name = "bridge";
+				rotate = Cell.ROTATE_90;
+				break;
+			case BRIDGE_UP:
+				name = "bridge_up";
+				break;
+			case BRIDGE_DOWN:
+				name = "bridge_down";
+				break;
+			case BRIDGE_LEFT:
+				name = "bridge_down";
+				rotate = Cell.ROTATE_270;
+				break;
+			case BRIDGE_RIGHT:
+				name = "bridge_down";
+				rotate = Cell.ROTATE_90;
+				break;
+			case REDUIT_1:
+				name = "reduit1";
+				break;
+			case REDUIT_2:
+				name = "reduit2";
 				break;
 			}
 
@@ -131,17 +284,18 @@ public class MapUtils {
 
 			Array<StaticTiledMapTile> shots = new Array<StaticTiledMapTile>();
 			for (TextureAtlas.AtlasRegion region : tileAtlas.findRegions(name)) {
+				region.flip(flipHoriz, flipVert);
 				shots.add(new StaticTiledMapTile(region));
 			}
+
 			if (shots.size > 1) {
 				cell.setTile(new AnimatedTiledMapTile(ANIM_INTERVAL, shots));
 			} else {
 				cell.setTile(shots.first());
 			}
-
-			cell.setFlipHorizontally(flipHoriz);
-			cell.setFlipVertically(flipVert);
 			cell.setRotation(rotate);
+			cell.getTile().getProperties().put(CELL_CODE_PROP, code);
+
 			if (cache) {
 				cells.put(code, cell);
 			}

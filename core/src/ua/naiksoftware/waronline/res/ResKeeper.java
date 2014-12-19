@@ -43,6 +43,7 @@ public class ResKeeper {
 			break;
 		case BTN:
 			path = "btn_off.png";
+			break;
 		}
 		Pixmap.Format format = TextureFormats.data.get(id);
 		if (format == null)
@@ -55,6 +56,9 @@ public class ResKeeper {
 		switch (id) {
 		case MAP_TILES:
 			path = "atlas/tiles.atlas";
+			break;
+		case EDITOR_IMAGES:
+			path = "atlas/editor_images.atlas";
 			break;
 		}
 		return new TextureAtlas(Gdx.files.internal(path));

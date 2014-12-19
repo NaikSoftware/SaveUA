@@ -1,5 +1,5 @@
 package ua.naiksoftware.waronline.res.id;
 
 public enum AtlasId {
-	MAP_TILES
+	MAP_TILES, EDITOR_IMAGES
 }

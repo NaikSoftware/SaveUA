@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -29,6 +31,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
  */
 public abstract class ScrollMap implements Screen {
 
+	private InputMultiplexer im;
 	private TiledMapRenderer mapRenderer;
 	private OrthographicCamera mapCamera;
 	private Actor mapHolder;
@@ -73,6 +76,7 @@ public abstract class ScrollMap implements Screen {
 		root.add(scrollPane).fill().expand();
 		stage = new Stage(stageViewport);
 		stage.addActor(root);
+		im = new InputMultiplexer();
 	}
 
 	@Override
@@ -165,7 +169,6 @@ public abstract class ScrollMap implements Screen {
 
 	@Override
 	public void show() {
-		InputMultiplexer im = new InputMultiplexer();
 		if (HAVE_BOARD) {
 			im.addProcessor(hardProcessor);
 		}
@@ -175,8 +178,7 @@ public abstract class ScrollMap implements Screen {
 	}
 
 	private void zoomChanged(float zoom) {
-		if ((mapW / zoom < (screenW - padLeft - padRight) || mapH / zoom < (screenH
-				- padTop - padBottom))
+		if ((mapW / zoom < (screenW - padLeft - padRight) || mapH / zoom < (screenH - padTop))
 				&& zoom > this.zoom) {
 			return;
 		} else if (zoom < minZoom) {
@@ -210,7 +212,13 @@ public abstract class ScrollMap implements Screen {
 		// TODO: Implement this method
 	}
 
+	protected void listen(InputProcessor ip) {
+		im.addProcessor(ip);
+	}
+
 	protected abstract void hardKeyUp(int key);
+
+	protected abstract void tapMap(Vector2 tapCoords);
 
 	private GestureDetector.GestureListener gestureListener = new GestureDetector.GestureListener() {
 
@@ -230,7 +238,17 @@ public abstract class ScrollMap implements Screen {
 
 		@Override
 		public boolean tap(float x, float y, int count, int button) {
-			// TODO Auto-generated method stub
+			if (x > padLeft && x < screenW - padRight && y > padTop
+					&& y < screenH - padBottom) {
+				Vector3 vec3 = new Vector3(x, y, 0);
+				mapCamera.unproject(vec3);
+				//vec3.set(vec3.x, mapH - vec3.y, 0);
+				if (vec3.x < mapW && vec3.y < mapH) {
+					vec3.scl(1f / cellSize);
+					Vector2 vec2 = new Vector2((int) vec3.x, (int) vec3.y);
+					tapMap(vec2);
+				}
+			}
 			return false;
 		}
 
