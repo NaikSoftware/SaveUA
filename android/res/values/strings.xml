@@ -13,11 +13,13 @@
 	<string name="input_map_name">Input map name</string>
 	<string name="input_map_size">Input map size</string>
 	
-	<string name="calcel">Cancel</string>
+	<string name="cancel">Cancel</string>
 	<string name="ok">Apply</string>
 	<string name="back">Back</string>
 	<string name="next">Next</string>
+	<string name="exit">Exit</string>
 	
 	<string name="build_map">Build map</string>
+	<string name="locate_objects">Locate objects</string>
 		
 </resources>

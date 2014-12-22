@@ -1,5 +1,11 @@
 package ua.naiksoftware.waronline;
 
+import java.io.BufferedReader;
+import java.util.function.Consumer;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Array;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -61,31 +67,44 @@ public class AndroidLauncher extends Activity {
 			final View v = inflater.inflate(R.layout.dialog_new_map, null);
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setView(v);
-			builder.setNegativeButton(R.string.calcel, null);
-			builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+			builder.setNegativeButton(R.string.cancel, null);
+			builder.setPositiveButton(R.string.ok,
+					new DialogInterface.OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface p1, int p2) {
-						String name = ((TextView)v.findViewById(R.id.dialog_new_mapEditText_name)).getText().toString();
-						int w, h;
-						try {
-							w = Integer.parseInt("0" + ((TextView)v.findViewById(R.id.dialog_new_mapEditText_w)).getText().toString());
-							h = Integer.parseInt("0" + ((TextView)v.findViewById(R.id.dialog_new_mapEditText_h)).getText().toString());
-						} catch (NumberFormatException e) {
-							w = h = 0;
+						@Override
+						public void onClick(DialogInterface p1, int p2) {
+							String name = ((TextView) v
+									.findViewById(R.id.dialog_new_mapEditText_name))
+									.getText().toString();
+							int w, h;
+							try {
+								w = Integer.parseInt("0"
+										+ ((TextView) v
+												.findViewById(R.id.dialog_new_mapEditText_w))
+												.getText().toString());
+								h = Integer.parseInt("0"
+										+ ((TextView) v
+												.findViewById(R.id.dialog_new_mapEditText_h))
+												.getText().toString());
+							} catch (NumberFormatException e) {
+								w = h = 0;
+							}
+							if (w < 5 || h < 5 || w > 1000 || h > 1000
+									|| name.isEmpty()) {
+								Toast.makeText(AndroidLauncher.this,
+										"Дурак штоле?", Toast.LENGTH_SHORT)
+										.show();
+							} else {
+								Intent i = new Intent(AndroidLauncher.this,
+										GdxLauncher.class);
+								i.putExtra(GdxLauncher.MODE, GdxLauncher.EDIT);
+								i.putExtra(GdxLauncher.MAP_NAME, name);
+								i.putExtra(GdxLauncher.MAP_W, w);
+								i.putExtra(GdxLauncher.MAP_H, h);
+								startActivityForResult(i, 0);
+							}
 						}
-						if (w < 5 || h < 5 || w > 1000 || h > 1000 || name.isEmpty()) {
-							Toast.makeText(AndroidLauncher.this, "Дурак штоле?", Toast.LENGTH_SHORT).show();
-						} else {
-							Intent i = new Intent(AndroidLauncher.this, GdxLauncher.class);
-							i.putExtra(GdxLauncher.MODE, GdxLauncher.EDIT);
-							i.putExtra(GdxLauncher.MAP_NAME, name);
-							i.putExtra(GdxLauncher.MAP_W, w);
-							i.putExtra(GdxLauncher.MAP_H, h);
-							startActivityForResult(i, 0);
-						}
-					}
-				});
+					});
 			dialogNewMap = builder.create();
 		}
 		dialogNewMap.show();

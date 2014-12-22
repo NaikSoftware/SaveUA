@@ -20,6 +20,12 @@ public class Language implements Lng {
 			put(Words.ABOUT, "About");
 			put(Words.BACK, "Back");
 			put(Words.NEXT, "Next");
+			put(Words.SELECT_MAP, "Select map");
+			put(Words.ADD, "Add");
+			put(Words.EDIT, "Edit");
+			put(Words.DELETE, "Delete");
+			put(Words.SOUND, "Sound");
+			put(Words.MUSIC_EFFECTS, "Music effects");
 			put(Words.BUILD_MAP, "Build map");
 		}
 	};
@@ -32,8 +38,14 @@ public class Language implements Lng {
 			put(Words.ABOUT, "Про гру");
 			put(Words.BACK, "Назад");
 			put(Words.NEXT, "Далi");
+			put(Words.SELECT_MAP, "Виберiть мапу");
+			put(Words.ADD, "Додати");
+			put(Words.EDIT, "Редагувати");
+			put(Words.DELETE, "Вилучити");
+			put(Words.SOUND, "Музика");
+			put(Words.MUSIC_EFFECTS, "Звуковi ефекти");
 			put(Words.BUILD_MAP, "Побудуйте мапу");
-			
+
 		}
 	};
 
@@ -45,6 +57,12 @@ public class Language implements Lng {
 			put(Words.ABOUT, "Об игре");
 			put(Words.BACK, "Назад");
 			put(Words.NEXT, "Далее");
+			put(Words.SELECT_MAP, "Выберите карту");
+			put(Words.ADD, "Добавить");
+			put(Words.EDIT, "Редактировать");
+			put(Words.DELETE, "Удалить");
+			put(Words.SOUND, "Музыка");
+			put(Words.MUSIC_EFFECTS, "Звуковые эффекты");
 			put(Words.BUILD_MAP, "Постройте карту");
 		}
 	};

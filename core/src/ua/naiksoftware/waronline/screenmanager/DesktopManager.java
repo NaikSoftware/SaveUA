@@ -20,6 +20,7 @@ public class DesktopManager extends Manager {
 	@Override
 	public void create() {
 		super.create();
+
 		skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 		BitmapFont font = skin.getFont("default-font");
 		float scale = (Math.min(Gdx.graphics.getHeight(),

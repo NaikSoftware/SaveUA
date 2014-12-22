@@ -12,11 +12,13 @@
 	<string name="input_map_name">Введіть iм\'я карти</string>
 	<string name="input_map_size">Введіть розмір карти</string>
 
-	<string name="calcel">Скасувати</string>
+	<string name="cancel">Скасувати</string>
 	<string name="ok">Прийняти</string>
 	<string name="back">Назад</string>
 	<string name="next">Далi</string>
+	<string name="exit">Вийти</string>
 	
 	<string name="build_map">Побудуйте мапу</string>
+	<string name="locate_objects">Iншi об\'екти</string>
 	
 </resources>

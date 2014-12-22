@@ -1,9 +1,15 @@
 package ua.naiksoftware.waronline;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+
+import ua.naiksoftware.waronline.game.ObjCode;
 import ua.naiksoftware.waronline.game.TileCode;
 import ua.naiksoftware.waronline.res.ResKeeper;
 import ua.naiksoftware.waronline.res.id.AtlasId;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.MapProperties;
@@ -14,19 +20,25 @@ import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
+import com.badlogic.gdx.utils.DataOutput;
 
 public class MapUtils {
 
-	public static final String CELL_W_PROP = "cellw";
-	public static final String CELL_H_PROP = "cellh";
+	public static final String MAP_W_PROP = "cellw";
+	public static final String MAP_H_PROP = "cellh";
 	public static final String CELL_SIZE_PROP = "cellsize";
 	public static final String MAP_NAME_PROP = "mapname";
+	public static final String MAX_GAMERS_PROP = "maxgamers";
 
 	public static final String CELL_IMPASSABLE_PROP = "impassable_cell";
 	public static final String CELL_CODE_PROP = "code";
+	public static final String CELL_OBJ_PROP = "codeobj";
 
 	private static final int CELL_SIZE = 72;
 	private static final float ANIM_INTERVAL = 0.1f;
+
+	private static final String INTERNAL_LIST = "maps/list.txt";
+	private static final String LOCAL_MAP_DIR = "maps";
 
 	private static TextureAtlas tileAtlas;
 	private static ArrayMap<TileCode, Cell> cells = new ArrayMap<TileCode, Cell>();
@@ -35,10 +47,11 @@ public class MapUtils {
 		tileAtlas = ResKeeper.get(AtlasId.MAP_TILES);
 		TiledMap map = new TiledMap();
 		MapProperties mapProp = map.getProperties();
-		mapProp.put(CELL_W_PROP, w);
-		mapProp.put(CELL_H_PROP, h);
+		mapProp.put(MAP_W_PROP, w);
+		mapProp.put(MAP_H_PROP, h);
 		mapProp.put(MAP_NAME_PROP, name);
 		mapProp.put(CELL_SIZE_PROP, CELL_SIZE);
+		MapLayers layers = map.getLayers();
 		TiledMapTileLayer layerBg = new TiledMapTileLayer(w, h, CELL_SIZE,
 				CELL_SIZE);
 		Cell cell = getCell(TileCode.GRASS, true);
@@ -47,8 +60,19 @@ public class MapUtils {
 				layerBg.setCell(i, j, cell);
 			}
 		}
-		map.getLayers().add(layerBg);
+		layers.add(layerBg);
 		cells.clear();
+
+		layers.add(new TiledMapTileLayer(w, h, CELL_SIZE, CELL_SIZE));// 1x1
+		layers.add(new TiledMapTileLayer(w / 2, h / 2, CELL_SIZE * 2,
+				CELL_SIZE * 2));// 2x2
+		layers.add(new TiledMapTileLayer(w / 3, h / 3, CELL_SIZE * 3,
+				CELL_SIZE * 3));// 3x3
+		layers.add(new TiledMapTileLayer(w / 4, h / 4, CELL_SIZE * 4,
+				CELL_SIZE * 4));// 4x4
+		layers.add(new TiledMapTileLayer(w / 5, h / 5, CELL_SIZE * 5,
+				CELL_SIZE * 5));// 5x5
+
 		return map;
 	}
 
@@ -68,10 +92,14 @@ public class MapUtils {
 		// debug
 		int cellSize = CELL_SIZE;
 		int mapW = 50, mapH = 30;
+		String mapName = "Test map name";
+		int maxGamers = 2;
 		MapProperties mapProp = map.getProperties();
-		mapProp.put(CELL_W_PROP, mapW);
-		mapProp.put(CELL_H_PROP, mapH);
+		mapProp.put(MAP_W_PROP, mapW);
+		mapProp.put(MAP_H_PROP, mapH);
+		mapProp.put(MAP_NAME_PROP, mapName);
 		mapProp.put(CELL_SIZE_PROP, cellSize);
+		mapProp.put(MAX_GAMERS_PROP, maxGamers);
 		TiledMapTileLayer layer = new TiledMapTileLayer(mapW, mapH, cellSize,
 				cellSize);
 		TileCode code;
@@ -93,9 +121,6 @@ public class MapUtils {
 		layers.add(layer);
 		cells.clear();
 		return map;
-	}
-
-	public static void saveMap(TiledMap map) {
 	}
 
 	public static Cell getCell(TileCode code, boolean cache) {
@@ -301,5 +326,122 @@ public class MapUtils {
 			}
 		}
 		return cell;
+	}
+
+	public static Cell getObjCell(ObjCode code) {
+		TextureAtlas atlas = ResKeeper.get(AtlasId.OVERLAY_IMAGES);
+		String name = null;
+		switch (code) {
+		case HATA_1:
+			name = "hata";
+			break;
+		case FORT:
+			name = "fort2x2";
+			break;
+		case ATB:
+			name = "atb3x3";
+			break;
+		case CHURCH:
+			name = "church2x1";
+			break;
+		case REMAINS1:
+			name = "remains1-2x2";
+			break;
+		case REMAINS2:
+			name = "remains2-2x1";
+			break;
+		case HATA_2:
+			name = "hata2x2";
+			break;
+		case TREE_1:
+			name = "tree2";
+			break;
+		case TREE_2:
+			name = "tree7";
+			break;
+		case HATA_3:
+			name = "oldhata2x1";
+			break;
+		case HATA_4:
+			name = "hata1";
+			break;
+		case TENT:
+			name = "tent2x1";
+			break;
+		case STOLB_1:
+			name = "stolb1x1";
+			break;
+		case STOLB_2:
+			name = "stolb2-1x1";
+			break;
+		case WELL:
+			name = "well";
+			break;
+		case KPP:
+			name = "kpp1x2";
+			break;
+		}
+
+		if (name == null) {
+			throw new IllegalArgumentException("Name \"" + name
+					+ "\" in atlas objects not exists");
+		}
+		Cell cell = new Cell();
+
+		Array<StaticTiledMapTile> shots = new Array<StaticTiledMapTile>();
+		for (TextureAtlas.AtlasRegion region : atlas.findRegions(name)) {
+			shots.add(new StaticTiledMapTile(region));
+		}
+
+		if (shots.size > 1) {
+			cell.setTile(new AnimatedTiledMapTile(ANIM_INTERVAL, shots));
+		} else {
+			cell.setTile(shots.first());
+		}
+		cell.getTile().getProperties().put(CELL_OBJ_PROP, code);
+
+		return cell;
+	}
+
+	public static void saveMap(TiledMap map) {
+		FileHandle dir = Gdx.files.local(LOCAL_MAP_DIR);
+		dir.mkdirs();
+		FileHandle file = dir.child(String.valueOf(System.currentTimeMillis()));
+		DataOutput data = new DataOutput(file.write(false));
+		MapProperties prop = map.getProperties();
+		try {
+			data.writeUTF(prop.get(MAP_NAME_PROP, String.class));
+			data.writeInt(prop.get(MAX_GAMERS_PROP, Integer.class));
+			data.writeInt(prop.get(MAP_W_PROP, Integer.class));
+			data.writeInt(prop.get(MAP_H_PROP, Integer.class));
+			data.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static Array<MapEntry> readMapList() {
+		final Array<MapEntry> maps = new Array<MapEntry>();
+
+		// read internal
+		BufferedReader reader = new BufferedReader(Gdx.files.internal(
+				INTERNAL_LIST).reader("utf-8"));
+		String path;
+		try {
+			while ((path = reader.readLine()) != null) {
+				maps.add(new MapEntry(path, false));
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		// read local
+		FileHandle dir = Gdx.files.local(LOCAL_MAP_DIR);
+		dir.mkdirs();
+		for (FileHandle fh : dir.list()) {
+			maps.add(new MapEntry(fh.path(), true));
+		}
+
+		return maps;
 	}
 }

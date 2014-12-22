@@ -22,7 +22,7 @@ public class ResKeeper {
 		}
 		return t;
 	}
-	
+
 	public static TextureAtlas get(AtlasId id) {
 		TextureAtlas ta = atlases.get(id);
 		if (ta == null) {
@@ -60,6 +60,9 @@ public class ResKeeper {
 		case EDITOR_IMAGES:
 			path = "atlas/editor_images.atlas";
 			break;
+		case OVERLAY_IMAGES:
+			path = "atlas/overlay_images.atlas";
+			break;
 		}
 		return new TextureAtlas(Gdx.files.internal(path));
 	}
@@ -80,7 +83,7 @@ public class ResKeeper {
 			textures.removeKey(id);
 		}
 	}
-	
+
 	public static void dispose(AtlasId id) {
 		TextureAtlas ta = atlases.get(id);
 		if (ta != null) {

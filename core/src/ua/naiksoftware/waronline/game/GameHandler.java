@@ -65,7 +65,7 @@ public class GameHandler extends ScrollMap {
 
 	@Override
 	protected void hardKeyUp(int key) {
-		if (key == Keys.BACKSPACE) {
+		if (key == Keys.BACKSPACE || key == Keys.BACK) {
 			dispose();
 			manager.showMenu();
 		}

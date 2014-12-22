@@ -9,18 +9,24 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-public class Tile extends Image {
+public class EditCell extends Image {
 
 	private boolean selected;
 	private TextureRegion selBorder = ResKeeper.get(AtlasId.EDITOR_IMAGES)
 			.findRegion("sel_tile");
 	private Cell cell;
 
-	public Tile(Cell cell) {
-		super(cell.getTile().getTextureRegion());
+	public EditCell(Cell cell, int size) {
+		super();
 		this.cell = cell;
-		setOrigin(getWidth() / 2, getHeight() / 2);
+		TextureRegionDrawable d = new TextureRegionDrawable(cell.getTile().getTextureRegion());
+		d.setMinWidth(size);
+		d.setMinHeight(size);
+		setDrawable(d);
+		setOrigin(size / 2, size / 2);
+		
 		switch (cell.getRotation()) {
 		case Cell.ROTATE_90:
 			setRotation(90);

@@ -37,6 +37,7 @@ public abstract class ScrollMap implements Screen {
 	private Actor mapHolder;
 	private ScreenViewport stageViewport;
 	private Stage stage;
+	private boolean disposed;
 	private ScrollPane scrollPane;
 	private Table root;
 	private int screenW, screenH, mapW, mapH;
@@ -62,10 +63,10 @@ public abstract class ScrollMap implements Screen {
 		cellSize = tileMap.getProperties().get(MapUtils.CELL_SIZE_PROP,
 				Integer.class);
 		mapW = cellSize
-				* tileMap.getProperties().get(MapUtils.CELL_W_PROP,
+				* tileMap.getProperties().get(MapUtils.MAP_W_PROP,
 						Integer.class);
 		mapH = cellSize
-				* tileMap.getProperties().get(MapUtils.CELL_H_PROP,
+				* tileMap.getProperties().get(MapUtils.MAP_H_PROP,
 						Integer.class);
 		mapHolder = new Actor();
 		mapHolder.setSize(mapW, mapH);
@@ -118,22 +119,22 @@ public abstract class ScrollMap implements Screen {
 		root.clear();
 		switch (side) {
 		case TOP:
-			padTop = (int) a.getHeight();
+			padTop = a == null ? 0 : (int) a.getHeight();
 			actTop = a;
 			alTop = align;
 			break;
 		case LEFT:
-			padLeft = (int) a.getWidth();
+			padLeft = a == null ? 0 : (int) a.getWidth();
 			actLeft = a;
 			alLeft = align;
 			break;
 		case BOTTOM:
-			padBottom = (int) a.getHeight();
+			padBottom = a == null ? 0 : (int) a.getHeight();
 			actBottom = a;
 			alBottom = align;
 			break;
 		default:
-			padRight = (int) a.getWidth();
+			padRight = a == null ? 0 : (int) a.getWidth();
 			actRight = a;
 			alRight = align;
 		}
@@ -169,12 +170,11 @@ public abstract class ScrollMap implements Screen {
 
 	@Override
 	public void show() {
-		if (HAVE_BOARD) {
-			im.addProcessor(hardProcessor);
-		}
+		im.addProcessor(hardProcessor);
 		im.addProcessor(new GestureDetector(gestureListener));
 		im.addProcessor(stage);
 		Gdx.input.setInputProcessor(im);
+		Gdx.input.setCatchBackKey(true);
 	}
 
 	private void zoomChanged(float zoom) {
@@ -242,7 +242,7 @@ public abstract class ScrollMap implements Screen {
 					&& y < screenH - padBottom) {
 				Vector3 vec3 = new Vector3(x, y, 0);
 				mapCamera.unproject(vec3);
-				//vec3.set(vec3.x, mapH - vec3.y, 0);
+				// vec3.set(vec3.x, mapH - vec3.y, 0);
 				if (vec3.x < mapW && vec3.y < mapH) {
 					vec3.scl(1f / cellSize);
 					Vector2 vec2 = new Vector2((int) vec3.x, (int) vec3.y);
@@ -296,8 +296,19 @@ public abstract class ScrollMap implements Screen {
 		}
 	};
 
+	protected Stage getStage() {
+		return stage;
+	}
+
+	protected int mapCellSize() {
+		return cellSize;
+	}
+
 	@Override
 	public void dispose() {
-		stage.dispose();
+		if (!disposed) {
+			stage.dispose();
+			disposed = true;
+		}
 	}
 }

@@ -68,6 +68,7 @@ public class AndroidManager extends Manager {
 		case MAP_EDITOR:
 			if (pathToMap == null) {
 				map = MapUtils.genVoidMap(wMap, hMap, mapName);
+				map.getProperties().put(MapUtils.MAP_NAME_PROP, mapName);
 			} else {
 				map = MapUtils.loadTileMap(pathToMap, internalMap);
 			}

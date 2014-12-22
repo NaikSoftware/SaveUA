@@ -74,6 +74,14 @@ public class GdxLauncher extends AndroidApplication {
 				return getString(R.string.next);
 			case BUILD_MAP:
 				return getString(R.string.build_map);
+			case OK:
+				return getString(R.string.ok);
+			case CANCEL:
+				return getString(R.string.cancel);
+			case EXIT:
+				return getString(R.string.exit);
+			case LOCATE_OBJECTS:
+				return getString(R.string.locate_objects);
 			}
 			return null;
 		}
