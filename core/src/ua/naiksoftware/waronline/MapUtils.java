@@ -20,6 +20,7 @@ import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
+import com.badlogic.gdx.utils.DataInput;
 import com.badlogic.gdx.utils.DataOutput;
 
 public class MapUtils {
@@ -39,6 +40,7 @@ public class MapUtils {
 
 	private static final String INTERNAL_LIST = "maps/list.txt";
 	private static final String LOCAL_MAP_DIR = "maps";
+	private static final int DATA_DIVIDER = -99;
 
 	private static TextureAtlas tileAtlas;
 	private static ArrayMap<TileCode, Cell> cells = new ArrayMap<TileCode, Cell>();
@@ -88,38 +90,42 @@ public class MapUtils {
 	public static TiledMap loadTileMap(String path, boolean internal) {
 		tileAtlas = ResKeeper.get(AtlasId.MAP_TILES);
 		TiledMap map = new TiledMap();
-		MapLayers layers = map.getLayers();
-		// debug
-		int cellSize = CELL_SIZE;
-		int mapW = 50, mapH = 30;
-		String mapName = "Test map name";
-		int maxGamers = 2;
 		MapProperties mapProp = map.getProperties();
-		mapProp.put(MAP_W_PROP, mapW);
-		mapProp.put(MAP_H_PROP, mapH);
-		mapProp.put(MAP_NAME_PROP, mapName);
-		mapProp.put(CELL_SIZE_PROP, cellSize);
-		mapProp.put(MAX_GAMERS_PROP, maxGamers);
-		TiledMapTileLayer layer = new TiledMapTileLayer(mapW, mapH, cellSize,
-				cellSize);
-		TileCode code;
-		for (int x = 0; x < mapW; x++) {
-			for (int y = 0; y < mapH; y++) {
+		MapLayers layers = map.getLayers();
+		TiledMapTileLayer layerBg;
 
-				if (x % 4 == 0)
-					code = TileCode.WATER;
-				else if (x % 4 == 1)
-					code = TileCode.BRIDGE_HORIZ;
-				else if (y % 4 == 2)
-					code = TileCode.WATER;
-				else
-					code = TileCode.WATER;
+		int mapW, mapH;
+		int maxGamers;
 
-				layer.setCell(x, y, getCell(code, true));
-			}
+		FileHandle fh;
+		if (internal) {
+			fh = Gdx.files.internal(path);
+		} else {
+			fh = Gdx.files.local(path);
 		}
-		layers.add(layer);
-		cells.clear();
+		if (!fh.exists()) {
+			throw new RuntimeException("Map " + path + " not found");
+		}
+
+		DataInput data = new DataInput(fh.read());
+		try {
+			mapProp.put(MAP_NAME_PROP, data.readUTF());
+			maxGamers = data.readInt();
+			mapW = data.readInt();
+			mapH = data.readInt();
+			mapProp.put(MAX_GAMERS_PROP, maxGamers);
+			mapProp.put(MAP_W_PROP, mapW);
+			mapProp.put(MAP_H_PROP, mapH);
+			mapProp.put(CELL_SIZE_PROP, CELL_SIZE);
+			layerBg = new TiledMapTileLayer(mapW, mapH, CELL_SIZE, CELL_SIZE);
+
+			layers.add(layerBg);
+			// Read other layers, etc
+			data.close();
+			cells.clear();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return map;
 	}
 

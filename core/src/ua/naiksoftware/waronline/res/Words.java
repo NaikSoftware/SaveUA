@@ -5,6 +5,7 @@ public enum Words {
 
 	/* --- only for desktop */
 	SELECT_MAP, ADD, EDIT, DELETE, SOUND, MUSIC_EFFECTS,
+	INPUT_MAP_NAME, INPUT_MAP_SIZE,
 	/* --- */
 
 	BACK, NEXT, OK, CANCEL, EXIT,
