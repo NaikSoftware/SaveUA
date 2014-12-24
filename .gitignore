@@ -61,3 +61,5 @@ build/
 
 ## OS Specific
 .DS_Store
+/SaveUA-android/gen/
+/SaveUA-android/nbandroid/

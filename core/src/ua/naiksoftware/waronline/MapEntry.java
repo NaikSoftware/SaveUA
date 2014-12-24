@@ -8,82 +8,79 @@ import com.badlogic.gdx.utils.DataInput;
 
 /**
  * Формат хранения данных:
- * 
- * String map name (read/write UTF);
- * int max gamers;
- * int map width, int map height;
- * 
+ *
+ * String map name (read/write UTF); int max gamers; int map width, int map
+ * height;
+ *
  * @author Naik
  */
 public class MapEntry {
 
-	private boolean local;
-	private String path;
-	private String name;
-	private int maxGamers;
-	private int w, h;
+    private boolean local;
+    private String path;
+    private String name;
+    private int maxGamers;
+    private int w, h;
 
-	/**
-	 * @param path
-	 *            путь к карте
-	 * @param local
-	 *            если true, то карта в локальном хранилище, иначe в internal
-	 *            (assets)
-	 */
-	public MapEntry(String path, boolean local) {
-		this.local = local;
-		this.path = path;
+    /**
+     * @param path путь к карте
+     * @param local если true, то карта в локальном хранилище, иначe в internal
+     * (assets)
+     */
+    public MapEntry(String path, boolean local) {
+        this.local = local;
+        this.path = path;
 
-		FileHandle fh;
+        FileHandle fh;
 
-		if (local) {
-			fh = Gdx.files.local(path);
-		} else {
-			fh = Gdx.files.internal(path);
-		}
+        if (local) {
+            fh = Gdx.files.local(path);
+        } else {
+            fh = Gdx.files.internal(path);
+        }
 
-		if (!fh.exists()) {
-			name = "Not found";
-		} else {
-			DataInput data = new DataInput(fh.read());
-			try {
-				name = data.readUTF();
-				maxGamers = data.readInt();
-				w = data.readInt();
-				h = data.readInt();
-				data.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	@Override
-	public String toString() {
-		return name;
-	}
+        if (!fh.exists()) {
+            name = "Not found";
+        } else {
+            DataInput data = new DataInput(fh.read());
+            try {
+                name = data.readUTF();
+                maxGamers = data.readInt();
+                w = data.readInt();
+                h = data.readInt();
+                data.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-	public boolean isLocal() {
-		return local;
-	}
+    @Override
+    public String toString() {
+        return name;
+    }
 
-	public String getPath() {
-		return path;
-	}
+    public boolean isLocal() {
+        return local;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getPath() {
+        return path;
+    }
 
-	public int getMaxGamers() {
-		return maxGamers;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public int getW() {
-		return w;
-	}
+    public int getMaxGamers() {
+        return maxGamers;
+    }
 
-	public int getH() {
-		return h;
-	}
+    public int getW() {
+        return w;
+    }
+
+    public int getH() {
+        return h;
+    }
 }
