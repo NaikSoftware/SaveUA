@@ -20,5 +20,6 @@
 	
 	<string name="build_map">Постройте карту</string>
 	<string name="locate_objects">Другие обьекты</string>
+        <string name="units_gamer">Юниты игрока</string>
 	
 </resources>

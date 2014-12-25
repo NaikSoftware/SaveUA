@@ -20,5 +20,6 @@
 	
 	<string name="build_map">Побудуйте мапу</string>
 	<string name="locate_objects">Iншi об\'екти</string>
+        <string name="units_gamer">Юнiти гравця</string>
 	
 </resources>

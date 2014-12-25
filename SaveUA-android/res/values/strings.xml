@@ -21,5 +21,6 @@
 	
 	<string name="build_map">Build map</string>
 	<string name="locate_objects">Locate objects</string>
+        <string name="units_gamer">Units gamer</string>
 		
 </resources>

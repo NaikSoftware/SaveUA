@@ -22,6 +22,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.DataInput;
 import com.badlogic.gdx.utils.DataOutput;
+import ua.naiksoftware.waronline.game.GameMap;
+import ua.naiksoftware.waronline.game.editor.EditGameMap;
 
 public class MapUtils {
 
@@ -43,7 +45,7 @@ public class MapUtils {
     private static final int DATA_DIVIDER = -99;
 
     private static TextureAtlas tileAtlas;
-    private static ArrayMap<TileCode, Cell> cells = new ArrayMap<TileCode, Cell>();
+    private static final ArrayMap<TileCode, Cell> cells = new ArrayMap<TileCode, Cell>();
 
     public static TiledMap genVoidMap(int w, int h, String name) {
         tileAtlas = ResKeeper.get(AtlasId.MAP_TILES);
@@ -85,7 +87,7 @@ public class MapUtils {
      * @param internal - предустановленная ли карта, или созданная пользователем
      * @return загруженную карту
      */
-    public static TiledMap loadTileMap(String path, boolean internal) {
+    public static GameMap loadTileMap(String path, boolean internal) {
         tileAtlas = ResKeeper.get(AtlasId.MAP_TILES);
         TiledMap map = new TiledMap();
         MapProperties mapProp = map.getProperties();
@@ -93,7 +95,6 @@ public class MapUtils {
         TiledMapTileLayer layerBg;
 
         int mapW, mapH;
-        int maxGamers;
 
         FileHandle fh;
         if (internal) {
@@ -108,10 +109,9 @@ public class MapUtils {
         DataInput data = new DataInput(fh.read());
         try {
             mapProp.put(MAP_NAME_PROP, data.readUTF());
-            maxGamers = data.readInt();
+            data.readInt();//ignore maxGamers, get it in GameMap class
             mapW = data.readInt();
             mapH = data.readInt();
-            mapProp.put(MAX_GAMERS_PROP, maxGamers);
             mapProp.put(MAP_W_PROP, mapW);
             mapProp.put(MAP_H_PROP, mapH);
             mapProp.put(CELL_SIZE_PROP, CELL_SIZE);
@@ -124,7 +124,7 @@ public class MapUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return map;
+        return new GameMap(map, null);
     }
 
     public static Cell getCell(TileCode code, boolean cache) {
@@ -407,17 +407,22 @@ public class MapUtils {
         return cell;
     }
 
-    public static void saveMap(TiledMap map) {
+    public static void saveMap(EditGameMap gameMap) {
         FileHandle dir = Gdx.files.local(LOCAL_MAP_DIR);
         dir.mkdirs();
         FileHandle file = dir.child(String.valueOf(System.currentTimeMillis()));
         DataOutput data = new DataOutput(file.write(false));
+        TiledMap map = gameMap.getTiledMap();
         MapProperties prop = map.getProperties();
+        int mapW = prop.get(MAP_W_PROP, Integer.class);
+        int mapH = prop.get(MAP_H_PROP, Integer.class);
+        int maxGamers = prop.get(MAX_GAMERS_PROP, Integer.class);
         try {
             data.writeUTF(prop.get(MAP_NAME_PROP, String.class));
-            data.writeInt(prop.get(MAX_GAMERS_PROP, Integer.class));
-            data.writeInt(prop.get(MAP_W_PROP, Integer.class));
-            data.writeInt(prop.get(MAP_H_PROP, Integer.class));
+            data.writeInt(maxGamers);
+            data.writeInt(mapW);
+            data.writeInt(mapH);
+
             data.close();
         } catch (IOException e) {
             e.printStackTrace();

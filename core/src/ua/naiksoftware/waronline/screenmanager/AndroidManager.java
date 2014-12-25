@@ -10,83 +10,88 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import ua.naiksoftware.waronline.game.GameMap;
+import ua.naiksoftware.waronline.game.editor.EditGameMap;
 
 public class AndroidManager extends Manager {
 
-	public static enum LaunchMode {
-		PLAY, PLAY_ONLINE, SPLASH_SCREEEN, MAP_EDITOR
-	}
+    public static enum LaunchMode {
 
-	private LaunchMode mode;
-	private String pathToMap, mapName;
-	private boolean internalMap;
-	private int wMap, hMap;
-	private Skin skin;
+        PLAY, PLAY_ONLINE, SPLASH_SCREEEN, MAP_EDITOR
+    }
 
-	public AndroidManager(LaunchMode mode, Lng lng) {
-		this(mode, lng, null, false);
-	}
+    private LaunchMode mode;
+    private String pathToMap, mapName;
+    private boolean internalMap;
+    private int wMap, hMap;
+    private Skin skin;
 
-	public AndroidManager(LaunchMode mode, Lng lng, int wMap, int hMap,
-			String mapName) {
-		this(mode, lng, null, false);
-		this.wMap = wMap;
-		this.hMap = hMap;
-		this.mapName = mapName;
-	}
+    public AndroidManager(LaunchMode mode, Lng lng) {
+        this(mode, lng, null, false);
+    }
 
-	public AndroidManager(LaunchMode mode, Lng lng, String pathToMap,
-			boolean internalMap) {
-		super(lng);
-		this.mode = mode;
-		this.pathToMap = pathToMap;
-		this.internalMap = internalMap;
-	}
+    public AndroidManager(LaunchMode mode, Lng lng, int wMap, int hMap,
+            String mapName) {
+        this(mode, lng, null, false);
+        this.wMap = wMap;
+        this.hMap = hMap;
+        this.mapName = mapName;
+    }
 
-	@Override
-	public void create() {
-		super.create();
-		skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-		BitmapFont font = skin.getFont("default-font");
-		font.setScale((Math.max(Gdx.graphics.getHeight(),
-				Gdx.graphics.getWidth()) / 25)
-				/ font.getLineHeight());
+    public AndroidManager(LaunchMode mode, Lng lng, String pathToMap,
+            boolean internalMap) {
+        super(lng);
+        this.mode = mode;
+        this.pathToMap = pathToMap;
+        this.internalMap = internalMap;
+    }
 
-		TiledMap map;
-		switch (mode) {
-		case SPLASH_SCREEEN:
-			setScreen(new SplashScreen(this));
-			break;
-		case PLAY:
-			map = MapUtils.loadTileMap(pathToMap, internalMap);
-			setScreen(new GameHandler(this, map));
-			break;
-		case PLAY_ONLINE:
-			map = MapUtils.loadTileMap(pathToMap, internalMap);
-			setScreen(new GameHandler(this, map));
-			break;
-		case MAP_EDITOR:
-			if (pathToMap == null) {
-				map = MapUtils.genVoidMap(wMap, hMap, mapName);
-				map.getProperties().put(MapUtils.MAP_NAME_PROP, mapName);
-			} else {
-				map = MapUtils.loadTileMap(pathToMap, internalMap);
-			}
-			setScreen(new EditorHandler(this, map));
-			break;
-		default:
-			break;
-		}
-	}
+    @Override
+    public void create() {
+        super.create();
+        skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+        BitmapFont font = skin.getFont("default-font");
+        font.setScale((Math.max(Gdx.graphics.getHeight(),
+                Gdx.graphics.getWidth()) / 25)
+                / font.getLineHeight());
 
-	@Override
-	public void showMenu() {
-		// Back to native menu
-		Gdx.app.exit();
-	}
+        GameMap gameMap;
+        switch (mode) {
+            case SPLASH_SCREEEN:
+                setScreen(new SplashScreen(this));
+                break;
+            case PLAY:
+                gameMap = MapUtils.loadTileMap(pathToMap, internalMap);
+                setScreen(new GameHandler(this, gameMap));
+                break;
+            case PLAY_ONLINE:
+                gameMap = MapUtils.loadTileMap(pathToMap, internalMap);
+                setScreen(new GameHandler(this, gameMap));
+                break;
+            case MAP_EDITOR:
+                TiledMap map;
+                if (pathToMap == null) {
+                    map = MapUtils.genVoidMap(wMap, hMap, mapName);
+                    map.getProperties().put(MapUtils.MAP_NAME_PROP, mapName);
+                } else {
+                    gameMap = MapUtils.loadTileMap(pathToMap, internalMap);
+                    map = gameMap.getTiledMap();
+                }
+                setScreen(new EditorHandler(this, map));
+                break;
+            default:
+                break;
+        }
+    }
 
-	@Override
-	public Skin getSkin() {
-		return skin;
-	}
+    @Override
+    public void showMenu() {
+        // Back to native menu
+        Gdx.app.exit();
+    }
+
+    @Override
+    public Skin getSkin() {
+        return skin;
+    }
 }

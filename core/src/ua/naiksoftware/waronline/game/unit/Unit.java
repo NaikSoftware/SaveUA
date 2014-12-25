@@ -59,105 +59,104 @@ public class Unit {
     }
 
     /*public int calcPassability(TileCode tileCode) {
-        int cellsMinus = passability + 999;
-        if (tileCode == TileCode.GRASS) {
-            //grass
-            switch (code) {
-                case UnitCode.ING_AVTO:
-                    cellsMinus = passability / 3;
-                    break;
-                case UnitCode.SOLDIER:
-                    cellsMinus = passability / 3;
-                    break;
-                case UnitCode.HORSE:
-                    cellsMinus = passability / 4;
-                    break;
-                case UnitCode.HOTCHKISS:
-                    cellsMinus = passability / 3;
-                    break;
-                case UnitCode.T34_85:
-                    cellsMinus = passability / 4;
-                    break;
-                case UnitCode.PANZER:
-                    cellsMinus = passability / 3;
-                    break;
-                case UnitCode.TIGER:
-                    cellsMinus = passability / 3;
-                    break;
-                case UnitCode.ARTILLERY:
-                    cellsMinus = passability / 2;
-                    break;
-            }
-        } else if (tileCode > TileCode.GRASS && tileCode < TileCode.ROAD_HORIZ) {
-            //trees
-            switch (code) {
-                case UnitCode.ING_AVTO:
-                    cellsMinus = passability / 2;
-                    break;
-                case UnitCode.SOLDIER:
-                    cellsMinus = passability / 3;
-                    break;
-                case UnitCode.HORSE:
-                    cellsMinus = passability / 3;
-                    break;
-                case UnitCode.HOTCHKISS:
-                    cellsMinus = passability / 2;
-                    break;
-                case UnitCode.T34_85:
-                    cellsMinus = passability / 2;
-                    break;
-                case UnitCode.PANZER:
-                    cellsMinus = passability / 2;
-                    break;
-                case UnitCode.TIGER:
-                    cellsMinus = passability / 2;
-                    break;
-                case UnitCode.ARTILLERY:
-                    cellsMinus = passability / 1;
-                    break;
-            }
-        } else if (tileCode > TileCode.TREES_INCORNER_LEFT_DOWN && tileCode < TileCode.WATER) {
-            //road
-            switch (code) {
-                case UnitCode.ING_AVTO:
-                    cellsMinus = passability / 4;
-                    break;
-                case UnitCode.SOLDIER:
-                    cellsMinus = passability / 3;
-                    break;
-                case UnitCode.HORSE:
-                    cellsMinus = passability / 5;
-                    break;
-                case UnitCode.HOTCHKISS:
-                    cellsMinus = passability / 4;
-                    break;
-                case UnitCode.T34_85:
-                    cellsMinus = passability / 5;
-                    break;
-                case UnitCode.PANZER:
-                    cellsMinus = passability / 4;
-                    break;
-                case UnitCode.TIGER:
-                    cellsMinus = passability / 4;
-                    break;
-                case UnitCode.ARTILLERY:
-                    cellsMinus = passability / 3;
-                    break;
-            }
-        } else if (tileCode > TileCode.BRIDGE_RIGHT && tileCode < TileCode.REDUIT_1) {
-            //water
-            switch (code) {
-                case UnitCode.SOLDIER:
-                    cellsMinus = passability;
-                    break;
-                case UnitCode.HORSE:
-                    cellsMinus = passability / 2;
-                    break;
-            }
-        }
-        return cellsMinus;
-    }*/
-
+     int cellsMinus = passability + 999;
+     if (tileCode == TileCode.GRASS) {
+     //grass
+     switch (code) {
+     case UnitCode.ING_AVTO:
+     cellsMinus = passability / 3;
+     break;
+     case UnitCode.SOLDIER:
+     cellsMinus = passability / 3;
+     break;
+     case UnitCode.HORSE:
+     cellsMinus = passability / 4;
+     break;
+     case UnitCode.HOTCHKISS:
+     cellsMinus = passability / 3;
+     break;
+     case UnitCode.T34_85:
+     cellsMinus = passability / 4;
+     break;
+     case UnitCode.PANZER:
+     cellsMinus = passability / 3;
+     break;
+     case UnitCode.TIGER:
+     cellsMinus = passability / 3;
+     break;
+     case UnitCode.ARTILLERY:
+     cellsMinus = passability / 2;
+     break;
+     }
+     } else if (tileCode > TileCode.GRASS && tileCode < TileCode.ROAD_HORIZ) {
+     //trees
+     switch (code) {
+     case UnitCode.ING_AVTO:
+     cellsMinus = passability / 2;
+     break;
+     case UnitCode.SOLDIER:
+     cellsMinus = passability / 3;
+     break;
+     case UnitCode.HORSE:
+     cellsMinus = passability / 3;
+     break;
+     case UnitCode.HOTCHKISS:
+     cellsMinus = passability / 2;
+     break;
+     case UnitCode.T34_85:
+     cellsMinus = passability / 2;
+     break;
+     case UnitCode.PANZER:
+     cellsMinus = passability / 2;
+     break;
+     case UnitCode.TIGER:
+     cellsMinus = passability / 2;
+     break;
+     case UnitCode.ARTILLERY:
+     cellsMinus = passability / 1;
+     break;
+     }
+     } else if (tileCode > TileCode.TREES_INCORNER_LEFT_DOWN && tileCode < TileCode.WATER) {
+     //road
+     switch (code) {
+     case UnitCode.ING_AVTO:
+     cellsMinus = passability / 4;
+     break;
+     case UnitCode.SOLDIER:
+     cellsMinus = passability / 3;
+     break;
+     case UnitCode.HORSE:
+     cellsMinus = passability / 5;
+     break;
+     case UnitCode.HOTCHKISS:
+     cellsMinus = passability / 4;
+     break;
+     case UnitCode.T34_85:
+     cellsMinus = passability / 5;
+     break;
+     case UnitCode.PANZER:
+     cellsMinus = passability / 4;
+     break;
+     case UnitCode.TIGER:
+     cellsMinus = passability / 4;
+     break;
+     case UnitCode.ARTILLERY:
+     cellsMinus = passability / 3;
+     break;
+     }
+     } else if (tileCode > TileCode.BRIDGE_RIGHT && tileCode < TileCode.REDUIT_1) {
+     //water
+     switch (code) {
+     case UnitCode.SOLDIER:
+     cellsMinus = passability;
+     break;
+     case UnitCode.HORSE:
+     cellsMinus = passability / 2;
+     break;
+     }
+     }
+     return cellsMinus;
+     }*/
     public void setFree() {
         gamer = null;
         this.free = true;
@@ -169,52 +168,51 @@ public class Unit {
         return free;
     }
 
-/*    public int shot(Unit enemy) {
-        int x1 = x - enemy.getX();
-        int y1 = y - enemy.getY();
-        int x2 = lookX;
-        int y2 = lookY;
-        double lenShooting = Math.hypot(x1, y1);
-        double len2 = Math.hypot(x2, y2);
-        double scalarMult = x1 * x2 + y1 * y2;
-        double lenMult = lenShooting * len2;
-        double angle = Math.toDegrees(Math.acos(scalarMult / lenMult));
-        if (x2 < 0) {
-            angle = 360 - angle;
-        }
-        int shotDirection = (int) (angle + 45) / 90;
-        if (shotDirection > 3) {
-            shotDirection = 0;
-        }
-        int result = DB.shootingForce.get(enemy.getCode());
-        Log.d("\n\n" + tag, "result=" + result);
-        float percent = (float) lenShooting / DB.attackRadius.get(enemy.getCode());
-        if (enemy.getCode() == UnitCode.ARTILLERY) {// артилерия наносит больший урон издалека
-            percent = 1f - percent;
-        }
-        Log.d(tag, "percent="+percent);
-        percent /= 2f;// уменьшаем в 2 раза влияние расстояния на урон
-        result *= (1f - percent);
-        Log.d(tag, "result(len)=" + result);
-        int koefArmor;
-        if (shotDirection == 0) {// в спину
-            koefArmor = DB.armorRear.get(code);
-        } else if (shotDirection == 1) {// сбоку
-            koefArmor = DB.armorSide.get(code);
-        } else {// спереди
-            koefArmor = DB.armorFront.get(code);
-        }
-        result -= (result * (koefArmor / 100f));
-        Log.d(tag, "result(armor)=" + result);
-        Log.d(tag, "x1=" + x1 + " y1=" + y1);
-        Log.d(tag, "x2=" + x2 + " y2=" + y2);
-        Log.d(tag, "lenShooting=" + lenShooting);
-        Log.d(tag, "angleShooting=" + angle);
-        Log.d(tag, "directionShooting=" + shotDirection);
-        changeLife(result);
-        return result;
-    }*/
-
+    /*    public int shot(Unit enemy) {
+     int x1 = x - enemy.getX();
+     int y1 = y - enemy.getY();
+     int x2 = lookX;
+     int y2 = lookY;
+     double lenShooting = Math.hypot(x1, y1);
+     double len2 = Math.hypot(x2, y2);
+     double scalarMult = x1 * x2 + y1 * y2;
+     double lenMult = lenShooting * len2;
+     double angle = Math.toDegrees(Math.acos(scalarMult / lenMult));
+     if (x2 < 0) {
+     angle = 360 - angle;
+     }
+     int shotDirection = (int) (angle + 45) / 90;
+     if (shotDirection > 3) {
+     shotDirection = 0;
+     }
+     int result = DB.shootingForce.get(enemy.getCode());
+     Log.d("\n\n" + tag, "result=" + result);
+     float percent = (float) lenShooting / DB.attackRadius.get(enemy.getCode());
+     if (enemy.getCode() == UnitCode.ARTILLERY) {// артилерия наносит больший урон издалека
+     percent = 1f - percent;
+     }
+     Log.d(tag, "percent="+percent);
+     percent /= 2f;// уменьшаем в 2 раза влияние расстояния на урон
+     result *= (1f - percent);
+     Log.d(tag, "result(len)=" + result);
+     int koefArmor;
+     if (shotDirection == 0) {// в спину
+     koefArmor = DB.armorRear.get(code);
+     } else if (shotDirection == 1) {// сбоку
+     koefArmor = DB.armorSide.get(code);
+     } else {// спереди
+     koefArmor = DB.armorFront.get(code);
+     }
+     result -= (result * (koefArmor / 100f));
+     Log.d(tag, "result(armor)=" + result);
+     Log.d(tag, "x1=" + x1 + " y1=" + y1);
+     Log.d(tag, "x2=" + x2 + " y2=" + y2);
+     Log.d(tag, "lenShooting=" + lenShooting);
+     Log.d(tag, "angleShooting=" + angle);
+     Log.d(tag, "directionShooting=" + shotDirection);
+     changeLife(result);
+     return result;
+     }*/
     private void changeLife(int dLife) {
         life += dLife;
 //		  После смерти юнит больше не не отрисовывается через класс Unit,
@@ -225,16 +223,15 @@ public class Unit {
 //        updateLifeBitmap();
     }
 
-/*    private void updateLifeBitmap() {
-        float drawLife = (life * ((float) (LIFE_WIDTH - 4) / DB.lifes.get(code))) + 2;
-        Canvas canvas = new Canvas(lifeBitmap);
-        canvas.drawColor(0xff100910);
-        Paint lifePaint = new Paint();
-        lifePaint.setColor(lifeColor);
-        lifePaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        canvas.drawRect(2, 2, drawLife, LIFE_HEIGHT - 2, lifePaint);
-    }*/
-
+    /*    private void updateLifeBitmap() {
+     float drawLife = (life * ((float) (LIFE_WIDTH - 4) / DB.lifes.get(code))) + 2;
+     Canvas canvas = new Canvas(lifeBitmap);
+     canvas.drawColor(0xff100910);
+     Paint lifePaint = new Paint();
+     lifePaint.setColor(lifeColor);
+     lifePaint.setStyle(Paint.Style.FILL_AND_STROKE);
+     canvas.drawRect(2, 2, drawLife, LIFE_HEIGHT - 2, lifePaint);
+     }*/
     // Never used
     public int getLife() {
         return life;
@@ -246,76 +243,74 @@ public class Unit {
 
     // return draw state
 /*    public int draw(Canvas canvas) {
-        if (life > 0) canvas.drawBitmap(lifeBitmap, drawx, drawy - LIFE_HEIGHT, null);
-        if (move) {
-            int time = (int) (System.currentTimeMillis() - startMove);
-            shift = time / DELAY;
-            if ((dX != 0 && shift > (Math.abs(dX) - 3)) || (dY != 0 && shift > (Math.abs(dY) - 3))) {
-                //Log.d("Unit", "shift="+shift+" dx="+dX+" dy="+dY);
-                this.x += lookX; //dX / Tile.TILE_SIZE;
-                this.y += lookY; //dY / Tile.TILE_SIZE;
-                this.drawx = Tile.TILE_SIZE * x;
-                this.drawy = Tile.TILE_SIZE * y;
-                if (path.size() > 1) {
-                    path.remove(0);
-                    int index = ((int) (System.currentTimeMillis() - startAnim) / ANIM_DELAY) % anim.length;
-                    canvas.drawBitmap(anim[index], drawx, drawy, null);
-                    return MOVE_TO_NEW_CELL;
-                } else {
-                    canvas.drawBitmap(anim[0], drawx, drawy, null);
-                    startAnim = shift = 0;
-                    this.move = false;
-                    return END_MOVE; // Весь путь пройден
-                }
-            }
-            int index = ((int) (System.currentTimeMillis() - startAnim) / ANIM_DELAY) % anim.length;
-            if (dX < 0) {
-                drawx = Tile.TILE_SIZE * x - shift;
-            } else if (dY < 0) {
-                drawy = Tile.TILE_SIZE * y - shift;
-            } else if (dX > 0) {
-                drawx = Tile.TILE_SIZE * x + shift;
-            } else if (dY > 0) {
-                drawy = Tile.TILE_SIZE * y + shift;
-            }
-            canvas.drawBitmap(anim[index], drawx, drawy, null);
-            return MOVE;
-        } else {
-            canvas.drawBitmap(anim[0], drawx, drawy, null);
-            return NOT_MOVE;
-        }
-    }*/
-
+     if (life > 0) canvas.drawBitmap(lifeBitmap, drawx, drawy - LIFE_HEIGHT, null);
+     if (move) {
+     int time = (int) (System.currentTimeMillis() - startMove);
+     shift = time / DELAY;
+     if ((dX != 0 && shift > (Math.abs(dX) - 3)) || (dY != 0 && shift > (Math.abs(dY) - 3))) {
+     //Log.d("Unit", "shift="+shift+" dx="+dX+" dy="+dY);
+     this.x += lookX; //dX / Tile.TILE_SIZE;
+     this.y += lookY; //dY / Tile.TILE_SIZE;
+     this.drawx = Tile.TILE_SIZE * x;
+     this.drawy = Tile.TILE_SIZE * y;
+     if (path.size() > 1) {
+     path.remove(0);
+     int index = ((int) (System.currentTimeMillis() - startAnim) / ANIM_DELAY) % anim.length;
+     canvas.drawBitmap(anim[index], drawx, drawy, null);
+     return MOVE_TO_NEW_CELL;
+     } else {
+     canvas.drawBitmap(anim[0], drawx, drawy, null);
+     startAnim = shift = 0;
+     this.move = false;
+     return END_MOVE; // Весь путь пройден
+     }
+     }
+     int index = ((int) (System.currentTimeMillis() - startAnim) / ANIM_DELAY) % anim.length;
+     if (dX < 0) {
+     drawx = Tile.TILE_SIZE * x - shift;
+     } else if (dY < 0) {
+     drawy = Tile.TILE_SIZE * y - shift;
+     } else if (dX > 0) {
+     drawx = Tile.TILE_SIZE * x + shift;
+     } else if (dY > 0) {
+     drawy = Tile.TILE_SIZE * y + shift;
+     }
+     canvas.drawBitmap(anim[index], drawx, drawy, null);
+     return MOVE;
+     } else {
+     canvas.drawBitmap(anim[0], drawx, drawy, null);
+     return NOT_MOVE;
+     }
+     }*/
     public void setMove(ArrayList<Node> path) {
         this.path = path;
         this.startAnim = System.currentTimeMillis();
         move = true;
 //        continueMove();
     }
-    
-    /* Вызывается каждую пройденную клетку поля */
-/*    public void continueMove() {
-        Node node = path.get(0);
-        dX = (node.getX() - this.x) * Tile.TILE_SIZE;
-        dY = (node.getY() - this.y) * Tile.TILE_SIZE;
-        // set anim array
-        lookX = lookY = 0;
-        if (dX > 0) {
-            lookX = 1;
-            anim = Anim.get(code + UnitCode.ID_RIGHT);
-        } else if (dX < 0) {
-            lookX = -1;
-            anim = Anim.get(code + UnitCode.ID_LEFT);
-        } else if (dY > 0) {
-            lookY = 1;
-            anim = Anim.get(code + UnitCode.ID_DOWN);
-        } else if (dY < 0) {
-            lookY = -1;
-            anim = Anim.get(code + UnitCode.ID_UP);
-        }
-        startMove = System.currentTimeMillis();
-    }*/
 
+    /* Вызывается каждую пройденную клетку поля */
+    /*    public void continueMove() {
+     Node node = path.get(0);
+     dX = (node.getX() - this.x) * Tile.TILE_SIZE;
+     dY = (node.getY() - this.y) * Tile.TILE_SIZE;
+     // set anim array
+     lookX = lookY = 0;
+     if (dX > 0) {
+     lookX = 1;
+     anim = Anim.get(code + UnitCode.ID_RIGHT);
+     } else if (dX < 0) {
+     lookX = -1;
+     anim = Anim.get(code + UnitCode.ID_LEFT);
+     } else if (dY > 0) {
+     lookY = 1;
+     anim = Anim.get(code + UnitCode.ID_DOWN);
+     } else if (dY < 0) {
+     lookY = -1;
+     anim = Anim.get(code + UnitCode.ID_UP);
+     }
+     startMove = System.currentTimeMillis();
+     }*/
     // Never used
     public void setCoords(int x, int y) {
         move = false;
@@ -357,7 +352,6 @@ public class Unit {
 //    public int getLookRadius() {
 //        return DB.looks.get(code);
 //    }
-
     public int getPassability() {
         return passability;
     }
@@ -371,13 +365,11 @@ public class Unit {
     }
 
  //   public int getShotMaxPassability() {
- //       return DB.maxCellsShot.get(code) * 100;
- //   }
-
+    //       return DB.maxCellsShot.get(code) * 100;
+    //   }
  //   public int getAttackRadius() {
- //       return DB.attackRadius.get(code);
- //   }
-
+    //       return DB.attackRadius.get(code);
+    //   }
     public double distanseTo(int x2, int y2) {
         return Math.hypot(x2 - x, y2 - y);
     }
@@ -416,19 +408,17 @@ public class Unit {
     }
 
     // Для отрисовки юнита как картинки (в меню например)
- //   public Bitmap getBitmap() {
- //       return anim[0];
- //   }
-
+    //   public Bitmap getBitmap() {
+    //       return anim[0];
+    //   }
     public int getColor() {
         return lifeColor;
     }
 
-    /** 
-     * Сортировщик: чем выше координата юнита (чем меньше y),
-     * тем раньше он будет отрисован.
-     * Для правильного наложения выступающих за размеры тайла (спрайта)
-     * элементов, например полоса жизней над юнитами.
+    /**
+     * Сортировщик: чем выше координата юнита (чем меньше y), тем раньше он
+     * будет отрисован. Для правильного наложения выступающих за размеры тайла
+     * (спрайта) элементов, например полоса жизней над юнитами.
      */
     public static class DrawSortComparator implements Comparator<Unit> {
 

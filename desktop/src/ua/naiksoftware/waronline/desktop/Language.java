@@ -33,6 +33,8 @@ public class Language implements Lng {
             put(OK, "Ok");
             put(CANCEL, "Cancel");
             put(EXIT, "Exit");
+            put(LOCATE_OBJECTS, "Locate objects");
+            put(UNITS_GAMER, "Locate units gamer");
         }
     };
 
@@ -56,6 +58,8 @@ public class Language implements Lng {
             put(OK, "Добре");
             put(CANCEL, "Скасувати");
             put(EXIT, "Вийти");
+            put(LOCATE_OBJECTS, "Розташуйте на мапi iншi об'екти");
+            put(UNITS_GAMER, "Розташуйте юнiтiв гравця");
         }
     };
 
@@ -79,6 +83,8 @@ public class Language implements Lng {
             put(OK, "Ok");
             put(CANCEL, "Отмена");
             put(EXIT, "Выйти");
+            put(LOCATE_OBJECTS, "Расположите на карте другие обьекты");
+            put(UNITS_GAMER, "Расположите юнитов игрока");
         }
     };
 
