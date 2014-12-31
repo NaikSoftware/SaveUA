@@ -3,7 +3,7 @@ package ua.naiksoftware.waronline.game;
 /**
  * Дерева, будівлі, і т.п.
  */
-public enum ObjCode {
+public enum MapObjCode {
 	HATA_1,
 	FORT,
 	ATB,

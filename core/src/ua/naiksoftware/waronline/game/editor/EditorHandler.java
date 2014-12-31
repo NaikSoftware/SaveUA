@@ -1,10 +1,14 @@
 package ua.naiksoftware.waronline.game.editor;
 
+import ua.naiksoftware.waronline.MapCell;
 import ua.naiksoftware.waronline.MapUtils;
 import ua.naiksoftware.waronline.ScrollMap;
-import ua.naiksoftware.waronline.game.ObjCode;
+import ua.naiksoftware.waronline.game.Gamer;
+import ua.naiksoftware.waronline.game.MapObjCode;
+import ua.naiksoftware.waronline.game.MapObject;
 import ua.naiksoftware.waronline.game.TileCode;
-import ua.naiksoftware.waronline.res.MetaData;
+import ua.naiksoftware.waronline.game.unit.UnitCode;
+import ua.naiksoftware.waronline.res.MapMetaData;
 import ua.naiksoftware.waronline.res.ResKeeper;
 import ua.naiksoftware.waronline.res.Words;
 import ua.naiksoftware.waronline.res.id.AtlasId;
@@ -12,16 +16,15 @@ import ua.naiksoftware.waronline.screenmanager.Manager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -32,35 +35,40 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-import ua.naiksoftware.waronline.game.Gamer;
-import ua.naiksoftware.waronline.game.unit.UnitCode;
+import ua.naiksoftware.waronline.game.ImpassableCells;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class EditorHandler extends ScrollMap {
 
     private Manager manager;
-    private TiledMap map;
-    private SpriteBatch batch;
-    private BitmapFont font;
-    private Label headLabel;
+    private final TiledMap map;
+    private final Batch batch;
+    private final BitmapFont font;
+    private final Label headLabel;
     private TextButton btnBack, btnNext;
-    private Vector2 tapCoords = new Vector2();
-    private TiledMapTileLayer tileLayer;
-    private TiledMapTileLayer[] objLayers;
+    private final TiledMapTileLayer layerBg;
 
-    Array<EditCell> tiles;
-    private EditCell currTile;
+    /**
+     * Tiles on panel
+     */
+    Array<SelectPanelCell> panelTiles;
+    private SelectPanelCell currTile;
+    /**
+     * Objects (buildings, trees) on panel
+     */
+    Array<SelectPanelCell> panelObjects;
+    private SelectPanelCell currObj;
+    /**
+     * Units on panel
+     */
+    private Array<SelectPanelCell> panelUnits;
+    private SelectPanelCell currUnit;
 
-    Array<EditCell> objects;
-    private EditCell currObj;
-
-    private Array<EditCell> panelUnits;
-    private EditCell currUnit;
-
-    private Array<EditUnit> units;
+    private final Array<Sprite> sprites;
     private Gamer currentGamer;
 
-    private int cellSize;
-    private Group gameWidget;
+    private final int cellSize;
 
     private enum State {
 
@@ -69,19 +77,16 @@ public class EditorHandler extends ScrollMap {
 
     private State state;
 
+    // TODO: send map objects if edit existing map
     public EditorHandler(Manager manager, TiledMap map) {
         super(map);
         this.manager = manager;
         this.map = map;
-        this.tileLayer = (TiledMapTileLayer) map.getLayers().get(0);
-        objLayers = new TiledMapTileLayer[5];
-        for (int i = 0; i < 5; i++) {
-            objLayers[i] = (TiledMapTileLayer) map.getLayers().get(i + 1);
-        }
+        this.layerBg = (TiledMapTileLayer) map.getLayers().get(0);
         cellSize = mapCellSize();
         font = new BitmapFont();
         batch = new SpriteBatch();
-        units = new Array<EditUnit>();
+        sprites = new Array<Sprite>();
 
         btnBack = new TextButton(manager.lng.get(Words.BACK), manager.getSkin());
         btnNext = new TextButton(manager.lng.get(Words.NEXT), manager.getSkin());
@@ -98,19 +103,25 @@ public class EditorHandler extends ScrollMap {
         head.setBackground(manager.getSkin().getDrawable("default-pane"));
         head.pack();
         setWidget(head, Side.TOP, Align.center);
-        gameWidget = getGameWidget();
+        setSprites(sprites);
     }
 
-    //int x, y;
+    @Override
+    public void resize(int newX, int newY) {
+        super.resize(newX, newY);
+    }
+
     @Override
     public void render(float deltaTime) {
         super.render(deltaTime);
 
         batch.begin();
-        //font.draw(batch, "Sel: " + x + ", " + y + " rang: " + rang, 10, 60);
-        //font.draw(batch, "Tap: " + tapCoords.x + ", " + tapCoords.y, 10, 40);
         font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);
         batch.end();
+    }
+
+    @Override
+    protected void drawGameScreen(Batch batch, float deltaTime) {
     }
 
     private final ChangeListener btnListener = new ChangeListener() {
@@ -149,9 +160,9 @@ public class EditorHandler extends ScrollMap {
                 }
             } else {
                 if (a == btnNext) {
-                    //map.getProperties().put(MapUtils.MAX_GAMERS_PROP, 2);
-                    //EditGameMap editGameMap = new EditGameMap(map, units);
-                    //MapUtils.saveMap(editGameMap);
+                    // map.getProperties().put(MapUtils.MAX_GAMERS_PROP, 2);
+                    // EditGameMap editGameMap = new EditGameMap(map, units);
+                    // MapUtils.saveMap(editGameMap);
                 }
             }
         }
@@ -159,44 +170,92 @@ public class EditorHandler extends ScrollMap {
 
     @Override
     protected void tapMap(Vector2 tapCoords) {
-        this.tapCoords = tapCoords;
+        int tapX = (int) tapCoords.x;
+        int tapY = (int) tapCoords.y;
         if (state == State.TILEMAP) {
-            tileLayer.setCell((int) tapCoords.x, (int) tapCoords.y,
-                    currTile.getInsertCell());
+            layerBg.setCell(tapX, tapY, currTile.getInsertCell());
         } else if (state == State.OBJECTS) {
-            for (int i = 4; i >= 0; i--) {
-                int x = (int) tapCoords.x / (i + 1);
-                int y = (int) tapCoords.y / (i + 1);
-                Cell sel = objLayers[i].getCell(x, y);
-                if (sel != null) {
-                    objLayers[i].setCell(x, y, null);
-                    return;
-                }
-            }
-            Cell insCell = currObj.getInsertCell();
-            int range = MetaData.objRange(insCell.getTile().getProperties()
-                    .get(MapUtils.CELL_OBJ_PROP, ObjCode.class));
-            objLayers[range - 1].setCell((int) tapCoords.x / range,
-                    (int) tapCoords.y / range, insCell);
-        } else if (state == State.GAMERS_UNITS) {
-            int x = (int) tapCoords.x * cellSize;
-            int y = (int) tapCoords.y * cellSize;
-            boolean hold = false;
-            for (EditUnit u : units) {
-                if ((int) u.getX() == x && (int) u.getY() == y) {
-                    if (u.getGamer() == currentGamer) {
-                        units.removeValue(u, true);
-                        u.remove();
+            MapObject obj = null;
+            for (Sprite s : sprites) {
+                if (s.getBoundingRectangle().contains(tapX * cellSize + 1, tapY * cellSize + 1)
+                        && s instanceof MapObject) {
+                    obj = (MapObject) s;
+                    int x = (int) (obj.getX() / cellSize);
+                    int y = (int) (obj.getY() / cellSize);
+                    int[][] mask = MapMetaData.objIntersect(obj.getMapObjCode());
+                    int range = mask.length;
+                    for (int i = 0; i < range; i++) {
+                        int arr[] = mask[i];
+                        for (int j = 0; j < range; j++) {
+                            int bit = arr[j];
+                            if (bit == 1) {
+                                ImpassableCells.remove(x + i, y + j);
+                            }
+                        }
                     }
-                    hold = true;
+                    sprites.removeValue(obj, true);
                     break;
                 }
             }
+            if (obj == null) {
+                obj = new MapObject(currObj.getMapObjCode());
+                obj.setX(tapX * cellSize);
+                obj.setY(tapY * cellSize);
+                int[][] mask = MapMetaData.objIntersect(obj.getMapObjCode());
+                int range = mask.length;
+                for (int i = 0; i < range; i++) {
+                    int arr[] = mask[i];
+                    for (int j = 0; j < range; j++) {
+                        int bit = arr[j];
+                        if (bit == 1) {
+                            ImpassableCells.add(tapX + i, tapY + j);
+                        }
+                    }
+                }
+                sprites.add(obj);
+            }
+        } else if (state == State.GAMERS_UNITS) {
+            int x = tapX * cellSize;
+            int y = tapY * cellSize;
+            boolean hold = false;
+            for (Sprite s : sprites) {
+                if (s instanceof MapUnit) {
+                    MapUnit u = (MapUnit) s;
+                    if ((int) u.getX() == x && (int) u.getY() == y) {
+                        if (u.getGamer() == currentGamer) {
+                            sprites.removeValue(u, true);
+                        }
+                        hold = true;
+                        break;
+                    }
+                }
+            }
             if (!hold) {
-                EditUnit unit = new EditUnit(currUnit.getDrawable(), currUnit.getUnitCode(), currentGamer);
-                unit.setPosition(x, y);
-                units.add(unit);
-                gameWidget.addActor(unit);
+                MapCell cell = (MapCell) layerBg.getCell(tapX, tapY);
+                if (!ImpassableCells.have(tapX, tapY)) {
+                    switch (cell.getCode()) {
+                        case WATER:
+                        case WATER_CORNER_LEFT_DOWN:
+                        case WATER_CORNER_LEFT_UP:
+                        case WATER_CORNER_RIGHT_DOWN:
+                        case WATER_CORNER_RIGHT_UP:
+                        case WATER_INCORNER_LEFT_DOWN:
+                        case WATER_INCORNER_LEFT_UP:
+                        case WATER_INCORNER_RIGHT_DOWN:
+                        case WATER_INCORNER_RIGHT_UP:
+                        case WATER_DOWN_2:
+                        case WATER_LEFT_2:
+                        case WATER_RIGHT_2:
+                        case WATER_UP_2:
+                        case REDUIT_1:
+                        case REDUIT_2:
+                            break;
+                        default:
+                            MapUnit unit = new MapUnit(currUnit.getUnitCode(), currentGamer);
+                            unit.setPosition(x, y);
+                            sprites.add(unit);
+                    }
+                }
             }
         }
     }
@@ -217,13 +276,13 @@ public class EditorHandler extends ScrollMap {
             tilesTable.setBackground(manager.getSkin().getDrawable(
                     "default-pane"));
 
-            if (tiles == null) {
-                tiles = new Array<EditCell>();
+            if (panelTiles == null) {
+                panelTiles = new Array<SelectPanelCell>();
                 initTiles();
-                currTile = tiles.first();
+                currTile = panelTiles.first();
                 currTile.setSelected(true);
             }
-            for (EditCell tile : tiles) {
+            for (SelectPanelCell tile : panelTiles) {
                 tilesTable.add(tile);
             }
 
@@ -232,19 +291,28 @@ public class EditorHandler extends ScrollMap {
             setWidget(scrollPane, Side.BOTTOM, Align.left);
 
         } else if (state == State.OBJECTS) {
+            // оставляем саму карту
+            Sprite s;
+            for (int i = 0; i < sprites.size; i++) {
+                s = sprites.get(i);
+                if (s instanceof MapUnit) {
+                    sprites.removeValue(s, true);
+                    i--;
+                }
+            }
             headLabel.setText(manager.lng.get(Words.LOCATE_OBJECTS));
             Table objTable = new Table();
             objTable.setBackground(manager.getSkin()
                     .getDrawable("default-pane"));
 
-            if (objects == null) {
-                objects = new Array<EditCell>();
+            if (panelObjects == null) {
+                panelObjects = new Array<SelectPanelCell>();
                 initObjects();
-                currObj = objects.first();
+                currObj = panelObjects.first();
                 currObj.setSelected(true);
             }
 
-            for (EditCell obj : objects) {
+            for (SelectPanelCell obj : panelObjects) {
                 objTable.add(obj);
             }
             ScrollPane scrollPane = new ScrollPane(objTable);
@@ -256,13 +324,13 @@ public class EditorHandler extends ScrollMap {
             Table unitTable = new Table();
 
             if (panelUnits == null) {
-                panelUnits = new Array<EditCell>();
+                panelUnits = new Array<SelectPanelCell>();
                 initPanelUnits();
                 currUnit = panelUnits.first();
                 currUnit.setSelected(true);
             }
 
-            for (EditCell unit : panelUnits) {
+            for (SelectPanelCell unit : panelUnits) {
                 unitTable.add(unit);
             }
 
@@ -271,6 +339,9 @@ public class EditorHandler extends ScrollMap {
 
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
+                    currentGamer = selectPrevGamer();
+                    headLabel.setText(manager.lng.get(Words.UNITS_GAMER) + " "
+                            + currentGamer.getId());
                 }
             });
             TextButton btnPlus = new TextButton(" + ", manager.getSkin());
@@ -278,23 +349,58 @@ public class EditorHandler extends ScrollMap {
 
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
+                    if (getCountUnits(currentGamer) > 0) {
+                        currentGamer = new Gamer();
+                        headLabel.setText(manager.lng.get(Words.UNITS_GAMER)
+                                + " " + currentGamer.getId());
+                    }
                 }
             });
 
             ScrollPane scrollPane = new ScrollPane(unitTable);
-            scrollPane.pack();
             Table panel = new Table();
             panel.setBackground(manager.getSkin().getDrawable("default-pane"));
             panel.add(btnMinus).left();
             panel.add(scrollPane).expandX().center();
             panel.add(btnPlus);
+            panel.pack();
             setWidget(panel, Side.BOTTOM, Align.left);
-            units.clear();
             Gamer.count = 0;
             currentGamer = new Gamer();
         }
 
         this.state = state;
+    }
+
+    private int getCountUnits(Gamer g) {
+        int count = 0;
+        for (Sprite s : sprites) {
+            if (s instanceof MapUnit && ((MapUnit) s).getGamer() == g) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private Gamer selectPrevGamer() {
+        Gamer prev = currentGamer;
+        if (Gamer.count > 1) {
+            Gamer.count--;
+            Sprite s;
+            for (int i = 0; i < sprites.size; i++) {
+                s = sprites.get(i);
+                if (s instanceof MapUnit) {
+                    MapUnit u = (MapUnit) s;
+                    if (u.getGamer() == currentGamer) {
+                        sprites.removeValue(u, true);
+                        i--;
+                    } else if (u.getGamer().getId() == Gamer.count) {
+                        prev = u.getGamer();
+                    }
+                }
+            }
+        }
+        return prev;
     }
 
     private void initTiles() {
@@ -357,55 +463,55 @@ public class EditorHandler extends ScrollMap {
 
     private void putTile(TileCode code) {
         Cell cell = MapUtils.getCell(code, false);
-        EditCell tile = new EditCell(cell, cellSize);
+        SelectPanelCell tile = new SelectPanelCell(cell);
         tile.addListener(tileListener);
-        tiles.add(tile);
+        panelTiles.add(tile);
     }
 
-    private ClickListener tileListener = new ClickListener() {
+    private final ClickListener tileListener = new ClickListener() {
 
         @Override
         public void clicked(InputEvent event, float x, float y) {
             if (state == State.TILEMAP) {
                 currTile.setSelected(false);
-                currTile = (EditCell) event.getTarget();
+                currTile = (SelectPanelCell) event.getTarget();
                 currTile.setSelected(true);
             } else if (state == State.OBJECTS) {
                 currObj.setSelected(false);
-                currObj = (EditCell) event.getTarget();
+                currObj = (SelectPanelCell) event.getTarget();
                 currObj.setSelected(true);
             } else if (state == State.GAMERS_UNITS) {
                 currUnit.setSelected(false);
-                currUnit = (EditCell) event.getTarget();
+                currUnit = (SelectPanelCell) event.getTarget();
                 currUnit.setSelected(true);
             }
         }
     };
 
     private void initObjects() {
-        putObject(ObjCode.HATA_1);
-        putObject(ObjCode.FORT);
-        putObject(ObjCode.ATB);
-        putObject(ObjCode.CHURCH);
-        putObject(ObjCode.REMAINS1);
-        putObject(ObjCode.REMAINS2);
-        putObject(ObjCode.HATA_2);
-        putObject(ObjCode.TREE_1);
-        putObject(ObjCode.TREE_2);
-        putObject(ObjCode.HATA_3);
-        putObject(ObjCode.HATA_4);
-        putObject(ObjCode.TENT);
-        putObject(ObjCode.STOLB_1);
-        putObject(ObjCode.STOLB_2);
-        putObject(ObjCode.WELL);
-        putObject(ObjCode.KPP);
+        putMapObjectToPanel(MapObjCode.HATA_1);
+        putMapObjectToPanel(MapObjCode.FORT);
+        putMapObjectToPanel(MapObjCode.ATB);
+        putMapObjectToPanel(MapObjCode.CHURCH);
+        putMapObjectToPanel(MapObjCode.REMAINS1);
+        putMapObjectToPanel(MapObjCode.REMAINS2);
+        putMapObjectToPanel(MapObjCode.HATA_2);
+        putMapObjectToPanel(MapObjCode.TREE_1);
+        putMapObjectToPanel(MapObjCode.TREE_2);
+        putMapObjectToPanel(MapObjCode.HATA_3);
+        putMapObjectToPanel(MapObjCode.HATA_4);
+        putMapObjectToPanel(MapObjCode.TENT);
+        putMapObjectToPanel(MapObjCode.STOLB_1);
+        putMapObjectToPanel(MapObjCode.STOLB_2);
+        putMapObjectToPanel(MapObjCode.WELL);
+        putMapObjectToPanel(MapObjCode.KPP);
     }
 
-    private void putObject(ObjCode code) {
-        Cell cell = MapUtils.getObjCell(code);
-        EditCell editCell = new EditCell(cell, cellSize);
+    private void putMapObjectToPanel(MapObjCode code) {
+        SelectPanelCell editCell = new SelectPanelCell(MapObject
+                .getAtlasRegions(code).first(), code, cellSize);
         editCell.addListener(tileListener);
-        objects.add(editCell);
+        panelObjects.add(editCell);
     }
 
     private void initPanelUnits() {
@@ -420,45 +526,10 @@ public class EditorHandler extends ScrollMap {
     }
 
     private void putUnitToPanel(UnitCode code) {
-        TextureAtlas atlas = ResKeeper.get(AtlasId.UNIT_SPRITES);
-        String name = null;
-        switch (code) {
-            case BTR_4E:
-                name = "horse_up";
-                break;
-            case ARTILLERY:
-                name = "artillery_up";
-                break;
-            case HOTCHKISS:
-                name = "hotchkiss_up";
-                break;
-            case ING_AVTO:
-                name = "avto_up";
-                break;
-            case PANZER:
-                name = "panzer_up";
-                break;
-            case T34_85:
-                name = "t34_85_up";
-                break;
-            case SOLDIER:
-                name = "soldier_up";
-                break;
-            case TIGER:
-                name = "tiger_up";
-                break;
-        }
-
-        if (name == null) {
-            throw new IllegalArgumentException("Name for code \"" + code
-                    + "\" in atlas units sprites not exists");
-        }
-        TextureRegion r = atlas.findRegion(name);
-        if (r == null) {
-            throw new IllegalArgumentException("Name \"" + name
-                    + "\" in atlas units sprites not exists");
-        }
-        panelUnits.add(new EditCell(r, code));
+        SelectPanelCell cell = new SelectPanelCell(
+                MapUnit.getTextureRegion(code), code);
+        cell.addListener(tileListener);
+        panelUnits.add(cell);
     }
 
     @Override

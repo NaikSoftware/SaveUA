@@ -6,21 +6,24 @@ import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 /**
@@ -34,15 +37,15 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
  */
 public abstract class ScrollMap implements Screen {
 
-    private InputMultiplexer im;
-    private TiledMapRenderer mapRenderer;
+    private final InputMultiplexer im;
+    private final OrthogonalTiledMapRenderer mapRenderer;
     private OrthographicCamera mapCamera;
-    private Actor mapHolder;
-    private ScreenViewport stageViewport;
-    private Stage stage;
+    private final Actor mapHolder;
+    private final ScreenViewport stageViewport;
+    private final Stage stage;
     private boolean disposed;
-    private ScrollPane scrollPane;
-    private Table root;
+    private final ScrollPane scrollPane;
+    private final Table root;
     private int screenW, screenH, mapW, mapH;
     private float zoom = 1f;
     private float lastZoom;
@@ -51,8 +54,9 @@ public abstract class ScrollMap implements Screen {
     private Actor actTop, actLeft, actBottom, actRight;
     private int alTop, alLeft, alBottom, alRight;
     private int cellSize;
-    private Group gameHolder;
-    private SpriteBatch gameBatch;
+    private final Batch gameBatch;
+    private Array<Sprite> sprites;
+    private Rectangle scrRect;
 
     public static enum Side {
 
@@ -72,8 +76,6 @@ public abstract class ScrollMap implements Screen {
                 * tileMap.getProperties().get(MapUtils.MAP_W_PROP, Integer.class);
         mapH = cellSize
                 * tileMap.getProperties().get(MapUtils.MAP_H_PROP, Integer.class);
-        gameHolder = new Group();
-        gameHolder.setSize(mapW, mapH);
         mapHolder = new Actor();
         mapHolder.setSize(mapW, mapH);
         scrollPane = new ScrollPane(mapHolder);
@@ -84,9 +86,10 @@ public abstract class ScrollMap implements Screen {
         stage = new Stage(stageViewport);
         stage.addActor(root);
         im = new InputMultiplexer();
-        gameBatch = new SpriteBatch();
+        gameBatch = mapRenderer.getSpriteBatch();
+        sprites = new Array<Sprite>();
     }
-    
+
     @Override
     public void render(float deltaTime) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -101,10 +104,19 @@ public abstract class ScrollMap implements Screen {
         mapCamera.update();
         mapRenderer.setView(mapCamera);
         mapRenderer.render();
-        
-        gameBatch.setProjectionMatrix(mapCamera.combined);
+
+        scrRect.x = mapCamera.position.x - screenW / 2 * zoom;
+        scrRect.y = mapCamera.position.y - screenH / 2 * zoom;
+
         gameBatch.begin();
-        gameHolder.draw(gameBatch, 1);
+        Rectangle spriteRect;
+        for (Sprite s : sprites) {
+            spriteRect = s.getBoundingRectangle();
+            if (scrRect.contains(spriteRect) || scrRect.overlaps(spriteRect)) {
+                s.draw(gameBatch);
+            }
+        }
+        drawGameScreen(gameBatch, deltaTime);
         gameBatch.end();
 
         stage.act(deltaTime);
@@ -178,6 +190,7 @@ public abstract class ScrollMap implements Screen {
         stageViewport.update(newX, newY, true);
         screenW = newX;
         screenH = newY;
+        scrRect = new Rectangle(0, 0, newX, newY);
     }
 
     @Override
@@ -205,6 +218,8 @@ public abstract class ScrollMap implements Screen {
         scrollPane.setScrollY(scrollPane.getScrollY()
                 + (screenH / 2 + scrollPane.getScrollY()) * (this.zoom - zoom)
                 / zoom);
+        scrRect.width = screenW * zoom;
+        scrRect.height = screenH * zoom;
 
         this.zoom = zoom;
     }
@@ -231,6 +246,8 @@ public abstract class ScrollMap implements Screen {
     protected abstract void hardKeyUp(int key);
 
     protected abstract void tapMap(Vector2 tapCoords);
+
+    protected abstract void drawGameScreen(Batch batch, float deltaTime);
 
     private GestureDetector.GestureListener gestureListener = new GestureDetector.GestureListener() {
 
@@ -313,13 +330,13 @@ public abstract class ScrollMap implements Screen {
     protected Stage getStage() {
         return stage;
     }
-    
-    protected Group getGameWidget() {
-        return gameHolder;
-    }
 
     protected int mapCellSize() {
         return cellSize;
+    }
+
+    public void setSprites(Array<Sprite> sprites) {
+        this.sprites = sprites;
     }
 
     @Override

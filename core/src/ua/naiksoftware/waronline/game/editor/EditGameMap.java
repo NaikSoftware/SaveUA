@@ -11,9 +11,9 @@ import com.badlogic.gdx.utils.Array;
 public class EditGameMap {
 
     private final TiledMap tiledMap;
-    private final Array<EditUnit> units;
+    private final Array<MapUnit> units;
 
-    public EditGameMap(TiledMap tiledMap, Array<EditUnit> units) {
+    public EditGameMap(TiledMap tiledMap, Array<MapUnit> units) {
         this.tiledMap = tiledMap;
         this.units = units;
     }

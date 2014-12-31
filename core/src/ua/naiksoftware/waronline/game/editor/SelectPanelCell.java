@@ -1,35 +1,37 @@
 package ua.naiksoftware.waronline.game.editor;
 
-import ua.naiksoftware.waronline.res.ResKeeper;
-import ua.naiksoftware.waronline.res.id.AtlasId;
-
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import ua.naiksoftware.waronline.game.MapObjCode;
 import ua.naiksoftware.waronline.game.unit.UnitCode;
+import ua.naiksoftware.waronline.res.ResKeeper;
+import ua.naiksoftware.waronline.res.id.AtlasId;
 
-public class EditCell extends Image {
+public class SelectPanelCell extends Image {
 
     private boolean selected;
     private TextureRegion selBorder = ResKeeper.get(AtlasId.EDITOR_IMAGES)
             .findRegion("sel_tile");
     private Cell cell;
     private UnitCode unitCode;
+    private MapObjCode mapObjCode;
 
     /**
-     * Конструктор для создания тайлов и обьектов
+     * Конструктор для создания тайлов на панель в редакторе
+     *
      * @param cell
-     * @param size 
+     * @param size
      */
-    public EditCell(Cell cell, int size) {
+    public SelectPanelCell(Cell cell) {
         super();
         this.cell = cell;
         TextureRegionDrawable d = new TextureRegionDrawable(cell.getTile().getTextureRegion());
-        d.setMinWidth(size);
-        d.setMinHeight(size);
         setDrawable(d);
+		float size = d.getMinHeight();
         setOrigin(size / 2, size / 2);
 
         switch (cell.getRotation()) {
@@ -49,12 +51,31 @@ public class EditCell extends Image {
 
     /**
      * Конструктор для создания юнитов на панель в редакторе
-     * @param region 
-     * @param unitCode 
+     *
+     * @param region
+     * @param unitCode
      */
-    public EditCell(TextureRegion region, UnitCode unitCode) {
+    public SelectPanelCell(TextureRegion region, UnitCode unitCode) {
         super(region);
         this.unitCode = unitCode;
+		
+    }
+
+    /**
+     * Конструктор для создания других обьектов карты на панель в редакторе
+     *
+     * @param region
+     * @param mapObjCode
+	 * @param size - preffered cell size
+     */
+    public SelectPanelCell(TextureRegion region, MapObjCode mapObjCode, int size) {
+        super(region);
+        this.mapObjCode = mapObjCode;
+		Drawable d = getDrawable();
+		d.setMinWidth(size);
+		d.setMinHeight(size);
+		setSize(size, size);
+        setOrigin(size / 2, size / 2);
     }
 
     public void setSelected(boolean selected) {
@@ -72,8 +93,12 @@ public class EditCell extends Image {
     public Cell getInsertCell() {
         return cell;
     }
-    
+
     public UnitCode getUnitCode() {
         return unitCode;
+    }
+
+    public MapObjCode getMapObjCode() {
+        return mapObjCode;
     }
 }
