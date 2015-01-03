@@ -212,7 +212,7 @@ public class EditorHandler extends ScrollMap {
                         }
                     }
                 }
-                sprites.add(obj);
+                addSprite(obj);
             }
         } else if (state == State.GAMERS_UNITS) {
             int x = tapX * cellSize;
@@ -253,12 +253,24 @@ public class EditorHandler extends ScrollMap {
                         default:
                             MapUnit unit = new MapUnit(currUnit.getUnitCode(), currentGamer);
                             unit.setPosition(x, y);
-                            sprites.add(unit);
+                            addSprite(unit);
                     }
                 }
             }
         }
     }
+	
+	private void addSprite(Sprite s) {
+		float y = s.getY();
+		int i, size = sprites.size;
+		for (i = 0;i < size;i++) {
+			if (y > sprites.get(i).getY()) {
+				sprites.insert(i, s);
+				return;
+			}
+		}
+		sprites.insert(i, s);
+	}
 
     @Override
     protected void hardKeyUp(int key) {

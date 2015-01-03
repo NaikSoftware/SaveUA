@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import ua.naiksoftware.waronline.game.Gamer;
 import ua.naiksoftware.waronline.game.unit.UnitCode;
 import ua.naiksoftware.waronline.res.ResKeeper;
@@ -16,6 +17,7 @@ import ua.naiksoftware.waronline.res.id.AtlasId;
  */
 public class MapUnit extends Sprite {
 
+    private static final ShapeRenderer renderer = ResKeeper.getShapeRenderer();
     private static final int LABEL_RADIUS = 7;
 
     private final UnitCode code;
@@ -45,6 +47,13 @@ public class MapUnit extends Sprite {
     public void draw(Batch batch) {
         super.draw(batch);
         if (gamer != null) {
+            batch.end();//pause
+            renderer.setProjectionMatrix(batch.getProjectionMatrix());
+            renderer.begin(ShapeRenderer.ShapeType.Filled);
+            renderer.setColor(color);
+            renderer.circle(getX() + LABEL_RADIUS / 2, getY() + size - LABEL_RADIUS / 2, LABEL_RADIUS);
+            renderer.end();
+            batch.begin();//resume
         }
     }
 

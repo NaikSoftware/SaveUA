@@ -15,6 +15,7 @@ public class ResKeeper {
 
     private static ArrayMap<TextureId, Texture> textures = new ArrayMap<TextureId, Texture>();
     private static ArrayMap<AtlasId, TextureAtlas> atlases = new ArrayMap<AtlasId, TextureAtlas>();
+    private static Array<ShapeRenderer> renderers = new Array<ShapeRenderer>();
 
     public static Texture get(TextureId id) {
         Texture t = textures.get(id);
@@ -32,6 +33,13 @@ public class ResKeeper {
             atlases.put(id, ta);
         }
         return ta;
+    }
+
+    public static ShapeRenderer getShapeRenderer() {
+        if (renderers.size < 1) {
+            renderers.add(new ShapeRenderer());
+        }
+        return renderers.get(0);
     }
 
     private static Texture loadTexture(TextureId id) {
@@ -79,6 +87,9 @@ public class ResKeeper {
         }
         for (int i = 0, len = atlases.size; i < len; i++) {
             dispose(atlases.getKeyAt(i));
+        }
+        for (ShapeRenderer r : renderers) {
+            r.dispose();
         }
     }
 
