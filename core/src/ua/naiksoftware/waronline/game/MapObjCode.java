@@ -6,7 +6,8 @@ package ua.naiksoftware.waronline.game;
 public enum MapObjCode {
 	HATA_1,
 	FORT,
-	ATB,
+	ATB_1,
+        ATB_2,
 	CHURCH,
 	REMAINS1,
 	REMAINS2,

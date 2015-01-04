@@ -3,157 +3,171 @@ overlay_images.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-atb3x3
+fort2x2
   rotate: false
-  xy: 1, 293
+  xy: 1, 283
   size: 216, 216
   orig: 216, 216
   offset: 0, 0
   index: -1
-fort2x2
+atb3x2
   rotate: false
-  xy: 1, 75
-  size: 216, 216
-  orig: 216, 216
+  xy: 1, 160
+  size: 213, 121
+  orig: 213, 121
+  offset: 0, 0
+  index: -1
+atb3x1
+  rotate: false
+  xy: 219, 413
+  size: 205, 86
+  orig: 205, 86
   offset: 0, 0
   index: -1
 hata
   rotate: false
-  xy: 219, 365
+  xy: 1, 14
   size: 144, 144
   orig: 144, 144
   offset: 0, 0
   index: -1
 church2x1
   rotate: false
-  xy: 219, 219
+  xy: 219, 267
   size: 144, 144
   orig: 144, 144
   offset: 0, 0
   index: -1
-remains1-2x2
-  rotate: false
-  xy: 365, 382
-  size: 144, 127
-  orig: 144, 127
-  offset: 0, 0
-  index: -1
 hata2x2
   rotate: false
-  xy: 219, 100
+  xy: 216, 148
   size: 144, 117
   orig: 144, 117
   offset: 0, 0
   index: -1
 remains2-2x1
   rotate: false
-  xy: 365, 283
+  xy: 426, 402
   size: 144, 97
   orig: 144, 97
   offset: 0, 0
   index: -1
+remains1-2x2
+  rotate: false
+  xy: 572, 372
+  size: 144, 127
+  orig: 144, 127
+  offset: 0, 0
+  index: -1
 oldhata2x1
   rotate: false
-  xy: 511, 412
+  xy: 718, 402
   size: 144, 97
   orig: 144, 97
   offset: 0, 0
   index: -1
 hata1
   rotate: false
-  xy: 365, 181
+  xy: 864, 399
   size: 119, 100
   orig: 119, 100
   offset: 0, 0
   index: -1
+stolb1x1
+  rotate: false
+  xy: 147, 49
+  size: 63, 109
+  orig: 63, 109
+  offset: 0, 0
+  index: -1
 tent2x1
   rotate: false
-  xy: 511, 332
+  xy: 212, 68
   size: 128, 78
   orig: 128, 78
   offset: 0, 0
   index: -1
 stolb2-1x1
   rotate: false
-  xy: 657, 384
+  xy: 365, 275
   size: 72, 125
   orig: 72, 125
   offset: 0, 0
   index: -1
 kpp1x2
   rotate: false
-  xy: 731, 402
+  xy: 439, 293
   size: 72, 107
   orig: 72, 107
   offset: 0, 0
   index: -1
-stolb1x1
+tree2
   rotate: false
-  xy: 805, 400
-  size: 63, 109
-  orig: 63, 109
+  xy: 718, 335
+  size: 72, 65
+  orig: 72, 65
   offset: 0, 0
-  index: -1
+  index: 4
 well
   rotate: false
-  xy: 1, 1
+  xy: 342, 74
   size: 72, 72
   orig: 72, 72
   offset: 0, 0
   index: -1
 tree2
   rotate: false
-  xy: 365, 114
-  size: 72, 65
-  orig: 72, 65
-  offset: 0, 0
-  index: 4
-tree2
-  rotate: false
-  xy: 870, 444
+  xy: 212, 1
   size: 72, 65
   orig: 72, 65
   offset: 0, 0
   index: 3
 tree7
   rotate: false
-  xy: 75, 8
+  xy: 286, 1
   size: 72, 65
   orig: 72, 65
   offset: 0, 0
   index: 2
 tree7
   rotate: false
-  xy: 944, 444
+  xy: 360, 7
   size: 72, 65
   orig: 72, 65
   offset: 0, 0
   index: 4
 tree2
   rotate: false
-  xy: 149, 8
+  xy: 439, 226
   size: 72, 65
   orig: 72, 65
   offset: 0, 0
   index: 2
 tree2
   rotate: false
-  xy: 511, 265
+  xy: 365, 208
   size: 72, 65
   orig: 72, 65
   offset: 0, 0
   index: 1
 tree7
   rotate: false
-  xy: 585, 265
+  xy: 439, 159
   size: 72, 65
   orig: 72, 65
   offset: 0, 0
   index: 3
 tree7
   rotate: false
-  xy: 870, 377
+  xy: 416, 92
   size: 72, 65
   orig: 72, 65
   offset: 0, 0
   index: 1
+life_bar
+  rotate: false
+  xy: 792, 392
+  size: 65, 8
+  orig: 65, 8
+  offset: 0, 0
+  index: -1

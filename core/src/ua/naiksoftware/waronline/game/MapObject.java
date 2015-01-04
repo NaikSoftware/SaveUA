@@ -58,8 +58,11 @@ public class MapObject extends Sprite {
             case FORT:
                 name = "fort2x2";
                 break;
-            case ATB:
-                name = "atb3x3";
+            case ATB_1:
+                name = "atb3x1";
+                break;
+            case ATB_2:
+                name = "atb3x2";
                 break;
             case CHURCH:
                 name = "church2x1";

@@ -512,7 +512,8 @@ public class EditorHandler extends ScrollMap {
     private void initObjects() {
         putMapObjectToPanel(MapObjCode.HATA_1);
         putMapObjectToPanel(MapObjCode.FORT);
-        putMapObjectToPanel(MapObjCode.ATB);
+        putMapObjectToPanel(MapObjCode.ATB_1);
+        putMapObjectToPanel(MapObjCode.ATB_2);
         putMapObjectToPanel(MapObjCode.CHURCH);
         putMapObjectToPanel(MapObjCode.REMAINS1);
         putMapObjectToPanel(MapObjCode.REMAINS2);
