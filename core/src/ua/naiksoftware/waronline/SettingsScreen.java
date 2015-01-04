@@ -159,16 +159,7 @@ public class SettingsScreen implements Screen {
                 Table panel = new Table();
                 final TextField fieldW = new TextField("20", skin);
                 fieldW.setMaxLength(3);
-                fieldW.setTextFieldFilter(new TextField.TextFieldFilter() {
-
-                    public boolean acceptChar(TextField textField, char c) {
-                        if ("0123456789".indexOf(c) == -1) {
-                            return false;
-                        } else {
-                            return true;
-                        }
-                    }
-                });
+                fieldW.setTextFieldFilter(numberFilter);
                 panel.add(fieldW);
 
                 Label labelXX = new Label(" X ", skin);
@@ -176,6 +167,7 @@ public class SettingsScreen implements Screen {
 
                 final TextField fieldH = new TextField("30", skin);
                 fieldH.setMaxLength(3);
+                fieldH.setTextFieldFilter(numberFilter);
                 panel.add(fieldH);
 
                 dialogCreate = new Dialog("", skin) {
@@ -208,6 +200,17 @@ public class SettingsScreen implements Screen {
             dialogCreate.show(stage);
         }
     }
+
+    TextField.TextFieldFilter numberFilter = new TextField.TextFieldFilter() {
+
+        public boolean acceptChar(TextField textField, char c) {
+            if ("0123456789".indexOf(c) == -1) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    };
 
     @Override
     public void hide() {

@@ -1,6 +1,7 @@
 package ua.naiksoftware.waronline.game;
 
-import com.badlogic.gdx.utils.Array;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -16,36 +17,37 @@ public class ImpassableCells {
             this.x = x;
             this.y = y;
         }
+
+        @Override
+        public boolean equals(Object obj) {
+            Point p2 = (Point) obj;
+            return p2.x == x && p2.y == y;
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 11 * hash + this.x;
+            hash = 11 * hash + this.y;
+            return hash;
+        }
     }
 
-    private static final Array<Point> points = new Array<Point>();
+    private static final Set<Point> points = new HashSet<Point>();
 
-	/** Can contains duplicates for one point */
     public static void add(int x, int y) {
         points.add(new Point(x, y));
     }
 
     public static boolean have(int x, int y) {
-        for (Point p : points) {
-            if (p.x == x && p.y == y) {
-                return true;
-            }
-        }
-        return false;
+        return points.contains(new Point(x, y));
     }
 
     public static void remove(int x, int y) {
-        for (int size = points.size, i = 0;i < size;i++) {
-			Point p = points.get(i);
-            if (p.x == x && p.y == y) {
-                points.removeValue(p, true);
-				size--;
-				i--;
-            }
-        }
+        points.remove(new Point(x, y));
     }
-	
-	public static void clear() {
-		points.clear();
-	}
+
+    public static void clear() {
+        points.clear();
+    }
 }

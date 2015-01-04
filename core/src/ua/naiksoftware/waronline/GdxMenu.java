@@ -57,9 +57,6 @@ public class GdxMenu implements Screen {
         Skin skin = manager.getSkin();
         Lng lng = manager.lng;
         BitmapFont font = manager.getTitleFont();
-        font.setScale(Math.min(Gdx.graphics.getWidth(),
-                Gdx.graphics.getHeight())
-                / 10 / font.getLineHeight());
         btn = ResKeeper.get(TextureId.BTN);
         NinePatchDrawable npBtnOff = new NinePatchDrawable(new NinePatch(btn,
                 25, 25, 15, 25)); // рамка r,l,t,b

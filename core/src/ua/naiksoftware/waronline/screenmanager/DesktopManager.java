@@ -10,56 +10,60 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class DesktopManager extends Manager {
 
-	private Skin skin;
-	private BitmapFont titleFont;
+    private Skin skin;
+    private BitmapFont titleFont;
 
-	public DesktopManager(Lng lng) {
-		super(lng);
-	}
+    public DesktopManager(Lng lng) {
+        super(lng);
+    }
 
-	@Override
-	public void create() {
-		super.create();
+    @Override
+    public void create() {
+        super.create();
 
-		skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
-		BitmapFont font = skin.getFont("default-font");
-		float scale = (Math.min(Gdx.graphics.getHeight(),
-				Gdx.graphics.getWidth()) / 25)
-				/ font.getLineHeight();
-		if (scale < 1) {
-			font.setScale(scale);
-		}
-		setScreen(new SplashScreen(this));
-	}
+        skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
+        BitmapFont font = skin.getFont("default-font");
+        float scale = (Math.min(Gdx.graphics.getHeight(),
+                Gdx.graphics.getWidth()) / 25)
+                / font.getLineHeight();
+        if (scale < 1) {
+            font.setScale(scale);
+        }
+        setScreen(new SplashScreen(this));
+    }
 
-	@Override
-	public void showMenu() {
-		setScreen(new GdxMenu(this));
-	}
+    @Override
+    public void showMenu() {
+        setScreen(new GdxMenu(this));
+    }
 
-	@Override
-	public Skin getSkin() {
-		return skin;
-	}
+    @Override
+    public Skin getSkin() {
+        return skin;
+    }
 
-	public BitmapFont getTitleFont() {
-		if (titleFont == null) {
-			titleFont = new BitmapFont(
-					Gdx.files.internal("skins/albionic_72.fnt"));
-		}
-		return titleFont;
-	}
+    public BitmapFont getTitleFont() {
+        if (titleFont == null) {
+            titleFont = new BitmapFont(Gdx.files.internal("skins/albionic_72.fnt"));
+            float scale = Math.min(Gdx.graphics.getWidth(), Gdx.graphics.getHeight())
+                    / 10 / titleFont.getLineHeight();
+            if (scale < 1.3) {
+                titleFont.setScale(scale);
+            }
+    }
+    return titleFont ;
+}
 
-	public void freeTitleFont() {
-		if (titleFont != null) {
-			titleFont.dispose();
-			titleFont = null;
-		}
-	}
+public void freeTitleFont() {
+        if (titleFont != null) {
+            titleFont.dispose();
+            titleFont = null;
+        }
+    }
 
-	@Override
-	public void dispose() {
-		freeTitleFont();
-		super.dispose();
-	}
+    @Override
+        public void dispose() {
+        freeTitleFont();
+        super.dispose();
+    }
 }

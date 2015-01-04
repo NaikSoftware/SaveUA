@@ -4,6 +4,12 @@ import ua.naiksoftware.waronline.game.MapObjCode;
 
 public class MapMetaData {
 
+    /**
+     * size x*x
+     * 
+     * @param code
+     * @return array, where 1 - is have intersect cell, else 0
+     */
     public static final int[][] objIntersect(MapObjCode code) {
         switch (code) {
             case HATA_1:
@@ -13,9 +19,9 @@ public class MapMetaData {
             case HATA_4:
                 return new int[][]{{1, 1}, {1, 1}};
             case ATB_1:
-                return new int[][]{{0, 0, 1}, {0, 0, 1}, {0, 0, 1}};
+                return new int[][]{{1, 0, 0}, {1, 0, 0}, {1, 0, 0}};
             case ATB_2:
-                return new int[][]{{0, 0, 1}, {0, 0, 1}, {0, 1, 1}};
+                return new int[][]{{1, 0, 0}, {1, 0, 0}, {1, 1, 0}};
             case CHURCH:
             case REMAINS2:
             case TENT:

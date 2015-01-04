@@ -37,7 +37,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import ua.naiksoftware.waronline.game.ImpassableCells;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class EditorHandler extends ScrollMap {
 
@@ -104,6 +103,7 @@ public class EditorHandler extends ScrollMap {
         head.pack();
         setWidget(head, Side.TOP, Align.center);
         setSprites(sprites);
+        ImpassableCells.clear();
     }
 
     @Override
