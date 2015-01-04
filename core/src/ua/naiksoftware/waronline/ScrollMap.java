@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -52,6 +53,7 @@ public abstract class ScrollMap implements Screen {
     private int cellSize;
     private final Batch gameBatch;
     private Array<Sprite> sprites;
+	private Rectangle scrRect;
 
     public static enum Side {
 
@@ -99,11 +101,18 @@ public abstract class ScrollMap implements Screen {
         mapCamera.update();
         mapRenderer.setView(mapCamera);
         mapRenderer.render();
-
+		
+	    scrRect.x = mapCamera.position.x - screenW / 2 * zoom;
+        scrRect.y = mapCamera.position.y - screenH / 2 * zoom;
+		
         gameBatch.begin();
-        for (Sprite s : sprites) {
-            s.draw(gameBatch);
-        }
+        Rectangle spriteRect;
+		for (Sprite s : sprites) {
+			spriteRect = s.getBoundingRectangle();
+			if (scrRect.contains(spriteRect) || scrRect.overlaps(spriteRect)) {
+				s.draw(gameBatch);
+			}
+		}
         drawGameScreen(gameBatch, deltaTime);
         gameBatch.end();
 
@@ -178,6 +187,7 @@ public abstract class ScrollMap implements Screen {
         stageViewport.update(newX, newY, true);
         screenW = newX;
         screenH = newY;
+		scrRect = new Rectangle(0, 0, newX, newY);
     }
 
     @Override
@@ -205,6 +215,8 @@ public abstract class ScrollMap implements Screen {
         scrollPane.setScrollY(scrollPane.getScrollY()
                 + (screenH / 2 + scrollPane.getScrollY()) * (this.zoom - zoom)
                 / zoom);
+		scrRect.width = screenW * zoom;
+		scrRect.height = screenH * zoom;
 
         this.zoom = zoom;
     }

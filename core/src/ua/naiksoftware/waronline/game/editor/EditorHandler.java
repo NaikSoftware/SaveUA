@@ -180,20 +180,17 @@ public class EditorHandler extends ScrollMap {
                 if (s.getBoundingRectangle().contains(tapX * cellSize + 1, tapY * cellSize + 1)
                         && s instanceof MapObject) {
                     obj = (MapObject) s;
-                    int x = (int) (obj.getX() / cellSize);
-                    int y = (int) (obj.getY() / cellSize);
-                    int[][] mask = MapMetaData.objIntersect(obj.getMapObjCode());
-                    int range = mask.length;
-                    for (int i = 0; i < range; i++) {
-                        int arr[] = mask[i];
-                        for (int j = 0; j < range; j++) {
-                            int bit = arr[j];
-                            if (bit == 1) {
-                                ImpassableCells.remove(x + i, y + j);
+                    setImassableCellsUnderObject(obj, false);
+                    sprites.removeValue(obj, true);
+                    for (Sprite sp : sprites) {
+                        if (sp instanceof MapObject) {
+                            Rectangle r1 = s.getBoundingRectangle();
+                            Rectangle r2 = sp.getBoundingRectangle();
+                            if (r1.contains(r2) || r1.overlaps(r2)) {
+                                setImassableCellsUnderObject((MapObject) sp, true);
                             }
                         }
                     }
-                    sprites.removeValue(obj, true);
                     break;
                 }
             }
@@ -201,17 +198,7 @@ public class EditorHandler extends ScrollMap {
                 obj = new MapObject(currObj.getMapObjCode());
                 obj.setX(tapX * cellSize);
                 obj.setY(tapY * cellSize);
-                int[][] mask = MapMetaData.objIntersect(obj.getMapObjCode());
-                int range = mask.length;
-                for (int i = 0; i < range; i++) {
-                    int arr[] = mask[i];
-                    for (int j = 0; j < range; j++) {
-                        int bit = arr[j];
-                        if (bit == 1) {
-                            ImpassableCells.add(tapX + i, tapY + j);
-                        }
-                    }
-                }
+                setImassableCellsUnderObject(obj, true);
                 addSprite(obj);
             }
         } else if (state == State.GAMERS_UNITS) {
@@ -259,18 +246,40 @@ public class EditorHandler extends ScrollMap {
             }
         }
     }
-	
-	private void addSprite(Sprite s) {
-		float y = s.getY();
-		int i, size = sprites.size;
-		for (i = 0;i < size;i++) {
-			if (y > sprites.get(i).getY()) {
-				sprites.insert(i, s);
-				return;
-			}
-		}
-		sprites.insert(i, s);
-	}
+
+    private void setImassableCellsUnderObject(MapObject obj, boolean insert) {
+        int x = (int) (obj.getX() / cellSize);
+        int y = (int) (obj.getY() / cellSize);
+        int[][] mask = MapMetaData.objIntersect(obj.getMapObjCode());
+        int range = mask.length;
+        for (int i = 0; i < range; i++) {
+            int arr[] = mask[i];
+            for (int j = 0; j < range; j++) {
+                if (arr[j] == 1) {
+                    if (insert) {
+                        ImpassableCells.add(x + i, y + j);
+                    } else {
+                        ImpassableCells.remove(x + i, y + j);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * For sort by y-axis
+     */
+    private void addSprite(Sprite s) {
+        float y = s.getY();
+        int i, size = sprites.size;
+        for (i = 0; i < size; i++) {
+            if (y > sprites.get(i).getY()) {
+                sprites.insert(i, s);
+                return;
+            }
+        }
+        sprites.insert(i, s);
+    }
 
     @Override
     protected void hardKeyUp(int key) {

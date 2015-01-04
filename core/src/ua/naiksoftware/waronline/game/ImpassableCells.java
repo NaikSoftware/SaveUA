@@ -20,6 +20,7 @@ public class ImpassableCells {
 
     private static final Array<Point> points = new Array<Point>();
 
+	/** Can contains duplicates for one point */
     public static void add(int x, int y) {
         points.add(new Point(x, y));
     }
@@ -34,9 +35,12 @@ public class ImpassableCells {
     }
 
     public static void remove(int x, int y) {
-        for (Point p : points) {
+        for (int size = points.size, i = 0;i < size;i++) {
+			Point p = points.get(i);
             if (p.x == x && p.y == y) {
                 points.removeValue(p, true);
+				size--;
+				i--;
             }
         }
     }

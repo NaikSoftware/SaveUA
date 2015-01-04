@@ -88,9 +88,6 @@ public class ResKeeper {
         for (int i = 0, len = atlases.size; i < len; i++) {
             dispose(atlases.getKeyAt(i));
         }
-        for (ShapeRenderer r : renderers) {
-            r.dispose();
-        }
     }
 
     public static void dispose(TextureId id) {
