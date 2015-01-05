@@ -1,18 +1,7 @@
 package ua.naiksoftware.waronline.game.editor;
 
-import ua.naiksoftware.waronline.MapCell;
-import ua.naiksoftware.waronline.MapUtils;
-import ua.naiksoftware.waronline.ScrollMap;
-import ua.naiksoftware.waronline.game.Gamer;
-import ua.naiksoftware.waronline.game.MapObjCode;
-import ua.naiksoftware.waronline.game.MapObject;
-import ua.naiksoftware.waronline.game.TileCode;
-import ua.naiksoftware.waronline.game.unit.UnitCode;
-import ua.naiksoftware.waronline.res.MapMetaData;
-import ua.naiksoftware.waronline.res.ResKeeper;
-import ua.naiksoftware.waronline.res.Words;
-import ua.naiksoftware.waronline.res.id.AtlasId;
-import ua.naiksoftware.waronline.screenmanager.Manager;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import ua.naiksoftware.waronline.game.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -23,20 +12,23 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-import ua.naiksoftware.waronline.game.ImpassableCells;
-import com.badlogic.gdx.math.Rectangle;
+import ua.naiksoftware.waronline.MapCell;
+import ua.naiksoftware.waronline.MapUtils;
+import ua.naiksoftware.waronline.ScrollMap;
+import ua.naiksoftware.waronline.game.unit.UnitCode;
+import ua.naiksoftware.waronline.res.MapMetaData;
+import ua.naiksoftware.waronline.res.ResKeeper;
+import ua.naiksoftware.waronline.res.Words;
+import ua.naiksoftware.waronline.res.id.AtlasId;
+import ua.naiksoftware.waronline.screenmanager.Manager;
 
 public class EditorHandler extends ScrollMap {
 
@@ -321,6 +313,7 @@ public class EditorHandler extends ScrollMap {
                     i--;
                 }
             }
+            UnitHelper.disposeAll(); // Очищаем старые life bars если есть
             headLabel.setText(manager.lng.get(Words.LOCATE_OBJECTS));
             Table objTable = new Table();
             objTable.setBackground(manager.getSkin()
@@ -557,6 +550,7 @@ public class EditorHandler extends ScrollMap {
     @Override
     public void dispose() {
         super.dispose();
+        UnitHelper.disposeAll();
         map.dispose();
         ResKeeper.dispose(AtlasId.MAP_TILES);
         ResKeeper.dispose(AtlasId.OVERLAY_IMAGES);

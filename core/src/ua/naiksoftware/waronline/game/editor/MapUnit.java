@@ -1,15 +1,17 @@
 package ua.naiksoftware.waronline.game.editor;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import ua.naiksoftware.waronline.game.Gamer;
+import ua.naiksoftware.waronline.game.UnitHelper;
 import ua.naiksoftware.waronline.game.unit.UnitCode;
 import ua.naiksoftware.waronline.res.ResKeeper;
 import ua.naiksoftware.waronline.res.id.AtlasId;
+import ua.naiksoftware.waronline.game.unit.Unit;
 
 /**
  *
@@ -17,26 +19,23 @@ import ua.naiksoftware.waronline.res.id.AtlasId;
  */
 public class MapUnit extends Sprite {
 
-    private static final ShapeRenderer renderer = ResKeeper.getShapeRenderer();
-    private static final int LABEL_RADIUS = 7;
+    private static final int BAR_SHIFT = getTextureRegion(UnitCode.BTR_4E).getRegionHeight();
 
     private final UnitCode code;
     private final Gamer gamer;
-    private final Color color;
-    private final int size;
+    private final TextureRegion lifeBar;
+    private final Texture lifeLabel;
 
     public MapUnit(UnitCode code, Gamer gamer) {
         this.code = code;
         this.gamer = gamer;
         TextureRegion region = getTextureRegion(code);
         setRegion(region);
-        if (gamer != null) {
-            this.color = gamer.getColor();
-        } else {
-            this.color = new Color(0, 0, 0, 0);
-        }
-        size = region.getRegionHeight();
+        int size = region.getRegionHeight();
         setSize(size, size);
+        this.lifeBar = ResKeeper.get(AtlasId.OVERLAY_IMAGES).findRegion("life_bar");
+        Color c = gamer == null ? Unit.COLOR_FREE_UNITS : gamer.getColor();
+        lifeLabel = UnitHelper.getLifeBar(c);
     }
 
     public UnitCode getCode() {
@@ -46,15 +45,9 @@ public class MapUnit extends Sprite {
     @Override
     public void draw(Batch batch) {
         super.draw(batch);
-        if (gamer != null) {
-            batch.end();//pause
-            renderer.setProjectionMatrix(batch.getProjectionMatrix());
-            renderer.begin(ShapeRenderer.ShapeType.Filled);
-            renderer.setColor(color);
-            renderer.circle(getX() + LABEL_RADIUS / 2, getY() + size - LABEL_RADIUS / 2, LABEL_RADIUS);
-            renderer.end();
-            batch.begin();//resume
-        }
+        float x = getX(), y = getY();
+        batch.draw(lifeBar, x, y + BAR_SHIFT);
+        batch.draw(lifeLabel, x, y + BAR_SHIFT);
     }
 
     public Gamer getGamer() {

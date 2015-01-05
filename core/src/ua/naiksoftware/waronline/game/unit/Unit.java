@@ -5,9 +5,14 @@ import java.util.Comparator;
 
 import ua.naiksoftware.waronline.game.Gamer;
 import ua.naiksoftware.waronline.game.Node;
+import com.badlogic.gdx.graphics.Color;
 
 public class Unit {
 
+	//! new
+	public static final Color COLOR_FREE_UNITS = Color.WHITE;
+	// new
+	
     public static final int UNIT_COUNT = 8;
 
     public static final int NOT_MOVE = 0;
