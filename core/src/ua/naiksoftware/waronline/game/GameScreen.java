@@ -15,7 +15,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
-public class GameHandler extends ScrollMap {
+public class GameScreen extends ScrollMap {
 
     private Manager manager;
     private static TiledMap tileMap;
@@ -24,7 +24,7 @@ public class GameHandler extends ScrollMap {
     private SpriteBatch batch;
     private int screenW, screenH, mapW, mapH;
 
-    public GameHandler(Manager manager, GameMap gameMap) {
+    public GameScreen(Manager manager, GameMap gameMap) {
         super(tileMap = gameMap.getTiledMap());
         this.manager = manager;
         this.gameMap = gameMap;

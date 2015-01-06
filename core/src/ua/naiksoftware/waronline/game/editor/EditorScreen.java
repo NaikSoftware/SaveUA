@@ -30,7 +30,7 @@ import ua.naiksoftware.waronline.res.Words;
 import ua.naiksoftware.waronline.res.id.AtlasId;
 import ua.naiksoftware.waronline.screenmanager.Manager;
 
-public class EditorHandler extends ScrollMap {
+public class EditorScreen extends ScrollMap {
 
     private Manager manager;
     private final TiledMap map;
@@ -39,6 +39,7 @@ public class EditorHandler extends ScrollMap {
     private final Label headLabel;
     private TextButton btnBack, btnNext;
     private final TiledMapTileLayer layerBg;
+    private Dialog dialog;
 
     /**
      * Tiles on panel
@@ -57,7 +58,7 @@ public class EditorHandler extends ScrollMap {
     private SelectPanelCell currUnit;
 
     private final Array<Sprite> sprites;
-    private Gamer currentGamer;
+    private Gamer currentGamer, savedCurrentGamer;
 
     private final int cellSize;
 
@@ -69,7 +70,7 @@ public class EditorHandler extends ScrollMap {
     private State state;
 
     // TODO: send map objects if edit existing map
-    public EditorHandler(Manager manager, TiledMap map) {
+    public EditorScreen(Manager manager, TiledMap map) {
         super(map);
         this.manager = manager;
         this.map = map;
@@ -99,11 +100,6 @@ public class EditorHandler extends ScrollMap {
     }
 
     @Override
-    public void resize(int newX, int newY) {
-        super.resize(newX, newY);
-    }
-
-    @Override
     public void render(float deltaTime) {
         super.render(deltaTime);
 
@@ -122,7 +118,7 @@ public class EditorHandler extends ScrollMap {
         public void changed(ChangeListener.ChangeEvent ev, Actor a) {
             if (state == State.TILEMAP) {
                 if (a == btnBack) {
-                    Dialog d = new Dialog("", manager.getSkin()) {
+                    dialog = new Dialog("", manager.getSkin()) {
                         @Override
                         protected void result(Object o) {
                             if (o != null) {
@@ -131,12 +127,12 @@ public class EditorHandler extends ScrollMap {
                             }
                         }
                     };
-                    d.text(manager.lng.get(Words.EXIT) + "?");
-                    d.button(manager.lng.get(Words.CANCEL));
-                    d.button(manager.lng.get(Words.OK), this);
-                    d.key(Keys.ENTER, this);
-                    d.key(Keys.ESCAPE, null);
-                    d.show(getStage());
+                    dialog.text(manager.lng.get(Words.EXIT) + "?");
+                    dialog.button(manager.lng.get(Words.CANCEL));
+                    dialog.button(manager.lng.get(Words.OK), this);
+                    dialog.key(Keys.ENTER, this);
+                    dialog.key(Keys.ESCAPE, null);
+                    dialog.show(getStage());
                 } else if (a == btnNext) {
                     setUI(State.OBJECTS);
                 }
@@ -149,12 +145,38 @@ public class EditorHandler extends ScrollMap {
             } else if (state == State.GAMERS_UNITS) {
                 if (a == btnBack) {
                     setUI(State.OBJECTS);
+                } else if (a == btnNext) {
+                    if (Gamer.count < 2) {
+                        dialog = new Dialog("", manager.getSkin());
+                        dialog.text(manager.lng.get(Words.MIN_TWO_GAMERS_REQUIRED));
+                        dialog.button(manager.lng.get(Words.OK));
+                        dialog.key(Keys.ENTER, null);
+                        dialog.key(Keys.ESCAPE, null);
+                        dialog.show(getStage());
+                    } else {
+                        setUI(State.FREE_UNITS);
+                    }
                 }
-            } else {
-                if (a == btnNext) {
-                    // map.getProperties().put(MapUtils.MAX_GAMERS_PROP, 2);
-                    // EditGameMap editGameMap = new EditGameMap(map, units);
-                    // MapUtils.saveMap(editGameMap);
+            } else if (state == State.FREE_UNITS) {
+                if (a == btnBack) {
+                    setUI(State.GAMERS_UNITS);
+                } else if (a == btnNext) {
+                    dialog = new Dialog("", manager.getSkin()) {
+                        @Override
+                        protected void result(Object o) {
+                            if (o != null) {
+                                MapUtils.saveMap(new EditGameMap(map, sprites));
+                                dispose();
+                                manager.showMenu();
+                            }
+                        }
+                    };
+                    dialog.text(manager.lng.get(Words.SAVE_MAP_AND_EXIT));
+                    dialog.button(manager.lng.get(Words.OK), this);
+                    dialog.button(manager.lng.get(Words.CANCEL));
+                    dialog.key(Keys.ENTER, this);
+                    dialog.key(Keys.ESCAPE, null);
+                    dialog.show(getStage());
                 }
             }
         }
@@ -193,7 +215,8 @@ public class EditorHandler extends ScrollMap {
                 setImassableCellsUnderObject(obj, true);
                 addSprite(obj);
             }
-        } else if (state == State.GAMERS_UNITS) {
+        } else if (state == State.GAMERS_UNITS
+                || state == State.FREE_UNITS) {
             int x = tapX * cellSize;
             int y = tapY * cellSize;
             boolean hold = false;
@@ -276,7 +299,9 @@ public class EditorHandler extends ScrollMap {
     @Override
     protected void hardKeyUp(int key) {
         if (key == Keys.BACKSPACE || key == Keys.BACK) {
-            btnListener.changed(null, btnBack);
+            if (!getStage().getActors().contains(dialog, true)) {
+                btnListener.changed(null, btnBack);
+            }
         }
     }
 
@@ -334,7 +359,6 @@ public class EditorHandler extends ScrollMap {
             setWidget(scrollPane, Side.BOTTOM, Align.left);
 
         } else if (state == State.GAMERS_UNITS) {
-            headLabel.setText(manager.lng.get(Words.UNITS_GAMER) + " 1");
             Table unitTable = new Table();
 
             if (panelUnits == null) {
@@ -379,8 +403,46 @@ public class EditorHandler extends ScrollMap {
             panel.add(btnPlus);
             panel.pack();
             setWidget(panel, Side.BOTTOM, Align.left);
-            Gamer.count = 0;
-            currentGamer = new Gamer();
+            if (savedCurrentGamer == null) {
+                Gamer.count = 0;
+                currentGamer = new Gamer();
+            } else {
+                // Значит вернулись из расстановки ничейных юнитов,
+                // удаляем их
+                currentGamer = savedCurrentGamer;
+                savedCurrentGamer = null;
+                Sprite s;
+                for (int size = sprites.size, i = 0; i < size; i++) {
+                    s = sprites.get(i);
+                    if (s instanceof MapUnit) {
+                        if (((MapUnit) s).getGamer() == null) {
+                            sprites.removeValue(s, true);
+                            i--;
+                            size--;
+                        }
+                    }
+                }
+            }
+            headLabel.setText(manager.lng.get(Words.UNITS_GAMER) + " "
+                    + currentGamer.getId());
+
+        } else if (state == State.FREE_UNITS) {
+            headLabel.setText(manager.lng.get(Words.FREE_UNITS));
+            Table unitTable = new Table();
+
+            // Список юнитов инициализирован на пред. шаге расставления юнитов игроков
+            for (SelectPanelCell unit : panelUnits) {
+                unitTable.add(unit);
+            }
+
+            ScrollPane scrollPane = new ScrollPane(unitTable);
+            Table panel = new Table();
+            panel.setBackground(manager.getSkin().getDrawable("default-pane"));
+            panel.add(scrollPane).expandX().center();
+            panel.pack();
+            setWidget(panel, Side.BOTTOM, Align.left);
+            savedCurrentGamer = currentGamer;
+            currentGamer = null; // ничейные юниты же
         }
 
         this.state = state;
@@ -494,7 +556,7 @@ public class EditorHandler extends ScrollMap {
                 currObj.setSelected(false);
                 currObj = (SelectPanelCell) event.getTarget();
                 currObj.setSelected(true);
-            } else if (state == State.GAMERS_UNITS) {
+            } else if (state == State.GAMERS_UNITS || state == State.FREE_UNITS) {
                 currUnit.setSelected(false);
                 currUnit = (SelectPanelCell) event.getTarget();
                 currUnit.setSelected(true);

@@ -1,6 +1,6 @@
 package ua.naiksoftware.waronline;
 
-import ua.naiksoftware.waronline.game.editor.EditorHandler;
+import ua.naiksoftware.waronline.game.editor.EditorScreen;
 import ua.naiksoftware.waronline.res.Lng;
 import ua.naiksoftware.waronline.res.ResKeeper;
 import ua.naiksoftware.waronline.res.Words;
@@ -29,7 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 /**
- * Экран настроек
+ * Экран настроек (в Android-версии свой (нативный, xml) экран настроек)
  *
  * @author Naik
  *
@@ -139,7 +139,7 @@ public class SettingsScreen implements Screen {
     private void showDialogEditCreate(boolean edit) {
         if (edit) {
             if (dialogEdit == null) {
-
+				// TODO
             }
             dialogEdit.show(stage);
         } else {
@@ -157,7 +157,7 @@ public class SettingsScreen implements Screen {
                         manager.lng.get(Words.INPUT_MAP_SIZE), skin);
 
                 Table panel = new Table();
-                final TextField fieldW = new TextField("20", skin);
+                final TextField fieldW = new TextField("30", skin);
                 fieldW.setMaxLength(3);
                 fieldW.setTextFieldFilter(numberFilter);
                 panel.add(fieldW);
@@ -165,7 +165,7 @@ public class SettingsScreen implements Screen {
                 Label labelXX = new Label(" X ", skin);
                 panel.add(labelXX);
 
-                final TextField fieldH = new TextField("30", skin);
+                final TextField fieldH = new TextField("40", skin);
                 fieldH.setMaxLength(3);
                 fieldH.setTextFieldFilter(numberFilter);
                 panel.add(fieldH);
@@ -179,7 +179,7 @@ public class SettingsScreen implements Screen {
                             int h = Integer.valueOf("0" + fieldH.getText());
                             TiledMap map = MapUtils.genVoidMap(w, h, name);
                             dispose();
-                            manager.setScreen(new EditorHandler(manager, map));
+                            manager.setScreen(new EditorScreen(manager, map));
                         }
                     }
                 };
@@ -201,7 +201,7 @@ public class SettingsScreen implements Screen {
         }
     }
 
-    TextField.TextFieldFilter numberFilter = new TextField.TextFieldFilter() {
+    private final TextField.TextFieldFilter numberFilter = new TextField.TextFieldFilter() {
 
         public boolean acceptChar(TextField textField, char c) {
             if ("0123456789".indexOf(c) == -1) {

@@ -1,6 +1,6 @@
 package ua.naiksoftware.waronline;
 
-import ua.naiksoftware.waronline.game.GameHandler;
+import ua.naiksoftware.waronline.game.GameScreen;
 import ua.naiksoftware.waronline.res.Lng;
 import ua.naiksoftware.waronline.res.ResKeeper;
 import ua.naiksoftware.waronline.res.Words;
@@ -159,7 +159,7 @@ public class GdxMenu implements Screen {
                 dispose();
                 // TODO: show select map dialog in future
                 GameMap map = MapUtils.loadTileMap(null, true);
-                manager.setScreen(new GameHandler(manager, map));
+                manager.setScreen(new GameScreen(manager, map));
             } else if (a == btnOnline) {
             } else if (a == btnSettings) {
                 manager.setScreen(new SettingsScreen(manager));

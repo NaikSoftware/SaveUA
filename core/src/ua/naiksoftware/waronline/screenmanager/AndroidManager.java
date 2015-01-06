@@ -2,8 +2,8 @@ package ua.naiksoftware.waronline.screenmanager;
 
 import ua.naiksoftware.waronline.MapUtils;
 import ua.naiksoftware.waronline.SplashScreen;
-import ua.naiksoftware.waronline.game.GameHandler;
-import ua.naiksoftware.waronline.game.editor.EditorHandler;
+import ua.naiksoftware.waronline.game.GameScreen;
+import ua.naiksoftware.waronline.game.editor.EditorScreen;
 import ua.naiksoftware.waronline.res.Lng;
 
 import com.badlogic.gdx.Gdx;
@@ -62,11 +62,11 @@ public class AndroidManager extends Manager {
                 break;
             case PLAY:
                 gameMap = MapUtils.loadTileMap(pathToMap, internalMap);
-                setScreen(new GameHandler(this, gameMap));
+                setScreen(new GameScreen(this, gameMap));
                 break;
             case PLAY_ONLINE:
                 gameMap = MapUtils.loadTileMap(pathToMap, internalMap);
-                setScreen(new GameHandler(this, gameMap));
+                setScreen(new GameScreen(this, gameMap));
                 break;
             case MAP_EDITOR:
                 TiledMap map;
@@ -77,7 +77,7 @@ public class AndroidManager extends Manager {
                     gameMap = MapUtils.loadTileMap(pathToMap, internalMap);
                     map = gameMap.getTiledMap();
                 }
-                setScreen(new EditorHandler(this, map));
+                setScreen(new EditorScreen(this, map));
                 break;
             default:
                 break;

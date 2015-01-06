@@ -35,6 +35,9 @@ public class Language implements Lng {
             put(EXIT, "Exit");
             put(LOCATE_OBJECTS, "Locate objects");
             put(UNITS_GAMER, "Locate units gamer");
+            put(FREE_UNITS, "Locate free units");
+            put(MIN_TWO_GAMERS_REQUIRED, "Should be no less\nthan two players.");
+            put(SAVE_MAP_AND_EXIT, "Save map and exit?");
         }
     };
 
@@ -60,6 +63,9 @@ public class Language implements Lng {
             put(EXIT, "Вийти");
             put(LOCATE_OBJECTS, "Розташуйте на мапi iншi об'екти");
             put(UNITS_GAMER, "Розташуйте юнiтiв гравця");
+            put(FREE_UNITS, "Розташуйте вiльних юнiтiв");
+            put(MIN_TWO_GAMERS_REQUIRED, "Повинно бути не менше\n   двох гравцiв.");
+            put(SAVE_MAP_AND_EXIT, "Зберегти мапу\n   та вийти?");
         }
     };
 
@@ -85,6 +91,9 @@ public class Language implements Lng {
             put(EXIT, "Выйти");
             put(LOCATE_OBJECTS, "Расположите на карте другие обьекты");
             put(UNITS_GAMER, "Расположите юнитов игрока");
+            put(FREE_UNITS, "Расположите свободных юнитов");
+            put(MIN_TWO_GAMERS_REQUIRED, "Должно быть не менее\n   двух игроков.");
+            put(SAVE_MAP_AND_EXIT, "Сохранить карту\n   и выйти?");
         }
     };
 

@@ -324,7 +324,7 @@ public class MapUtils {
         MapProperties prop = map.getProperties();
         int mapW = prop.get(MAP_W_PROP, Integer.class);
         int mapH = prop.get(MAP_H_PROP, Integer.class);
-        int maxGamers = prop.get(MAX_GAMERS_PROP, Integer.class);
+        int maxGamers = gameMap.maxGamers();
         try {
             data.writeUTF(prop.get(MAP_NAME_PROP, String.class));
             data.writeInt(maxGamers);

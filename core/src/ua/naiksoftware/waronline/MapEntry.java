@@ -9,8 +9,10 @@ import com.badlogic.gdx.utils.DataInput;
 /**
  * Формат хранения данных:
  *
- * String map name (read/write UTF); int max gamers; int map width, int map
- * height;
+ * String map name (read/write UTF);
+ * int max gamers;
+ * int map width;
+ * int map height;
  *
  * @author Naik
  */

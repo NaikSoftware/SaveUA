@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * Непроходимые клетки на карте (под зданиями, деревьями и др. обьектами)
  *
  * @author Naik
  */

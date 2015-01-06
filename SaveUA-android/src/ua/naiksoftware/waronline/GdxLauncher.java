@@ -84,6 +84,12 @@ public class GdxLauncher extends AndroidApplication {
                     return getString(R.string.locate_objects);
                 case UNITS_GAMER:
                     return getString(R.string.units_gamer);
+                case FREE_UNITS:
+                    return getString(R.string.free_units);
+                case MIN_TWO_GAMERS_REQUIRED:
+                    return getString(R.string.min_two_gamers_req);
+                case SAVE_MAP_AND_EXIT:
+                    return getString(R.string.save_map_and_exit);
             }
             return null;
         }

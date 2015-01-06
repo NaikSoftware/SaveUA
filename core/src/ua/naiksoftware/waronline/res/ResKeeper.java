@@ -11,6 +11,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 
+/**
+ * Менеджер ресурсов
+ *
+ * @author Naik
+ */
 public class ResKeeper {
 
     private static ArrayMap<TextureId, Texture> textures = new ArrayMap<TextureId, Texture>();
