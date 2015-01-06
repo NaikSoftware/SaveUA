@@ -6,13 +6,14 @@ import java.util.Comparator;
 import ua.naiksoftware.waronline.game.Gamer;
 import ua.naiksoftware.waronline.game.Node;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
-public class Unit {
+public class Unit extends Sprite {
 
-	//! new
-	public static final Color COLOR_FREE_UNITS = Color.WHITE;
-	// new
-	
+    //! new
+    public static final Color COLOR_FREE_UNITS = Color.WHITE;
+    // new
+
     public static final int UNIT_COUNT = 8;
 
     public static final int NOT_MOVE = 0;
@@ -20,7 +21,7 @@ public class Unit {
     public static final int END_MOVE = 2;
     public static final int MOVE_TO_NEW_CELL = 3;
 
-    private final int code;
+    private final UnitCode code;
     private int x, y;
     private int drawx, drawy;
     private int lookX, lookY;
@@ -44,18 +45,24 @@ public class Unit {
 //    private static final int LIFE_HEIGHT = Tile.TILE_SIZE / 7;
 //    private static final int LIFE_WIDTH = Tile.TILE_SIZE;
 
-    public Unit(int code, int x, int y) {
+    public Unit(UnitCode code, int x, int y) {
+        this(code, null, x, y);
         this.lookY = -1;// изначально смотрят все вверх
         this.x = x;
         this.y = y;
 //        drawx = Tile.TILE_SIZE * x;
 //        drawy = Tile.TILE_SIZE * y;
-        this.code = code;
-        free = false;
 //        anim = Anim.get(code);
 //        lifeBitmap = Bitmap.createBitmap(LIFE_WIDTH, LIFE_HEIGHT, Bitmap.Config.RGB_565);
 //        changeLife(DB.lifes.get(code));
         reset();
+    }
+
+    public Unit(UnitCode code, Gamer g, int x, int y) {
+        this.code = code;
+        if (g == null) {
+            free = true;
+        }
     }
 
     public final void reset() {
@@ -323,11 +330,11 @@ public class Unit {
         this.y = y;
     }
 
-    public int getX() {
+    public int getXOnMap() {
         return x;
     }
 
-    public int getY() {
+    public int getYOnMap() {
         return y;
     }
 
@@ -339,7 +346,7 @@ public class Unit {
         return drawy;
     }
 
-    public int getCode() {
+    public UnitCode getCode() {
         return code;
     }
 
@@ -369,10 +376,10 @@ public class Unit {
         return usedPassability;
     }
 
- //   public int getShotMaxPassability() {
+    //   public int getShotMaxPassability() {
     //       return DB.maxCellsShot.get(code) * 100;
     //   }
- //   public int getAttackRadius() {
+    //   public int getAttackRadius() {
     //       return DB.attackRadius.get(code);
     //   }
     public double distanseTo(int x2, int y2) {
@@ -410,14 +417,6 @@ public class Unit {
             lookY = -1;
         }
 //        anim = Anim.get(code + frameShift);
-    }
-
-    // Для отрисовки юнита как картинки (в меню например)
-    //   public Bitmap getBitmap() {
-    //       return anim[0];
-    //   }
-    public int getColor() {
-        return lifeColor;
     }
 
     /**

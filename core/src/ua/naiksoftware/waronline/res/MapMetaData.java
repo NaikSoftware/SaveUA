@@ -1,6 +1,6 @@
 package ua.naiksoftware.waronline.res;
 
-import ua.naiksoftware.waronline.game.MapObjCode;
+import ua.naiksoftware.waronline.map.MapObjCode;
 
 public class MapMetaData {
 

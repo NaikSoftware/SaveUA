@@ -1,4 +1,4 @@
-package ua.naiksoftware.waronline.game;
+package ua.naiksoftware.waronline.map;
 
 public enum TileCode {
 

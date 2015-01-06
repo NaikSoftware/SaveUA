@@ -1,4 +1,4 @@
-package ua.naiksoftware.waronline;
+package ua.naiksoftware.waronline.map;
 
 import java.io.IOException;
 

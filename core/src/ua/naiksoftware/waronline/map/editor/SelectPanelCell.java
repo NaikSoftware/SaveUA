@@ -1,4 +1,4 @@
-package ua.naiksoftware.waronline.game.editor;
+package ua.naiksoftware.waronline.map.editor;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -6,7 +6,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import ua.naiksoftware.waronline.game.MapObjCode;
+import ua.naiksoftware.waronline.map.MapObjCode;
 import ua.naiksoftware.waronline.game.unit.UnitCode;
 import ua.naiksoftware.waronline.res.ResKeeper;
 import ua.naiksoftware.waronline.res.id.AtlasId;

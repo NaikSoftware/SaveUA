@@ -1,5 +1,6 @@
 package ua.naiksoftware.waronline;
 
+import ua.naiksoftware.waronline.map.MapUtils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Input.Peripheral;

@@ -1,4 +1,4 @@
-package ua.naiksoftware.waronline.game.editor;
+package ua.naiksoftware.waronline.map.editor;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;

@@ -1,6 +1,5 @@
-package ua.naiksoftware.waronline;
+package ua.naiksoftware.waronline.map;
 
-import ua.naiksoftware.waronline.game.TileCode;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 

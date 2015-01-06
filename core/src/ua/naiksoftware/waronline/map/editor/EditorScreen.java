@@ -1,5 +1,8 @@
-package ua.naiksoftware.waronline.game.editor;
+package ua.naiksoftware.waronline.map.editor;
 
+import ua.naiksoftware.waronline.map.MapObject;
+import ua.naiksoftware.waronline.map.TileCode;
+import ua.naiksoftware.waronline.map.MapObjCode;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import ua.naiksoftware.waronline.game.*;
 
@@ -20,8 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-import ua.naiksoftware.waronline.MapCell;
-import ua.naiksoftware.waronline.MapUtils;
+import ua.naiksoftware.waronline.map.MapCell;
+import ua.naiksoftware.waronline.map.MapUtils;
 import ua.naiksoftware.waronline.ScrollMap;
 import ua.naiksoftware.waronline.game.unit.UnitCode;
 import ua.naiksoftware.waronline.res.MapMetaData;
@@ -540,11 +543,11 @@ public class EditorScreen extends ScrollMap {
     private void putTile(TileCode code) {
         Cell cell = MapUtils.getCell(code, false);
         SelectPanelCell tile = new SelectPanelCell(cell);
-        tile.addListener(tileListener);
+        tile.addListener(panelListener);
         panelTiles.add(tile);
     }
 
-    private final ClickListener tileListener = new ClickListener() {
+    private final ClickListener panelListener = new ClickListener() {
 
         @Override
         public void clicked(InputEvent event, float x, float y) {
@@ -587,7 +590,7 @@ public class EditorScreen extends ScrollMap {
     private void putMapObjectToPanel(MapObjCode code) {
         SelectPanelCell editCell = new SelectPanelCell(MapObject
                 .getAtlasRegions(code).first(), code, cellSize);
-        editCell.addListener(tileListener);
+        editCell.addListener(panelListener);
         panelObjects.add(editCell);
     }
 
@@ -605,7 +608,7 @@ public class EditorScreen extends ScrollMap {
     private void putUnitToPanel(UnitCode code) {
         SelectPanelCell cell = new SelectPanelCell(
                 MapUnit.getTextureRegion(code), code);
-        cell.addListener(tileListener);
+        cell.addListener(panelListener);
         panelUnits.add(cell);
     }
 

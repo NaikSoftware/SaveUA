@@ -1,9 +1,8 @@
-package ua.naiksoftware.waronline;
+package ua.naiksoftware.waronline.map;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import ua.naiksoftware.waronline.game.TileCode;
 import ua.naiksoftware.waronline.res.ResKeeper;
 import ua.naiksoftware.waronline.res.id.AtlasId;
 
@@ -20,8 +19,16 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.DataInput;
 import com.badlogic.gdx.utils.DataOutput;
-import ua.naiksoftware.waronline.game.GameMap;
-import ua.naiksoftware.waronline.game.editor.EditGameMap;
+import java.util.HashSet;
+import java.util.Set;
+import ua.naiksoftware.waronline.game.Gamer;
+import ua.naiksoftware.waronline.game.unit.Unit;
+import ua.naiksoftware.waronline.game.unit.UnitCode;
+import ua.naiksoftware.waronline.map.editor.EditGameMap;
+import ua.naiksoftware.waronline.map.editor.MapObjCodeID;
+import ua.naiksoftware.waronline.map.editor.MapUnit;
+import ua.naiksoftware.waronline.map.editor.TileCodeID;
+import ua.naiksoftware.waronline.map.editor.UnitCodeID;
 
 public class MapUtils {
 
@@ -77,8 +84,9 @@ public class MapUtils {
         MapProperties mapProp = map.getProperties();
         MapLayers layers = map.getLayers();
         TiledMapTileLayer layerBg;
-
-        int mapW, mapH;
+        Array<Unit> units = new Array<Unit>();
+        Array<MapObject> mapObjects = new Array<MapObject>();
+        Array<Gamer> gamers = new Array<Gamer>();
 
         FileHandle fh;
         if (internal) {
@@ -92,23 +100,59 @@ public class MapUtils {
 
         DataInput data = new DataInput(fh.read());
         try {
+            int r;
+            // Header
             mapProp.put(MAP_NAME_PROP, data.readUTF());
-            data.readInt();//ignore maxGamers, get it in GameMap class
-            mapW = data.readInt();
-            mapH = data.readInt();
+            data.readInt(); // ignore max gamers - get it from units info
+            int mapW = data.readInt();
+            int mapH = data.readInt();
             mapProp.put(MAP_W_PROP, mapW);
             mapProp.put(MAP_H_PROP, mapH);
             mapProp.put(CELL_SIZE_PROP, CELL_SIZE);
             layerBg = new TiledMapTileLayer(mapW, mapH, CELL_SIZE, CELL_SIZE);
-
             layers.add(layerBg);
-            // Read other layers, etc
+            // Units
+            while ((r = data.readInt()) != DATA_DIVIDER) {
+                Gamer g = findGamer(gamers, r);
+                if (r > 0) {
+                    gamers.add(g);
+                }
+                UnitCode code = UnitCodeID.convertUnitID(data.readInt());
+                int x = data.readInt();
+                int y = data.readInt();
+                units.add(new Unit(code, g, x, y));
+            }
+            // Map objects
+            while ((r = data.readInt()) != DATA_DIVIDER) {
+                MapObjCode code = MapObjCodeID.convertObjID(r);
+                int x = data.readInt() * CELL_SIZE;
+                int y = data.readInt() * CELL_SIZE;
+                mapObjects.add(new MapObject(code, x, y));
+            }
+            // Tiles
+            for (int i = 0; i < mapW; i++) {
+                for (int j = 0; j < mapH; j++) {
+                    r = data.readInt();
+                    MapCell cell = new MapCell(TileCodeID.convertID(r));
+                    layerBg.setCell(i, j, cell);
+                }
+            }
+            // TODO: set impassable cells
             data.close();
             cells.clear();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new GameMap(map, null);
+        return new GameMap(map, units, mapObjects, gamers);
+    }
+
+    private static Gamer findGamer(Array<Gamer> gamers, int id) {
+        for (Gamer g : gamers) {
+            if (g.getId() == id) {
+                return g;
+            }
+        }
+        return null;
     }
 
     public static MapCell getCell(TileCode code, boolean cache) {
@@ -326,10 +370,39 @@ public class MapUtils {
         int mapH = prop.get(MAP_H_PROP, Integer.class);
         int maxGamers = gameMap.maxGamers();
         try {
+            // Header
             data.writeUTF(prop.get(MAP_NAME_PROP, String.class));
             data.writeInt(maxGamers);
             data.writeInt(mapW);
             data.writeInt(mapH);
+            // Units
+            for (MapUnit u : gameMap.getUnits()) {
+                Gamer g = u.getGamer();
+                if (g == null) { // Write unit gamer id (0 - free unit)
+                    data.writeInt(0);
+                } else {
+                    data.writeInt(g.getId());
+                }
+                data.writeInt(UnitCodeID.convertUnitCode(u.getCode()));
+                data.writeInt((int) (u.getX() / CELL_SIZE));
+                data.writeInt((int) (u.getY() / CELL_SIZE));
+            }
+            data.writeInt(DATA_DIVIDER);
+            // Map objects
+            for (MapObject o : gameMap.getMapObjects()) {
+                data.writeInt(MapObjCodeID.convertObjCode(o.getMapObjCode()));
+                data.writeInt((int) (o.getX() / CELL_SIZE));
+                data.writeInt((int) (o.getY() / CELL_SIZE));
+            }
+            data.writeInt(DATA_DIVIDER);
+            // Tiles
+            TiledMapTileLayer layerBg = (TiledMapTileLayer) map.getLayers().get(0);
+            for (int i = 0; i < mapW; i++) {
+                for (int j = 0; j < mapH; j++) {
+                    MapCell cell = (MapCell) layerBg.getCell(i, j);
+                    data.writeInt(TileCodeID.convertTile(cell.getCode()));
+                }
+            }
 
             data.close();
         } catch (IOException e) {

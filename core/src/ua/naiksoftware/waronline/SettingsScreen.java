@@ -1,6 +1,8 @@
 package ua.naiksoftware.waronline;
 
-import ua.naiksoftware.waronline.game.editor.EditorScreen;
+import ua.naiksoftware.waronline.map.MapEntry;
+import ua.naiksoftware.waronline.map.MapUtils;
+import ua.naiksoftware.waronline.map.editor.EditorScreen;
 import ua.naiksoftware.waronline.res.Lng;
 import ua.naiksoftware.waronline.res.ResKeeper;
 import ua.naiksoftware.waronline.res.Words;
@@ -139,7 +141,7 @@ public class SettingsScreen implements Screen {
     private void showDialogEditCreate(boolean edit) {
         if (edit) {
             if (dialogEdit == null) {
-				// TODO
+                // TODO
             }
             dialogEdit.show(stage);
         } else {

@@ -1,5 +1,6 @@
-package ua.naiksoftware.waronline.game;
+package ua.naiksoftware.waronline.map;
 
+import ua.naiksoftware.waronline.map.MapObjCode;
 import ua.naiksoftware.waronline.res.ResKeeper;
 import ua.naiksoftware.waronline.res.id.AtlasId;
 
@@ -35,6 +36,17 @@ public class MapObject extends Sprite {
         }
         setSize(regions.first().getRegionWidth(), regions.first()
                 .getRegionHeight());
+    }
+    
+    /**
+     * 
+     * @param code
+     * @param x
+     * @param y
+     */
+    public MapObject(MapObjCode code, int x, int y) {
+        this(code);
+        setPosition(x, y);
     }
 
     @Override

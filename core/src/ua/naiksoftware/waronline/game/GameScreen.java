@@ -1,5 +1,6 @@
 package ua.naiksoftware.waronline.game;
 
+import ua.naiksoftware.waronline.map.GameMap;
 import ua.naiksoftware.waronline.ScrollMap;
 import ua.naiksoftware.waronline.res.ResKeeper;
 import ua.naiksoftware.waronline.res.id.AtlasId;
@@ -17,18 +18,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class GameScreen extends ScrollMap {
 
-    private Manager manager;
-    private static TiledMap tileMap;
-    private GameMap gameMap;
-    private BitmapFont font;
-    private SpriteBatch batch;
+    private final Manager manager;
+    private final TiledMap tileMap;
+    private final GameMap gameMap;
+    private final BitmapFont font;
+    private final SpriteBatch batch;
     private int screenW, screenH, mapW, mapH;
 
     public GameScreen(Manager manager, GameMap gameMap) {
-        super(tileMap = gameMap.getTiledMap());
+        super(gameMap.getTiledMap());
         this.manager = manager;
         this.gameMap = gameMap;
-        tileMap = gameMap.getTiledMap();
+        this.tileMap = gameMap.getTiledMap();
 
         font = new BitmapFont();
         batch = new SpriteBatch();

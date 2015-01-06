@@ -1,17 +1,17 @@
 package ua.naiksoftware.waronline.screenmanager;
 
-import ua.naiksoftware.waronline.MapUtils;
+import ua.naiksoftware.waronline.map.MapUtils;
 import ua.naiksoftware.waronline.SplashScreen;
 import ua.naiksoftware.waronline.game.GameScreen;
-import ua.naiksoftware.waronline.game.editor.EditorScreen;
+import ua.naiksoftware.waronline.map.editor.EditorScreen;
 import ua.naiksoftware.waronline.res.Lng;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import ua.naiksoftware.waronline.game.GameMap;
-import ua.naiksoftware.waronline.game.editor.EditGameMap;
+import ua.naiksoftware.waronline.map.GameMap;
+import ua.naiksoftware.waronline.map.editor.EditGameMap;
 
 public class AndroidManager extends Manager {
 

@@ -1,5 +1,6 @@
 package ua.naiksoftware.waronline;
 
+import ua.naiksoftware.waronline.map.MapUtils;
 import ua.naiksoftware.waronline.game.GameScreen;
 import ua.naiksoftware.waronline.res.Lng;
 import ua.naiksoftware.waronline.res.ResKeeper;
@@ -23,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -32,7 +34,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import ua.naiksoftware.waronline.game.GameMap;
+import ua.naiksoftware.waronline.map.GameMap;
+import ua.naiksoftware.waronline.map.MapEntry;
 
 /**
  * Used instead of native menu on the same platforms, like desktop
@@ -49,6 +52,7 @@ public class GdxMenu implements Screen {
     private TextButton btnPAP, btnOnline, btnSettings, btnAbout;
     private OrthographicCamera cam;
     private Dialog dialogInfo;
+    private Dialog dialogSelectMap;
 
     public GdxMenu(DesktopManager manager) {
         this.manager = manager;
@@ -156,10 +160,7 @@ public class GdxMenu implements Screen {
         @Override
         public void changed(ChangeListener.ChangeEvent ev, Actor a) {
             if (a == btnPAP) {
-                dispose();
-                // TODO: show select map dialog in future
-                GameMap map = MapUtils.loadTileMap(null, true);
-                manager.setScreen(new GameScreen(manager, map));
+                selectmap(false);
             } else if (a == btnOnline) {
             } else if (a == btnSettings) {
                 manager.setScreen(new SettingsScreen(manager));
@@ -168,6 +169,42 @@ public class GdxMenu implements Screen {
             }
         }
     };
+
+    private void selectmap(final boolean online) {
+        if (dialogSelectMap == null) {
+            Skin skin = manager.getSkin();
+            
+            final SelectBox<MapEntry> dropdown = new SelectBox<MapEntry>(skin);
+            dropdown.addListener(new ChangeListener() {
+                public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+                    System.out.println(dropdown.getSelected());
+                }
+            });
+            dropdown.setItems(MapUtils.readMapList());
+            if (dropdown.getItems().size > 0) {
+                dropdown.setSelectedIndex(0);
+            }
+            
+            dialogSelectMap = new Dialog("", skin) {
+
+                @Override
+                protected void result(Object object) {
+                    if (online) {
+                        //todo
+                    } else {
+                        dispose();
+                        GameMap map = MapUtils.loadTileMap(null, true);
+                        manager.setScreen(new GameScreen(manager, map));
+                    }
+                }
+
+            };
+            
+            Table content = dialogSelectMap.getContentTable();
+            
+        }
+        dialogSelectMap.show(stage);
+    }
 
     @Override
     public void dispose() {

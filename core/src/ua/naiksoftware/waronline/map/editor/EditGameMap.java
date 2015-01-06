@@ -1,11 +1,11 @@
-package ua.naiksoftware.waronline.game.editor;
+package ua.naiksoftware.waronline.map.editor;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Array;
 import java.util.HashSet;
 import java.util.Set;
-import ua.naiksoftware.waronline.game.MapObject;
+import ua.naiksoftware.waronline.map.MapObject;
 
 /**
  * Содержит тайловую карту, исходные позиции игроков
@@ -16,7 +16,6 @@ public class EditGameMap {
 
     private final TiledMap tiledMap;
     private final Array<MapUnit> units = new Array<MapUnit>();
-    private final Array<MapUnit> freeUnits = new Array<MapUnit>();
     private final Array<MapObject> objects = new Array<MapObject>();
     private final int maxGamers;
 
@@ -26,10 +25,8 @@ public class EditGameMap {
         for (Sprite s : sprites) {
             if (s instanceof MapUnit) {
                 MapUnit u = (MapUnit) s;
-                if (u.getGamer() == null) {
-                    freeUnits.add(u);
-                } else {
-                    units.add(u);
+                units.add(u);
+                if (u.getGamer() != null) {// if gamer == null - its a free unit
                     gamers.add(u.getGamer().getId());
                 }
             } else if (s instanceof MapObject) {
@@ -45,10 +42,6 @@ public class EditGameMap {
 
     public Array<MapUnit> getUnits() {
         return units;
-    }
-
-    public Array<MapUnit> getFreeUnits() {
-        return freeUnits;
     }
 
     public Array<MapObject> getMapObjects() {
