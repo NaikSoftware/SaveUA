@@ -5,14 +5,13 @@ import java.io.IOException;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.DataInput;
+import ua.naiksoftware.io.RleDataInput;
 
 /**
  * Формат хранения данных:
  *
- * String map name (read/write UTF);
- * int max gamers;
- * int map width;
- * int map height;
+ * String map name (read/write UTF); int max gamers; int map width; int map
+ * height;
  *
  * @author Naik
  */
@@ -44,7 +43,7 @@ public class MapEntry {
         if (!fh.exists()) {
             name = "Not found";
         } else {
-            DataInput data = new DataInput(fh.read());
+            RleDataInput data = new RleDataInput(fh.read());
             try {
                 name = data.readUTF();
                 maxGamers = data.readInt();

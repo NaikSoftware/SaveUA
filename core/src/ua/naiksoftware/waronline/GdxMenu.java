@@ -1,12 +1,6 @@
 package ua.naiksoftware.waronline;
 
-import ua.naiksoftware.waronline.map.MapUtils;
-import ua.naiksoftware.waronline.game.GameScreen;
-import ua.naiksoftware.waronline.res.Lng;
-import ua.naiksoftware.waronline.res.ResKeeper;
-import ua.naiksoftware.waronline.res.Words;
-import ua.naiksoftware.waronline.res.id.TextureId;
-import ua.naiksoftware.waronline.screenmanager.DesktopManager;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -21,21 +15,23 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import ua.naiksoftware.libgdx.ui.WidgetList;
+import ua.naiksoftware.waronline.game.GameScreen;
 import ua.naiksoftware.waronline.map.GameMap;
 import ua.naiksoftware.waronline.map.MapEntry;
+import ua.naiksoftware.waronline.map.MapUtils;
+import ua.naiksoftware.waronline.res.Lng;
+import ua.naiksoftware.waronline.res.ResKeeper;
+import ua.naiksoftware.waronline.res.Words;
+import ua.naiksoftware.waronline.res.id.TextureId;
+import ua.naiksoftware.waronline.screenmanager.Manager;
 
 /**
  * Used instead of native menu on the same platforms, like desktop
@@ -45,19 +41,17 @@ import ua.naiksoftware.waronline.map.MapEntry;
  */
 public class GdxMenu implements Screen {
 
-    private DesktopManager manager;
+    private Manager manager;
     private Stage stage;
     private Texture bg, logo, btn;
     private Table root;
     private TextButton btnPAP, btnOnline, btnSettings, btnAbout;
-    private OrthographicCamera cam;
     private Dialog dialogInfo;
     private Dialog dialogSelectMap;
 
-    public GdxMenu(DesktopManager manager) {
+    public GdxMenu(Manager manager) {
         this.manager = manager;
-        cam = new OrthographicCamera();
-        stage = new Stage(new ScreenViewport(cam));
+        stage = new Stage(new ScreenViewport());
         Skin skin = manager.getSkin();
         Lng lng = manager.lng;
         BitmapFont font = manager.getTitleFont();
@@ -104,7 +98,7 @@ public class GdxMenu implements Screen {
         dialogInfo = new Dialog("", skin);
         dialogInfo.button("BtnTest");
         dialogInfo
-                .text("Test text rgsrg rgsdrg srgsrtqwweffffffffffffffffffffffff\n SDRGRG АПЕРАЕ  іерівер вр\n\n  парчрывры ыр ывр ыв \nры  чвр ывр ");
+                .text("Test text rgsrg rgsdrg \nsrgsrtqwweffffffff\nffffffffffffffff\n SDRGRG АПЕРАЕ \n іерівер вр\n\n  парчрывры ыр ывр ыв \nры  чвр ывр ");
     }
 
     @Override
@@ -130,7 +124,7 @@ public class GdxMenu implements Screen {
         im.addProcessor(new HardInputProcessor() {
             @Override
             public boolean keyUp(int keycode) {
-                if (keycode == Keys.BACKSPACE) {
+                if (keycode == Keys.BACKSPACE || keycode == Keys.BACK) {
                     dispose();
                     Gdx.app.exit();
                 }
@@ -138,6 +132,7 @@ public class GdxMenu implements Screen {
             }
         });
         Gdx.input.setInputProcessor(im);
+        Gdx.input.setCatchBackKey(true);
     }
 
     @Override
@@ -155,12 +150,12 @@ public class GdxMenu implements Screen {
         // TODO: Implement this method
     }
 
-    private ChangeListener btnListener = new ChangeListener() {
+    private final ChangeListener btnListener = new ChangeListener() {
 
         @Override
         public void changed(ChangeListener.ChangeEvent ev, Actor a) {
             if (a == btnPAP) {
-                selectmap(false);
+                selectMap(false);
             } else if (a == btnOnline) {
             } else if (a == btnSettings) {
                 manager.setScreen(new SettingsScreen(manager));
@@ -170,41 +165,61 @@ public class GdxMenu implements Screen {
         }
     };
 
-    private void selectmap(final boolean online) {
+    private void selectMap(final boolean online) {
         if (dialogSelectMap == null) {
             Skin skin = manager.getSkin();
-            
-            final SelectBox<MapEntry> dropdown = new SelectBox<MapEntry>(skin);
-            dropdown.addListener(new ChangeListener() {
-                public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-                    System.out.println(dropdown.getSelected());
-                }
-            });
-            dropdown.setItems(MapUtils.readMapList());
-            if (dropdown.getItems().size > 0) {
-                dropdown.setSelectedIndex(0);
-            }
-            
+
+            final LevelAdapter adapter = new LevelAdapter(MapUtils.readMapList());
+            final WidgetList levelList = new WidgetList(adapter, skin);
+
             dialogSelectMap = new Dialog("", skin) {
 
                 @Override
                 protected void result(Object object) {
-                    if (online) {
-                        //todo
-                    } else {
-                        dispose();
-                        GameMap map = MapUtils.loadTileMap(null, true);
-                        manager.setScreen(new GameScreen(manager, map));
+                    if (object != null) {
+                        if (online) {
+                            //todo
+                        } else {
+                            dispose();
+                            MapEntry e = adapter.getEntry(levelList.getSelectedIndex());
+                            GameMap map = MapUtils.loadTileMap(e);
+                            manager.setScreen(new GameScreen(manager, map));
+                        }
                     }
                 }
 
             };
-            
+
             Table content = dialogSelectMap.getContentTable();
-            
+            content.add(levelList);
+            dialogSelectMap.button(manager.lng.get(Words.BACK), null);
+
         }
         dialogSelectMap.show(stage);
     }
+
+    private class LevelAdapter implements WidgetList.WidgetAdapter<Label> {
+
+        private final Array<MapEntry> entries;
+
+        public LevelAdapter(Array<MapEntry> entries) {
+            this.entries = entries;
+        }
+
+        @Override
+        public int getCount() {
+            return entries.size;
+        }
+
+        @Override
+        public Label createItem(int n) {
+            return new Label(entries.get(n).getName(), manager.getSkin());
+        }
+
+        MapEntry getEntry(int id) {
+            return entries.get(id);
+        }
+    };
 
     @Override
     public void dispose() {

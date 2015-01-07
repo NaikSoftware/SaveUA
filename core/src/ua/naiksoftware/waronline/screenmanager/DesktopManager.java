@@ -24,8 +24,8 @@ public class DesktopManager extends Manager {
         skin = new Skin(Gdx.files.internal("skins/uiskin.json"));
         BitmapFont font = skin.getFont("default-font");
         float scale = (Math.min(Gdx.graphics.getHeight(),
-                Gdx.graphics.getWidth()) / 25)
-                / font.getLineHeight();
+								Gdx.graphics.getWidth()) / 25)
+			/ font.getLineHeight();
         if (scale < 1) {
             font.setScale(scale);
         }
@@ -42,28 +42,16 @@ public class DesktopManager extends Manager {
         return skin;
     }
 
+	@Override
     public BitmapFont getTitleFont() {
         if (titleFont == null) {
             titleFont = new BitmapFont(Gdx.files.internal("skins/albionic_72.fnt"));
             float scale = Math.min(Gdx.graphics.getWidth(), Gdx.graphics.getHeight())
-                    / 10 / titleFont.getLineHeight();
+				/ 10 / titleFont.getLineHeight();
             if (scale < 1.3) {
                 titleFont.setScale(scale);
             }
-    }
-    return titleFont ;
-}
-
-public void freeTitleFont() {
-        if (titleFont != null) {
-            titleFont.dispose();
-            titleFont = null;
-        }
-    }
-
-    @Override
-        public void dispose() {
-        freeTitleFont();
-        super.dispose();
-    }
+		}
+		return titleFont ;
+	}
 }

@@ -37,9 +37,9 @@ public class MapObject extends Sprite {
         setSize(regions.first().getRegionWidth(), regions.first()
                 .getRegionHeight());
     }
-    
+
     /**
-     * 
+     *
      * @param code
      * @param x
      * @param y

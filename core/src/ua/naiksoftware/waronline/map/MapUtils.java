@@ -17,10 +17,8 @@ import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
-import com.badlogic.gdx.utils.DataInput;
-import com.badlogic.gdx.utils.DataOutput;
-import java.util.HashSet;
-import java.util.Set;
+import ua.naiksoftware.io.RleDataInput;
+import ua.naiksoftware.io.RleDataOutput;
 import ua.naiksoftware.waronline.game.Gamer;
 import ua.naiksoftware.waronline.game.unit.Unit;
 import ua.naiksoftware.waronline.game.unit.UnitCode;
@@ -29,6 +27,8 @@ import ua.naiksoftware.waronline.map.editor.MapObjCodeID;
 import ua.naiksoftware.waronline.map.editor.MapUnit;
 import ua.naiksoftware.waronline.map.editor.TileCodeID;
 import ua.naiksoftware.waronline.map.editor.UnitCodeID;
+import ua.naiksoftware.waronline.game.ImpassableCells;
+import ua.naiksoftware.waronline.res.MapMetaData;
 
 public class MapUtils {
 
@@ -49,6 +49,7 @@ public class MapUtils {
     private static final ArrayMap<TileCode, MapCell> cells = new ArrayMap<TileCode, MapCell>();
 
     public static TiledMap genVoidMap(int w, int h, String name) {
+        ImpassableCells.clear();
         tileAtlas = ResKeeper.get(AtlasId.MAP_TILES);
         TiledMap map = new TiledMap();
         MapProperties mapProp = map.getProperties();
@@ -74,11 +75,13 @@ public class MapUtils {
     /**
      * Загружает тайловую карту.
      *
-     * @param path - путь к файлу карты
-     * @param internal - предустановленная ли карта, или созданная пользователем
+     * @param entry - содержит карту и другую информацию
      * @return загруженную карту
      */
-    public static GameMap loadTileMap(String path, boolean internal) {
+    public static GameMap loadTileMap(MapEntry entry) {
+        ImpassableCells.clear();
+        String path = entry.getPath();
+        boolean local = entry.isLocal();
         tileAtlas = ResKeeper.get(AtlasId.MAP_TILES);
         TiledMap map = new TiledMap();
         MapProperties mapProp = map.getProperties();
@@ -89,16 +92,16 @@ public class MapUtils {
         Array<Gamer> gamers = new Array<Gamer>();
 
         FileHandle fh;
-        if (internal) {
-            fh = Gdx.files.internal(path);
-        } else {
+        if (local) {
             fh = Gdx.files.local(path);
+        } else {
+            fh = Gdx.files.internal(path);
         }
         if (!fh.exists()) {
             throw new RuntimeException("Map " + path + " not found");
         }
 
-        DataInput data = new DataInput(fh.read());
+        RleDataInput data = new RleDataInput(fh.read());
         try {
             int r;
             // Header
@@ -114,7 +117,8 @@ public class MapUtils {
             // Units
             while ((r = data.readInt()) != DATA_DIVIDER) {
                 Gamer g = findGamer(gamers, r);
-                if (r > 0) {
+                if (r > 0 && g == null) {
+                    g = new Gamer();
                     gamers.add(g);
                 }
                 UnitCode code = UnitCodeID.convertUnitID(data.readInt());
@@ -127,13 +131,15 @@ public class MapUtils {
                 MapObjCode code = MapObjCodeID.convertObjID(r);
                 int x = data.readInt() * CELL_SIZE;
                 int y = data.readInt() * CELL_SIZE;
-                mapObjects.add(new MapObject(code, x, y));
+                MapObject mapObj = new MapObject(code, x, y);
+                mapObjects.add(mapObj);
+                setImassableCellsUnderObject(mapObj, true);
             }
             // Tiles
             for (int i = 0; i < mapW; i++) {
                 for (int j = 0; j < mapH; j++) {
                     r = data.readInt();
-                    MapCell cell = new MapCell(TileCodeID.convertID(r));
+                    MapCell cell = getCell(TileCodeID.convertID(r), true);
                     layerBg.setCell(i, j, cell);
                 }
             }
@@ -153,6 +159,25 @@ public class MapUtils {
             }
         }
         return null;
+    }
+
+    public static void setImassableCellsUnderObject(MapObject obj, boolean insert) {
+        int x = (int) (obj.getX() / CELL_SIZE);
+        int y = (int) (obj.getY() / CELL_SIZE);
+        int[][] mask = MapMetaData.objIntersect(obj.getMapObjCode());
+        int range = mask.length;
+        for (int i = 0; i < range; i++) {
+            int arr[] = mask[i];
+            for (int j = 0; j < range; j++) {
+                if (arr[j] == 1) {
+                    if (insert) {
+                        ImpassableCells.add(x + i, y + j);
+                    } else {
+                        ImpassableCells.remove(x + i, y + j);
+                    }
+                }
+            }
+        }
     }
 
     public static MapCell getCell(TileCode code, boolean cache) {
@@ -363,7 +388,7 @@ public class MapUtils {
         FileHandle dir = Gdx.files.local(LOCAL_MAP_DIR);
         dir.mkdirs();
         FileHandle file = dir.child(String.valueOf(System.currentTimeMillis()));
-        DataOutput data = new DataOutput(file.write(false));
+        RleDataOutput data = new RleDataOutput(file.write(false));
         TiledMap map = gameMap.getTiledMap();
         MapProperties prop = map.getProperties();
         int mapW = prop.get(MAP_W_PROP, Integer.class);
@@ -404,6 +429,7 @@ public class MapUtils {
                 }
             }
 
+            data.flush();
             data.close();
         } catch (IOException e) {
             e.printStackTrace();

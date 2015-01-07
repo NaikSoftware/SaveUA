@@ -120,6 +120,23 @@
 						android:layout_height="wrap_content"
 						android:layout_alignParentRight="true"/>
 				</RelativeLayout>
+				
+				<RelativeLayout
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginBottom="7dp"
+					android:gravity="center_vertical">
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="@string/gdx_menu"
+						android:layout_alignParentLeft="true"/>
+					<CheckBox
+						android:id="@+id/settingsCheckBox_gdx_menu"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_alignParentRight="true"/>
+				</RelativeLayout>
 
 			</LinearLayout>
 

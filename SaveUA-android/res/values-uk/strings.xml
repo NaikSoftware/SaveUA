@@ -6,24 +6,29 @@
     <string name="settings">Налаштування</string>
     <string name="about">Про гру</string>
 	
-    <string name="select_map">Виберiть мапу</string>
-    <string name="music">Музика</string>
-    <string name="sound_effects">Звукові ефекти</string>
-    <string name="input_map_name">Введіть iм\'я карти</string>
-    <string name="input_map_size">Введіть розмір карти</string>
+	<string name="select_map">Виберiть мапу</string>
+	<string name="music">Музика</string>
+	<string name="sound_effects">Звукові ефекти</string>
+	<string name="gdx_menu">Gdx меню</string>
+	<string name="input_map_name">Введіть iм\'я карти</string>
+	<string name="input_map_size">Введіть розмір карти</string>
 
-    <string name="cancel">Скасувати</string>
-    <string name="ok">Прийняти</string>
-    <string name="back">Назад</string>
-    <string name="next">Далi</string>
-    <string name="exit">Вийти</string>
+	<string name="cancel">Скасувати</string>
+	<string name="ok">Прийняти</string>
+	<string name="back">Назад</string>
+	<string name="next">Далi</string>
+	<string name="exit">Вийти</string>
 	
-    <string name="build_map">Побудуйте мапу</string>
-    <string name="locate_objects">Iншi об\'екти</string>
+	<string name="add">Додати</string>
+	<string name="edit">Редаг.</string>
+	<string name="delete">Видалити</string>
+	
+	<string name="build_map">Побудуйте мапу</string>
+	<string name="locate_objects">Iншi об\'екти</string>
     <string name="units_gamer">Юнiти гравця</string>
-    <string name="free_units">Вiльнi юнiти</string>
+	<string name="free_units">Вiльнi юнiти</string>
 	
-    <string name="min_two_gamers_req">Повинно бути не менше\nдвох гравцiв.</string>
-    <string name="save_map_and_exit">Зберегти мапу\n   та вийти?</string>
+	<string name="min_two_gamers_req">Повинно бути не менше\nдвох гравцiв.</string>
+	<string name="save_map_and_exit">Зберегти мапу\n   та вийти?</string>
 	
 </resources>

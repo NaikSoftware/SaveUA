@@ -1,10 +1,7 @@
 package ua.naiksoftware.waronline.map.editor;
 
-import ua.naiksoftware.waronline.map.MapObject;
-import ua.naiksoftware.waronline.map.TileCode;
-import ua.naiksoftware.waronline.map.MapObjCode;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import ua.naiksoftware.waronline.game.*;
+import ua.naiksoftware.waronline.map.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -23,9 +20,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-import ua.naiksoftware.waronline.map.MapCell;
-import ua.naiksoftware.waronline.map.MapUtils;
 import ua.naiksoftware.waronline.ScrollMap;
+import ua.naiksoftware.waronline.game.Gamer;
+import ua.naiksoftware.waronline.game.ImpassableCells;
+import ua.naiksoftware.waronline.game.UnitHelper;
 import ua.naiksoftware.waronline.game.unit.UnitCode;
 import ua.naiksoftware.waronline.res.MapMetaData;
 import ua.naiksoftware.waronline.res.ResKeeper;
@@ -72,7 +70,11 @@ public class EditorScreen extends ScrollMap {
 
     private State state;
 
-    // TODO: send map objects if edit existing map
+    public EditorScreen(Manager manager, GameMap gameMap) {
+        this(manager, gameMap.getTiledMap());
+        sprites.addAll(gameMap.getMapObjects());
+    }
+
     public EditorScreen(Manager manager, TiledMap map) {
         super(map);
         this.manager = manager;
@@ -99,7 +101,6 @@ public class EditorScreen extends ScrollMap {
         head.pack();
         setWidget(head, Side.TOP, Align.center);
         setSprites(sprites);
-        ImpassableCells.clear();
     }
 
     @Override
@@ -197,14 +198,14 @@ public class EditorScreen extends ScrollMap {
                 if (s.getBoundingRectangle().contains(tapX * cellSize + 1, tapY * cellSize + 1)
                         && s instanceof MapObject) {
                     obj = (MapObject) s;
-                    setImassableCellsUnderObject(obj, false);
+                    MapUtils.setImassableCellsUnderObject(obj, false);
                     sprites.removeValue(obj, true);
                     for (Sprite sp : sprites) {
                         if (sp instanceof MapObject) {
                             Rectangle r1 = s.getBoundingRectangle();
                             Rectangle r2 = sp.getBoundingRectangle();
                             if (r1.contains(r2) || r1.overlaps(r2)) {
-                                setImassableCellsUnderObject((MapObject) sp, true);
+                                MapUtils.setImassableCellsUnderObject((MapObject) sp, true);
                             }
                         }
                     }
@@ -215,7 +216,7 @@ public class EditorScreen extends ScrollMap {
                 obj = new MapObject(currObj.getMapObjCode());
                 obj.setX(tapX * cellSize);
                 obj.setY(tapY * cellSize);
-                setImassableCellsUnderObject(obj, true);
+                MapUtils.setImassableCellsUnderObject(obj, true);
                 addSprite(obj);
             }
         } else if (state == State.GAMERS_UNITS
@@ -259,25 +260,6 @@ public class EditorScreen extends ScrollMap {
                             MapUnit unit = new MapUnit(currUnit.getUnitCode(), currentGamer);
                             unit.setPosition(x, y);
                             addSprite(unit);
-                    }
-                }
-            }
-        }
-    }
-
-    private void setImassableCellsUnderObject(MapObject obj, boolean insert) {
-        int x = (int) (obj.getX() / cellSize);
-        int y = (int) (obj.getY() / cellSize);
-        int[][] mask = MapMetaData.objIntersect(obj.getMapObjCode());
-        int range = mask.length;
-        for (int i = 0; i < range; i++) {
-            int arr[] = mask[i];
-            for (int j = 0; j < range; j++) {
-                if (arr[j] == 1) {
-                    if (insert) {
-                        ImpassableCells.add(x + i, y + j);
-                    } else {
-                        ImpassableCells.remove(x + i, y + j);
                     }
                 }
             }
