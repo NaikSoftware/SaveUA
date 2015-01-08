@@ -8,7 +8,7 @@ check-off
   rotate: false
   xy: 11, 5
   size: 14, 14
-  orig: 14, 14
+  orig: 30, 30
   offset: 0, 0
   index: -1
 textfield
@@ -23,7 +23,7 @@ check-on
   rotate: false
   xy: 125, 35
   size: 14, 14
-  orig: 14, 14
+  orig: 30, 30
   offset: 0, 0
   index: -1
 cursor

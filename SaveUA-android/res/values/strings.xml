@@ -7,29 +7,32 @@
     <string name="settings">Settings</string>
     <string name="about">About</string>
 	
-	<string name="select_map">Select map</string>
-	<string name="music">Music</string>
-	<string name="sound_effects">Sound effects</string>
-	<string name="gdx_menu">Gdx menu</string>
-	<string name="input_map_name">Input map name</string>
-	<string name="input_map_size">Input map size</string>
+    <string name="select_map">Select map</string>
+    <string name="music">Music</string>
+    <string name="sound_effects">Sound effects</string>
+    <string name="gdx_menu">Gdx menu</string>
+    <string name="input_map_name">Input map name</string>
+    <string name="input_map_size">Input map size</string>
 	
-	<string name="cancel">Cancel</string>
-	<string name="ok">Apply</string>
-	<string name="back">Back</string>
-	<string name="next">Next</string>
-	<string name="exit">Exit</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">Apply</string>
+    <string name="back">Back</string>
+    <string name="next">Next</string>
+    <string name="exit">Exit</string>
 	
-	<string name="add">Add</string>
-	<string name="edit">Edit</string>
-	<string name="delete">Delete</string>
+    <string name="add">Add</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 	
-	<string name="build_map">Build map</string>
-	<string name="locate_objects">Locate objects</string>
+    <string name="build_map">Build map</string>
+    <string name="locate_objects">Locate objects</string>
     <string name="units_gamer">Units gamer</string>
-	<string name="free_units">Free units</string>
+    <string name="free_units">Free units</string>
 	
-	<string name="min_two_gamers_req">Should be no less\nthan two players.</string>
-	<string name="save_map_and_exit">Save map and exit?</string>
+    <string name="min_two_gamers_req">Should be no less\nthan two players.</string>
+    <string name="save_map_and_exit">Save map and exit?</string>
+    
+    <string name="size">Size</string>
+    <string name="max_gamers">Maximum gamers</string>
 		
 </resources>

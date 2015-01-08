@@ -1,11 +1,9 @@
-package ua.naiksoftware.waronline;
+package ua.naiksoftware.libgdx.ui;
 
-import ua.naiksoftware.waronline.map.MapUtils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -13,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -23,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import ua.naiksoftware.waronline.HardInputProcessor;
 
 /**
  * Экран, который содержит ScrollPane и предназначен для синхронизации координат
@@ -54,7 +54,8 @@ public abstract class ScrollMap implements Screen {
     private int cellSize;
     private final Batch gameBatch;
     private Array<Sprite> sprites;
-	private Rectangle scrRect;
+    private Rectangle scrRect;
+    private final GestureDetector gestureDetector;
 
     public static enum Side {
 
@@ -64,16 +65,21 @@ public abstract class ScrollMap implements Screen {
     protected static final boolean HAVE_BOARD = Gdx.input
             .isPeripheralAvailable(Peripheral.HardwareKeyboard);
 
+    /**
+     *
+     * @param tileMap ширина, высота и размер тайла берется из первого слоя:
+     * TiledMapTileLayer bg = (TiledMapTileLayer) tileMap.getLayers().get(0);
+     * cellSize = (int) bg.getTileHeight(); mapW = bg.getWidth(); mapH =
+     * bg.getHeight();
+     */
     public ScrollMap(TiledMap tileMap) {
         mapCamera = new OrthographicCamera();
         mapRenderer = new OrthogonalTiledMapRenderer(tileMap, 1f/* / cellSize */);
         stageViewport = new ScreenViewport(new OrthographicCamera());
-        cellSize = tileMap.getProperties().get(MapUtils.CELL_SIZE_PROP,
-                Integer.class);
-        mapW = cellSize
-                * tileMap.getProperties().get(MapUtils.MAP_W_PROP, Integer.class);
-        mapH = cellSize
-                * tileMap.getProperties().get(MapUtils.MAP_H_PROP, Integer.class);
+        TiledMapTileLayer bg = (TiledMapTileLayer) tileMap.getLayers().get(0);
+        cellSize = (int) bg.getTileHeight();
+        mapW = bg.getWidth() * cellSize;
+        mapH = bg.getHeight() * cellSize;
         mapHolder = new Actor();
         mapHolder.setSize(mapW, mapH);
         scrollPane = new ScrollPane(mapHolder);
@@ -86,6 +92,7 @@ public abstract class ScrollMap implements Screen {
         im = new InputMultiplexer();
         gameBatch = mapRenderer.getSpriteBatch();
         sprites = new Array<Sprite>();
+        gestureDetector = new GestureDetector(gestureListener);
     }
 
     @Override
@@ -102,18 +109,18 @@ public abstract class ScrollMap implements Screen {
         mapCamera.update();
         mapRenderer.setView(mapCamera);
         mapRenderer.render();
-		
-	    scrRect.x = mapCamera.position.x - screenW / 2 * zoom;
+
+        scrRect.x = mapCamera.position.x - screenW / 2 * zoom;
         scrRect.y = mapCamera.position.y - screenH / 2 * zoom;
-		
+
         gameBatch.begin();
         Rectangle spriteRect;
-		for (Sprite s : sprites) {
-			spriteRect = s.getBoundingRectangle();
-			if (scrRect.contains(spriteRect) || scrRect.overlaps(spriteRect)) {
-				s.draw(gameBatch);
-			}
-		}
+        for (Sprite s : sprites) {
+            spriteRect = s.getBoundingRectangle();
+            if (scrRect.contains(spriteRect) || scrRect.overlaps(spriteRect)) {
+                s.draw(gameBatch);
+            }
+        }
         drawGameScreen(gameBatch, deltaTime);
         gameBatch.end();
 
@@ -188,13 +195,13 @@ public abstract class ScrollMap implements Screen {
         stageViewport.update(newX, newY, true);
         screenW = newX;
         screenH = newY;
-		scrRect = new Rectangle(0, 0, newX, newY);
+        scrRect = new Rectangle(0, 0, newX, newY);
     }
 
     @Override
     public void show() {
         im.addProcessor(hardProcessor);
-        im.addProcessor(new GestureDetector(gestureListener));
+        im.addProcessor(gestureDetector);
         im.addProcessor(stage);
         Gdx.input.setInputProcessor(im);
         Gdx.input.setCatchBackKey(true);
@@ -216,8 +223,8 @@ public abstract class ScrollMap implements Screen {
         scrollPane.setScrollY(scrollPane.getScrollY()
                 + (screenH / 2 + scrollPane.getScrollY()) * (this.zoom - zoom)
                 / zoom);
-		scrRect.width = screenW * zoom;
-		scrRect.height = screenH * zoom;
+        scrRect.width = screenW * zoom;
+        scrRect.height = screenH * zoom;
 
         this.zoom = zoom;
     }
@@ -235,10 +242,6 @@ public abstract class ScrollMap implements Screen {
     @Override
     public void resume() {
         // TODO: Implement this method
-    }
-
-    protected void listen(InputProcessor ip) {
-        im.addProcessor(ip);
     }
 
     protected abstract void hardKeyUp(int key);
@@ -271,7 +274,7 @@ public abstract class ScrollMap implements Screen {
                 Vector3 vec3 = new Vector3(x, y, 0);
                 mapCamera.unproject(vec3);
                 // vec3.set(vec3.x, mapH - vec3.y, 0);
-                if (vec3.x < mapW && vec3.y < mapH) {
+                if (vec3.x < mapW && vec3.y > 0) {
                     vec3.scl(1f / cellSize);
                     Vector2 vec2 = new Vector2((int) vec3.x, (int) vec3.y);
                     tapMap(vec2);
@@ -311,7 +314,7 @@ public abstract class ScrollMap implements Screen {
         }
     };
 
-    private HardInputProcessor hardProcessor = new HardInputProcessor() {
+    private final HardInputProcessor hardProcessor = new HardInputProcessor() {
         @Override
         public boolean keyUp(int key) {
             hardKeyUp(key);
@@ -335,6 +338,14 @@ public abstract class ScrollMap implements Screen {
 
     public void setSprites(Array<Sprite> sprites) {
         this.sprites = sprites;
+    }
+
+    public void setBlockInput(boolean b) {
+        if (b) {
+            Gdx.input.setInputProcessor(stage);
+        } else {
+            Gdx.input.setInputProcessor(im);
+        }
     }
 
     @Override

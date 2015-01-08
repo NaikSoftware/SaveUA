@@ -6,29 +6,32 @@
     <string name="settings">Настройки</string>
     <string name="about">Об игре</string>
 	
-	<string name="select_map">Выберите карту</string>
-	<string name="music">Музыка</string>
-	<string name="sound_effects">Звуковые эффекты</string>
-	<string name="gdx_menu">Gdx меню</string>
-	<string name="input_map_name">Введите имя карты</string>
-	<string name="input_map_size">Введите размер карты</string>
+    <string name="select_map">Выберите карту</string>
+    <string name="music">Музыка</string>
+    <string name="sound_effects">Звуковые эффекты</string>
+    <string name="gdx_menu">Gdx меню</string>
+    <string name="input_map_name">Введите имя карты</string>
+    <string name="input_map_size">Введите размер карты</string>
 
-	<string name="cancel">Отмена</string>
-	<string name="ok">Принять</string>
-	<string name="back">Назад</string>
-	<string name="next">Далее</string>
-	<string name="exit">Выйти</string>
+    <string name="cancel">Отмена</string>
+    <string name="ok">Принять</string>
+    <string name="back">Назад</string>
+    <string name="next">Далее</string>
+    <string name="exit">Выйти</string>
 	
-	<string name="add">Создать</string>
-	<string name="edit">Редакт.</string>
-	<string name="delete">Удалить</string>
+    <string name="add">Создать</string>
+    <string name="edit">Редакт.</string>
+    <string name="delete">Удалить</string>
 	
-	<string name="build_map">Постройте карту</string>
-	<string name="locate_objects">Другие обьекты</string>
+    <string name="build_map">Постройте карту</string>
+    <string name="locate_objects">Другие обьекты</string>
     <string name="units_gamer">Юниты игрока</string>
-	<string name="free_units">Свободные юниты</string>
+    <string name="free_units">Свободные юниты</string>
 	
-	<string name="min_two_gamers_req">Должно быть не менее\nдвух игроков.</string>
-	<string name="save_map_and_exit">Сохранить карту\n   и выйти?</string>
+    <string name="min_two_gamers_req">Должно быть не менее\nдвух игроков.</string>
+    <string name="save_map_and_exit">Сохранить карту\n   и выйти?</string>
+    
+    <string name="size">Размер</string>
+    <string name="max_gamers">Максимум игроков</string>
 	
 </resources>

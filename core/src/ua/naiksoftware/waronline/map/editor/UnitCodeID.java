@@ -30,6 +30,10 @@ public class UnitCodeID {
     }
 
     public static UnitCode convertUnitID(int id) {
-        return map.getKey(id, true);
+        UnitCode code = map.getKey(id, true);
+		if (code == null) {
+			throw new IllegalArgumentException("Can't convert id " + id + " to UnitCode, map size=" + map.size + " contains value="+map.containsValue(id, true));
+		}
+		return code;
     }
 }

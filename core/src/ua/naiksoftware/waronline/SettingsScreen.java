@@ -71,8 +71,9 @@ public class SettingsScreen implements Screen {
             }
         });
         dropdown.setItems(levels);
-        if (dropdown.getItems().size > 0) {
+        if (levels.size > 0) {
             dropdown.setSelectedIndex(0);
+            level = levels.first();
         }
         content.add(dropdown).row();
 
@@ -170,10 +171,10 @@ public class SettingsScreen implements Screen {
                     protected void result(Object object) {
                         if (object != null) {
                             GameMap gameMap = MapUtils.loadTileMap(level);
-                            String name = fieldName.getText();
-                            gameMap.getTiledMap().getProperties().put(MapUtils.MAP_NAME_PROP, name);
+                            String newName = fieldName.getText().trim();
+                            if (newName.equals("")) newName = "А имя карты где?";
                             dispose();
-                            manager.setScreen(new EditorScreen(manager, gameMap));
+                            manager.setScreen(new EditorScreen(manager, gameMap, newName));
                         }
                     }
                 };
@@ -221,12 +222,15 @@ public class SettingsScreen implements Screen {
                     @Override
                     protected void result(Object object) {
                         if (object != null) {
-                            String name = fieldName.getText();
+                            String name = fieldName.getText().trim();
                             int w = Integer.valueOf("0" + fieldW.getText());
                             int h = Integer.valueOf("0" + fieldH.getText());
-                            TiledMap map = MapUtils.genVoidMap(w, h, name);
+                            if (w < 5) w = 5;
+                            if (h < 5) h = 5;
+                            if (name.equals("")) name = "Где название карты?";
+                            TiledMap map = MapUtils.genVoidMap(w, h);
                             dispose();
-                            manager.setScreen(new EditorScreen(manager, map));
+                            manager.setScreen(new EditorScreen(manager, map, name));
                         }
                     }
                 };

@@ -5,7 +5,7 @@ import java.io.IOException;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.DataInput;
-import ua.naiksoftware.io.RleDataInput;
+import java.util.zip.ZipInputStream;
 
 /**
  * Формат хранения данных:
@@ -43,13 +43,16 @@ public class MapEntry {
         if (!fh.exists()) {
             name = "Not found";
         } else {
-            RleDataInput data = new RleDataInput(fh.read());
             try {
+                ZipInputStream zis = new ZipInputStream(fh.read());
+                zis.getNextEntry();
+                DataInput data = new DataInput(zis);
                 name = data.readUTF();
                 maxGamers = data.readInt();
                 w = data.readInt();
                 h = data.readInt();
                 data.close();
+                zis.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

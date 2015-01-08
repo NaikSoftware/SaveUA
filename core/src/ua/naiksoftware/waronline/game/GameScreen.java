@@ -1,7 +1,7 @@
 package ua.naiksoftware.waronline.game;
 
 import ua.naiksoftware.waronline.map.GameMap;
-import ua.naiksoftware.waronline.ScrollMap;
+import ua.naiksoftware.libgdx.ui.ScrollMap;
 import ua.naiksoftware.waronline.res.ResKeeper;
 import ua.naiksoftware.waronline.res.id.AtlasId;
 import ua.naiksoftware.waronline.screenmanager.Manager;

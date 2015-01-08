@@ -66,6 +66,10 @@ public class TileCodeID {
     }
 
     public static TileCode convertID(int id) {
-        return map.getKey(id, true);
+		TileCode code = map.getKey(id, true);
+		if (code == null) {
+			throw new IllegalArgumentException("Can't convert id " + id + " to TileCode");
+		}
+		return code;
     }
 }

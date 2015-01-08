@@ -18,9 +18,11 @@ public class GameMap {
     private final Array<Unit> units;
     private final Array<Sprite> sprites;
     private final Array<Gamer> gamers;
+    private final String name;
 
-    public GameMap(TiledMap tiledMap, Array<Unit> units, Array<MapObject> mapObj, Array<Gamer> gamers) {
+    public GameMap(TiledMap tiledMap, String name, Array<Unit> units, Array<MapObject> mapObj, Array<Gamer> gamers) {
         this.tiledMap = tiledMap;
+        this.name = name;
         this.units = units;
         this.mapObj = mapObj;
         this.gamers = gamers;
@@ -31,6 +33,10 @@ public class GameMap {
 
     public TiledMap getTiledMap() {
         return tiledMap;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Array<Sprite> getSprites() {

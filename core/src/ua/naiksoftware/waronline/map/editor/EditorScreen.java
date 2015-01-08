@@ -20,12 +20,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-import ua.naiksoftware.waronline.ScrollMap;
+import ua.naiksoftware.libgdx.ui.ScrollMap;
 import ua.naiksoftware.waronline.game.Gamer;
 import ua.naiksoftware.waronline.game.ImpassableCells;
 import ua.naiksoftware.waronline.game.UnitHelper;
 import ua.naiksoftware.waronline.game.unit.UnitCode;
-import ua.naiksoftware.waronline.res.MapMetaData;
 import ua.naiksoftware.waronline.res.ResKeeper;
 import ua.naiksoftware.waronline.res.Words;
 import ua.naiksoftware.waronline.res.id.AtlasId;
@@ -41,6 +40,7 @@ public class EditorScreen extends ScrollMap {
     private TextButton btnBack, btnNext;
     private final TiledMapTileLayer layerBg;
     private Dialog dialog;
+    private final String name;
 
     /**
      * Tiles on panel
@@ -70,15 +70,16 @@ public class EditorScreen extends ScrollMap {
 
     private State state;
 
-    public EditorScreen(Manager manager, GameMap gameMap) {
-        this(manager, gameMap.getTiledMap());
+    public EditorScreen(Manager manager, GameMap gameMap, String newName) {
+        this(manager, gameMap.getTiledMap(), newName);
         sprites.addAll(gameMap.getMapObjects());
     }
 
-    public EditorScreen(Manager manager, TiledMap map) {
+    public EditorScreen(Manager manager, TiledMap map, String name) {
         super(map);
         this.manager = manager;
         this.map = map;
+        this.name = name;
         this.layerBg = (TiledMapTileLayer) map.getLayers().get(0);
         cellSize = mapCellSize();
         font = new BitmapFont();
@@ -128,6 +129,8 @@ public class EditorScreen extends ScrollMap {
                             if (o != null) {
                                 dispose();
                                 manager.showMenu();
+                            } else {
+                                setBlockInput(false);
                             }
                         }
                     };
@@ -137,6 +140,7 @@ public class EditorScreen extends ScrollMap {
                     dialog.key(Keys.ENTER, this);
                     dialog.key(Keys.ESCAPE, null);
                     dialog.show(getStage());
+                    setBlockInput(true);
                 } else if (a == btnNext) {
                     setUI(State.OBJECTS);
                 }
@@ -151,12 +155,18 @@ public class EditorScreen extends ScrollMap {
                     setUI(State.OBJECTS);
                 } else if (a == btnNext) {
                     if (Gamer.count < 2) {
-                        dialog = new Dialog("", manager.getSkin());
+                        dialog = new Dialog("", manager.getSkin()) {
+                            @Override
+                            protected void result(Object object) {
+                                setBlockInput(false);
+                            }
+                        };
                         dialog.text(manager.lng.get(Words.MIN_TWO_GAMERS_REQUIRED));
                         dialog.button(manager.lng.get(Words.OK));
                         dialog.key(Keys.ENTER, null);
                         dialog.key(Keys.ESCAPE, null);
                         dialog.show(getStage());
+                        setBlockInput(true);
                     } else {
                         setUI(State.FREE_UNITS);
                     }
@@ -169,9 +179,11 @@ public class EditorScreen extends ScrollMap {
                         @Override
                         protected void result(Object o) {
                             if (o != null) {
-                                MapUtils.saveMap(new EditGameMap(map, sprites));
+                                MapUtils.saveMap(new EditGameMap(map, name, sprites));
                                 dispose();
                                 manager.showMenu();
+                            } else {
+                                setBlockInput(false);
                             }
                         }
                     };
@@ -181,6 +193,7 @@ public class EditorScreen extends ScrollMap {
                     dialog.key(Keys.ENTER, this);
                     dialog.key(Keys.ESCAPE, null);
                     dialog.show(getStage());
+                    setBlockInput(true);
                 }
             }
         }

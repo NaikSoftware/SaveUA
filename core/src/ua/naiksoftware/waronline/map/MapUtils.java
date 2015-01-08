@@ -1,10 +1,6 @@
 package ua.naiksoftware.waronline.map;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-
-import ua.naiksoftware.waronline.res.ResKeeper;
-import ua.naiksoftware.waronline.res.id.AtlasId;
+import ua.naiksoftware.waronline.map.editor.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -17,24 +13,23 @@ import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
-import ua.naiksoftware.io.RleDataInput;
-import ua.naiksoftware.io.RleDataOutput;
+import com.badlogic.gdx.utils.DataInput;
+import com.badlogic.gdx.utils.DataOutput;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import ua.naiksoftware.waronline.game.Gamer;
+import ua.naiksoftware.waronline.game.ImpassableCells;
 import ua.naiksoftware.waronline.game.unit.Unit;
 import ua.naiksoftware.waronline.game.unit.UnitCode;
-import ua.naiksoftware.waronline.map.editor.EditGameMap;
-import ua.naiksoftware.waronline.map.editor.MapObjCodeID;
-import ua.naiksoftware.waronline.map.editor.MapUnit;
-import ua.naiksoftware.waronline.map.editor.TileCodeID;
-import ua.naiksoftware.waronline.map.editor.UnitCodeID;
-import ua.naiksoftware.waronline.game.ImpassableCells;
 import ua.naiksoftware.waronline.res.MapMetaData;
+import ua.naiksoftware.waronline.res.ResKeeper;
+import ua.naiksoftware.waronline.res.id.AtlasId;
+import java.util.zip.ZipInputStream;
 
 public class MapUtils {
 
-    public static final String MAP_W_PROP = "cellw";
-    public static final String MAP_H_PROP = "cellh";
-    public static final String CELL_SIZE_PROP = "cellsize";
     public static final String MAP_NAME_PROP = "mapname";
     public static final String MAX_GAMERS_PROP = "maxgamers";
 
@@ -48,15 +43,10 @@ public class MapUtils {
     private static TextureAtlas tileAtlas;
     private static final ArrayMap<TileCode, MapCell> cells = new ArrayMap<TileCode, MapCell>();
 
-    public static TiledMap genVoidMap(int w, int h, String name) {
+    public static TiledMap genVoidMap(int w, int h) {
         ImpassableCells.clear();
         tileAtlas = ResKeeper.get(AtlasId.MAP_TILES);
         TiledMap map = new TiledMap();
-        MapProperties mapProp = map.getProperties();
-        mapProp.put(MAP_W_PROP, w);
-        mapProp.put(MAP_H_PROP, h);
-        mapProp.put(MAP_NAME_PROP, name);
-        mapProp.put(CELL_SIZE_PROP, CELL_SIZE);
         MapLayers layers = map.getLayers();
         TiledMapTileLayer layerBg = new TiledMapTileLayer(w, h, CELL_SIZE,
                 CELL_SIZE);
@@ -84,9 +74,9 @@ public class MapUtils {
         boolean local = entry.isLocal();
         tileAtlas = ResKeeper.get(AtlasId.MAP_TILES);
         TiledMap map = new TiledMap();
-        MapProperties mapProp = map.getProperties();
         MapLayers layers = map.getLayers();
         TiledMapTileLayer layerBg;
+        String name = null;
         Array<Unit> units = new Array<Unit>();
         Array<MapObject> mapObjects = new Array<MapObject>();
         Array<Gamer> gamers = new Array<Gamer>();
@@ -101,17 +91,16 @@ public class MapUtils {
             throw new RuntimeException("Map " + path + " not found");
         }
 
-        RleDataInput data = new RleDataInput(fh.read());
         try {
+            ZipInputStream zis = new ZipInputStream(fh.read());
+            zis.getNextEntry();
+            DataInput data = new DataInput(zis);
             int r;
             // Header
-            mapProp.put(MAP_NAME_PROP, data.readUTF());
+            name = data.readUTF();
             data.readInt(); // ignore max gamers - get it from units info
             int mapW = data.readInt();
             int mapH = data.readInt();
-            mapProp.put(MAP_W_PROP, mapW);
-            mapProp.put(MAP_H_PROP, mapH);
-            mapProp.put(CELL_SIZE_PROP, CELL_SIZE);
             layerBg = new TiledMapTileLayer(mapW, mapH, CELL_SIZE, CELL_SIZE);
             layers.add(layerBg);
             // Units
@@ -145,11 +134,12 @@ public class MapUtils {
             }
             // TODO: set impassable cells
             data.close();
+            zis.close();
             cells.clear();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new GameMap(map, units, mapObjects, gamers);
+        return new GameMap(map, name, units, mapObjects, gamers);
     }
 
     private static Gamer findGamer(Array<Gamer> gamers, int id) {
@@ -388,15 +378,17 @@ public class MapUtils {
         FileHandle dir = Gdx.files.local(LOCAL_MAP_DIR);
         dir.mkdirs();
         FileHandle file = dir.child(String.valueOf(System.currentTimeMillis()));
-        RleDataOutput data = new RleDataOutput(file.write(false));
         TiledMap map = gameMap.getTiledMap();
-        MapProperties prop = map.getProperties();
-        int mapW = prop.get(MAP_W_PROP, Integer.class);
-        int mapH = prop.get(MAP_H_PROP, Integer.class);
+        TiledMapTileLayer layerBg = (TiledMapTileLayer) map.getLayers().get(0);
+        int mapW = (int) layerBg.getWidth();
+        int mapH = (int) layerBg.getHeight();
         int maxGamers = gameMap.maxGamers();
         try {
+            ZipOutputStream zos = new ZipOutputStream(file.write(false));
+            zos.putNextEntry(new ZipEntry("map"));
+            DataOutput data = new DataOutput(zos);
             // Header
-            data.writeUTF(prop.get(MAP_NAME_PROP, String.class));
+            data.writeUTF(gameMap.getName());
             data.writeInt(maxGamers);
             data.writeInt(mapW);
             data.writeInt(mapH);
@@ -421,7 +413,6 @@ public class MapUtils {
             }
             data.writeInt(DATA_DIVIDER);
             // Tiles
-            TiledMapTileLayer layerBg = (TiledMapTileLayer) map.getLayers().get(0);
             for (int i = 0; i < mapW; i++) {
                 for (int j = 0; j < mapH; j++) {
                     MapCell cell = (MapCell) layerBg.getCell(i, j);
@@ -445,6 +436,9 @@ public class MapUtils {
         String path;
         try {
             while ((path = reader.readLine()) != null) {
+                if (path.trim().equals("")) {
+                    continue;
+                }
                 maps.add(new MapEntry(path, false));
             }
         } catch (IOException e) {

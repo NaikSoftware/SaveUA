@@ -5,7 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 
 /**
@@ -34,9 +33,12 @@ public class WidgetList extends WidgetGroup {
         size = adapter.getCount();
         items = new Array<Actor>(size);
         Table t = new Table();
-        t.setBackground(style.background);
+        t.defaults().uniformX().fillX();
         for (int i = 0; i < size; i++) {
             Actor a = adapter.createItem(i);
+            if (style.background == null && a instanceof Table) {
+                style.background = ((Table) a).getBackground();
+            }
             t.add(a).row();
             items.add(a);
             a.addListener(selectedListener);
@@ -44,7 +46,7 @@ public class WidgetList extends WidgetGroup {
         scrollPane = new ScrollPane(t);
         scrollPane.pack();
         addActor(scrollPane);
-        selected = 0;
+        selected = last = 0;
     }
 
     /**
@@ -57,7 +59,7 @@ public class WidgetList extends WidgetGroup {
         if (size > 0) {
             Actor a = items.get(last), a2 = items.get(selected);
             if (a instanceof Table) {
-                ((Table) a).setBackground((Drawable) null);
+                ((Table) a).setBackground(style.background);
             } else {
                 a.setColor(style.fontColorUnselected);
             }
@@ -84,9 +86,8 @@ public class WidgetList extends WidgetGroup {
     private final ClickListener selectedListener = new ClickListener() {
         @Override
         public void clicked(InputEvent event, float x, float y) {
-            Widget w = (Widget) event.getTarget();
             last = selected;
-            selected = items.indexOf(w, true);
+            selected = items.indexOf(event.getListenerActor(), true);
             invalidate();
         }
     };

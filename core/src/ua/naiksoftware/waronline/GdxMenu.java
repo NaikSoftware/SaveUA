@@ -8,7 +8,6 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
@@ -191,6 +190,8 @@ public class GdxMenu implements Screen {
             };
 
             Table content = dialogSelectMap.getContentTable();
+            Label title = new Label(manager.lng.get(Words.SELECT_MAP), skin);
+            content.add(title).padBottom(40).row();
             content.add(levelList);
             dialogSelectMap.button(manager.lng.get(Words.BACK), null);
 
@@ -198,7 +199,7 @@ public class GdxMenu implements Screen {
         dialogSelectMap.show(stage);
     }
 
-    private class LevelAdapter implements WidgetList.WidgetAdapter<Label> {
+    private class LevelAdapter implements WidgetList.WidgetAdapter<Table> {
 
         private final Array<MapEntry> entries;
 
@@ -212,8 +213,19 @@ public class GdxMenu implements Screen {
         }
 
         @Override
-        public Label createItem(int n) {
-            return new Label(entries.get(n).getName(), manager.getSkin());
+        public Table createItem(int n) {
+            MapEntry e = entries.get(n);
+            Skin s = manager.getSkin();
+            Label name = new Label(e.getName(), s);
+            Label size = new Label(manager.lng.get(Words.SIZE) + " " + e.getW() + " x " + e.getH(), s);
+            Label maxGamers = new Label(manager.lng.get(Words.MAX_GAMERS) + " " + e.getMaxGamers(), s);
+            Table t = new Table();
+            t.pad(5, 40, 5, 40);
+            t.setBackground(s.getDrawable("default-pane"));
+            t.add(name).row();
+            t.add(size).row();
+            t.add(maxGamers).row();
+            return t;
         }
 
         MapEntry getEntry(int id) {

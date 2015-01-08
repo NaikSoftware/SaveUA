@@ -18,9 +18,11 @@ public class EditGameMap {
     private final Array<MapUnit> units = new Array<MapUnit>();
     private final Array<MapObject> objects = new Array<MapObject>();
     private final int maxGamers;
+    private final String name;
 
-    public EditGameMap(TiledMap tiledMap, Array<Sprite> sprites) {
+    public EditGameMap(TiledMap tiledMap, String name, Array<Sprite> sprites) {
         this.tiledMap = tiledMap;
+        this.name = name;
         Set<Integer> gamers = new HashSet<Integer>();
         for (Sprite s : sprites) {
             if (s instanceof MapUnit) {
@@ -38,6 +40,10 @@ public class EditGameMap {
 
     public TiledMap getTiledMap() {
         return tiledMap;
+    }
+    
+    public String getName() {
+        return name;
     }
 
     public Array<MapUnit> getUnits() {
