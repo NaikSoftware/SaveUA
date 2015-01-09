@@ -1,5 +1,6 @@
 package ua.naiksoftware.waronline;
 
+import ua.naiksoftware.libgdx.ui.HardInputProcessor;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 
@@ -56,7 +57,7 @@ public class SettingsScreen implements Screen {
         Skin skin = manager.getSkin();
         Lng lng = manager.lng;
         Table content = new Table();
-        content.setBackground(manager.getSkin().getDrawable("default-pane"));
+        content.setBackground(skin.getDrawable("default-pane"));
         content.defaults().pad(20).align(Align.center);
 
         Label labelSelMap = new Label(lng.get(Words.SELECT_MAP), skin);

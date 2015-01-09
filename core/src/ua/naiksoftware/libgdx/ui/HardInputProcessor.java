@@ -1,4 +1,4 @@
-package ua.naiksoftware.waronline;
+package ua.naiksoftware.libgdx.ui;
 
 import com.badlogic.gdx.InputProcessor;
 

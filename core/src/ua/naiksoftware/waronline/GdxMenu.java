@@ -1,5 +1,6 @@
 package ua.naiksoftware.waronline;
 
+import ua.naiksoftware.libgdx.ui.HardInputProcessor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 
 import com.badlogic.gdx.Gdx;

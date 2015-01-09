@@ -13,6 +13,13 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.content.SharedPreferences;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import com.badlogic.gdx.utils.Array;
+import java.util.ArrayList;
+import java.util.List;
+import ua.naiksoftware.waronline.map.MapEntry;
+import ua.naiksoftware.waronline.map.MapUtils;
 
 public class AndroidLauncher extends Activity {
 
@@ -25,6 +32,7 @@ public class AndroidLauncher extends Activity {
 
     private LayoutInflater inflater;
     private AlertDialog dialogNewMap;
+    private AlertDialog dialogEditMap;
 
     private CheckBox checkBoxGdxMenu;
 
@@ -65,6 +73,13 @@ public class AndroidLauncher extends Activity {
     public void onClickSettings(View v) {
         screen = SCREEN_SETTINGS;
         setContentView(R.layout.settings);
+        Spinner mapSpinner = (Spinner) findViewById(R.id.settingsSpinner_maps);
+        List<String> list = new ArrayList<String>();
+        for (MapEntry e : MapUtils.readMapList()){
+            list.add(e.toString());
+        }
+        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.spinner_simple_item, R.id.spinner_item_label, list);
+        mapSpinner.setAdapter(adapter);
         checkBoxGdxMenu = (CheckBox) findViewById(R.id.settingsCheckBox_gdx_menu);
         checkBoxGdxMenu.setChecked(prefs.getBoolean(Prefs.ANDROID_GDX_MENU, false));
         checkBoxGdxMenu.setOnCheckedChangeListener(checkListener);
@@ -74,8 +89,37 @@ public class AndroidLauncher extends Activity {
 
     }
 
-    public void onClickEditMap(View v) {
+    public void onClickEditMap(View view) {
+        if (dialogEditMap == null) {
+            final View v = inflater.inflate(R.layout.dialog_new_map, null);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setView(v);
+            v.findViewById(R.id.new_map_container).setVisibility(View.GONE);
+            builder.setNegativeButton(R.string.cancel, null);
+            builder.setPositiveButton(R.string.ok,
+                    new DialogInterface.OnClickListener() {
 
+                        @Override
+                        public void onClick(DialogInterface p1, int p2) {
+                            String name = ((TextView) v
+                            .findViewById(R.id.dialog_new_mapEditText_name))
+                            .getText().toString();
+                            if (name.isEmpty()) {
+                                Toast.makeText(AndroidLauncher.this,
+                                        "Дурак штоле?", Toast.LENGTH_SHORT)
+                                .show();
+                            } else {
+                                Intent i = new Intent(AndroidLauncher.this,
+                                        GdxLauncher.class);
+                                i.putExtra(GdxLauncher.MODE, GdxLauncher.EDIT);
+                                i.putExtra(GdxLauncher.MAP_NAME, name);
+                                startActivityForResult(i, 0);
+                            }
+                        }
+                    });
+            dialogEditMap = builder.create();
+        }
+        dialogEditMap.show();
     }
 
     public void onClickMakeMap(View view) {
@@ -95,12 +139,10 @@ public class AndroidLauncher extends Activity {
                             int w, h;
                             try {
                                 w = Integer.parseInt("0"
-                                        + ((TextView) v
-                                        .findViewById(R.id.dialog_new_mapEditText_w))
+                                        + ((TextView) v.findViewById(R.id.dialog_new_mapEditText_w))
                                         .getText().toString());
                                 h = Integer.parseInt("0"
-                                        + ((TextView) v
-                                        .findViewById(R.id.dialog_new_mapEditText_h))
+                                        + ((TextView) v.findViewById(R.id.dialog_new_mapEditText_h))
                                         .getText().toString());
                             } catch (NumberFormatException e) {
                                 w = h = 0;

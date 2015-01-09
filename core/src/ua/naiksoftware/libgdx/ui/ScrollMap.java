@@ -22,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import ua.naiksoftware.waronline.HardInputProcessor;
 
 /**
  * Экран, который содержит ScrollPane и предназначен для синхронизации координат
@@ -97,7 +96,7 @@ public abstract class ScrollMap implements Screen {
 
     @Override
     public void render(float deltaTime) {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         if (HAVE_BOARD) {
             processInput(deltaTime);
         }

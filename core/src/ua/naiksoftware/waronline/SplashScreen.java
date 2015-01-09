@@ -32,7 +32,6 @@ public class SplashScreen implements Screen {
 
     private Manager manager;
     private Stage stage;
-    private Texture logo;
     private Image logoImage;
     private Label label;
 
@@ -40,8 +39,7 @@ public class SplashScreen implements Screen {
         this.manager = manager;
         label = new Label("NaikSoftware © 2014", manager.getSkin());
         label.setColor(Color.YELLOW);
-        logo = ResKeeper.get(TextureId.LOGO);
-        logoImage = new Image(logo);
+        logoImage = new Image(ResKeeper.get(TextureId.LOGO));
 
         stage = new Stage(new ScreenViewport());
         stage.addActor(logoImage);

@@ -23,6 +23,7 @@ public class GdxLauncher extends AndroidApplication {
     public static final String MAP_W = "mapw";
     public static final String MAP_H = "maph";
     public static final String MAP_PATH = "mappath";
+    public static final String MAP_INTERNAL = "mapinternal";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class GdxLauncher extends AndroidApplication {
         int hMap = i.getIntExtra(MAP_H, 10);
         String mapName = i.getStringExtra(MAP_NAME);
         String pathToMap = i.getStringExtra(MAP_PATH);
-        boolean internalMap = true;
+        boolean internalMap = i.getBooleanExtra(MAP_INTERNAL, false);
 
         switch (i.getShortExtra(MODE, (short) 1)) {
             case SPLASH:
