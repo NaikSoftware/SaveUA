@@ -34,5 +34,6 @@
     
     <string name="size">Size</string>
     <string name="max_gamers">Maximum gamers</string>
+	<string name="count_gamers">Gamers count</string>
 		
 </resources>

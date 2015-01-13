@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.ArrayMap;
+import java.util.Random;
 
 /**
  * Менеджер ресурсов
@@ -16,6 +17,7 @@ import com.badlogic.gdx.utils.ArrayMap;
  */
 public class ResKeeper {
 
+    private static final Random RND = new Random();
     private static ArrayMap<TextureId, Texture> textures = new ArrayMap<TextureId, Texture>();
     private static ArrayMap<AtlasId, TextureAtlas> atlases = new ArrayMap<AtlasId, TextureAtlas>();
 
@@ -41,7 +43,7 @@ public class ResKeeper {
         String path = null;
         switch (id) {
             case BG:
-                path = "bg.jpg";
+                path = "bg0.jpg";
                 break;
             case LOGO:
                 path = "logo.png";

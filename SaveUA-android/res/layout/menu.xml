@@ -1,18 +1,16 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+       android:layout_width="fill_parent"
+       android:layout_height="fill_parent" >
 
     <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="centerCrop"
-        android:src="@drawable/bg"
-        android:contentDescription="@null" />
+        android:id="@+id/menu_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical" >
 
         <ImageView
@@ -22,34 +20,40 @@
             android:layout_weight="1"
             android:contentDescription="@string/app_name"
             android:scaleType="centerInside"
+            android:layout_gravity="center"
             android:src="@drawable/logo" />
 
         <ScrollView
             android:layout_width="fill_parent"
             android:layout_height="0px"
-            android:layout_weight="2" >
+            android:layout_weight="3"
+            android:fillViewport="true">
 
             <LinearLayout
+                android:id="@+id/menu_container"
                 android:layout_width="fill_parent"
-                android:layout_height="0px"
-                android:layout_margin="10dp"
+                android:layout_height="match_parent"
+                android:padding="10dp"
                 android:gravity="center"
                 android:orientation="vertical" >
 
                 <ua.naiksoftware.waronline.MyButton
+                    android:id="@+id/btn_pap"
                     style="@style/MenuButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:text="@string/pass_and_play"
-                    android:onClick="onClickPAP" />
+                    android:onClick="onClickStart" />
 
                 <ua.naiksoftware.waronline.MyButton
+                    android:id="@+id/btn_online"
                     style="@style/MenuButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="@string/play_online" />
+                    android:text="@string/play_online"
+                    android:onClick="onClickStart" />
 
                 <ua.naiksoftware.waronline.MyButton
                     style="@style/MenuButtonStyle"
@@ -63,7 +67,6 @@
                     style="@style/MenuButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
                     android:text="@string/about" />
             </LinearLayout>
         </ScrollView>

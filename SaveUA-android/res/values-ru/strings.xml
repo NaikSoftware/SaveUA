@@ -33,5 +33,6 @@
     
     <string name="size">Размер</string>
     <string name="max_gamers">Максимум игроков</string>
+	<string name="count_gamers">Количество игроков</string>
 	
 </resources>

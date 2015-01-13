@@ -33,5 +33,6 @@
 	
     <string name="size">Розмiр</string>
     <string name="max_gamers">Максимум гравцiв</string>
+	<string name="count_gamers">Кiлькiсть гравцiв</string>
     
 </resources>
