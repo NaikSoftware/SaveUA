@@ -2,6 +2,7 @@ package ua.naiksoftware.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -10,7 +11,7 @@ import android.widget.TextView;
  *
  * @author Naik
  */
-public class NumberPicker extends LinearLayout {
+public class NumberPicker extends LinearLayout implements View.OnClickListener {
 
     private Button btnPlus, btnMinus;
     private TextView twValue;
@@ -35,10 +36,15 @@ public class NumberPicker extends LinearLayout {
     private void init(Context c) {
         btnPlus = new Button(c);
         btnPlus.setText("+");
+        btnPlus.setOnClickListener(this);
+
         btnMinus = new Button(c);
         btnMinus.setText("-");
+        btnMinus.setOnClickListener(this);
+
         twValue = new TextView(c);
         twValue.setText(String.valueOf(value));
+
         setOrientation(HORIZONTAL);
         addView(btnPlus);
         addView(twValue);
@@ -47,16 +53,12 @@ public class NumberPicker extends LinearLayout {
 
     public void setMinValue(int m) {
         min = m;
-        if (value < min) {
-            setValue(min);
-        }
+        setValue(min);
     }
 
     public void setMaxValue(int m) {
         max = m;
-        if (value > max) {
-            setValue(max);
-        }
+        setValue(max);
     }
 
     public void setValue(int v) {
@@ -79,6 +81,18 @@ public class NumberPicker extends LinearLayout {
         } else {
             btnMinus.setEnabled(true);
         }
-        requestLayout();
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    @Override
+    public void onClick(View btn) {
+        if (btn == btnPlus) {
+            setValue(value + 1);
+        } else {
+            setValue(value - 1);
+        }
     }
 }

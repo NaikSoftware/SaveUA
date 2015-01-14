@@ -23,7 +23,7 @@ public class GdxLauncher extends AndroidApplication {
     public static final String MAP_W = "mapw";
     public static final String MAP_H = "maph";
     public static final String MAP_PATH = "mappath";
-    public static final String MAP_INTERNAL = "mapinternal";
+    public static final String MAP_LOCAL = "maplocal";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class GdxLauncher extends AndroidApplication {
         int hMap = i.getIntExtra(MAP_H, 10);
         String mapName = i.getStringExtra(MAP_NAME);
         String pathToMap = i.getStringExtra(MAP_PATH);
-        boolean internalMap = i.getBooleanExtra(MAP_INTERNAL, false);
+        boolean local = i.getBooleanExtra(MAP_LOCAL, false);
 
         switch (i.getShortExtra(MODE, (short) 1)) {
             case SPLASH:
@@ -49,7 +49,7 @@ public class GdxLauncher extends AndroidApplication {
                 break;
             case PLAY:
                 initialize(new AndroidManager(AndroidManager.LaunchMode.PLAY, lng,
-                        new MapEntry(pathToMap, internalMap)), config);
+                        new MapEntry(pathToMap, local)), config);
                 break;
             case EDIT:
                 if (pathToMap == null) {
@@ -57,7 +57,7 @@ public class GdxLauncher extends AndroidApplication {
                             lng, wMap, hMap, mapName), config);
                 } else {
                     initialize(new AndroidManager(AndroidManager.LaunchMode.MAP_EDITOR,
-                            lng, new MapEntry(pathToMap, internalMap), mapName), config);
+                            lng, new MapEntry(pathToMap, local), mapName), config);
                 }
                 break;
             case GDX_MENU:
