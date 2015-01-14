@@ -20,7 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
-            android:maxLength="15" />
+            android:maxLength="15"
+            android:singleLine="true"/>
 
         <!-- Create new map (not edit) specific container -->
         <LinearLayout
@@ -47,7 +48,8 @@
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"
+                    android:singleLine="true"/>
 
                 <ua.naiksoftware.waronline.MyTextView
                     android:layout_width="wrap_content"
@@ -60,7 +62,8 @@
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"
+                    android:singleLine="true"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

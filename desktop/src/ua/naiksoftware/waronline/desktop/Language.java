@@ -106,8 +106,8 @@ public class Language implements Lng {
     @Override
     public String get(Words key) {
         ObjectMap<Words, String> l;
-        String tag = Locale.getDefault().toLanguageTag().toUpperCase();
-        if (tag.contains("UA")) {
+        String tag = Locale.getDefault().getLanguage().toUpperCase();
+        if (tag.contains("UK")) {
             l = ua;
         } else if (tag.contains("RU")) {
             l = ru;

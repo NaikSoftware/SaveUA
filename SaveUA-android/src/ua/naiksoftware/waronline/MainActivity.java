@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,9 +24,10 @@ public class MainActivity extends Activity {
 
     private static final Random RND = new Random();
 
-    private boolean gdxInit;
+    private boolean gdxInit, blockMediaPause;
     private SharedPreferences prefs;
     private LayoutInflater inflater;
+    private MediaPlayer mediaPlayer;
 
     private AlertDialog dialogStartGame;
 
@@ -55,8 +57,23 @@ public class MainActivity extends Activity {
             finish();
         } else if (gdxInit) {
             dialogStartGame = null; // for update level list in dialog
+            if (mediaPlayer == null) {
+                mediaPlayer = MediaPlayer.create(this, R.raw.entwine_oblivion);
+                mediaPlayer.setVolume(0.1f, 0.1f);
+                mediaPlayer.setLooping(true);
+            }
+            mediaPlayer.start();
         }
         gdxInit = true;
+        blockMediaPause = false;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mediaPlayer != null && !blockMediaPause) {
+            mediaPlayer.pause();
+        }
     }
 
     public void onClickStart(View view) {
@@ -89,6 +106,12 @@ public class MainActivity extends Activity {
 
                         @Override
                         public void onClick(DialogInterface p1, int p2) {
+                            mediaPlayer.stop();
+                            mediaPlayer.release();
+                            mediaPlayer = null;
+                            MapEntry entry = maps.get(levels.getCheckedItemPosition());
+                            Toast.makeText(MainActivity.this, "Start game on map " + entry.getName(), Toast.LENGTH_SHORT).show();
+                            finish();
                             //Intent i = new Intent(this, GdxLauncher.class);
                             //startActivityForResult(i, 0);
                         }
@@ -100,7 +123,18 @@ public class MainActivity extends Activity {
     }
 
     public void onClickSettings(View v) {
+        blockMediaPause = true;
         Intent i = new Intent(this, SettingsActivity.class);
         startActivityForResult(i, 0);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+        super.onDestroy();
     }
 }
