@@ -18,9 +18,10 @@ void MainMenu::paintEvent(QPaintEvent *pe)
     QPainter paint(this);
     stretchedBg = pixmapBg.scaledToHeight(this->height());
     if (this->width() > stretchedBg.width()) {
-        stretchedBg = stretchedBg.scaled(this->width(), this->height());
+        stretchedBg = pixmapBg.scaledToWidth(this->width());
     }
-    paint.drawPixmap(this->width() / 2 - stretchedBg.width() / 2, 0, stretchedBg);
+    paint.drawPixmap(this->width() / 2 - stretchedBg.width() / 2,
+                     this->height() / 2 - stretchedBg.height() /2, stretchedBg);
     QWidget::paintEvent(pe);
 }
 
