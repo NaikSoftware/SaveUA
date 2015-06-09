@@ -1,8 +1,0 @@
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <api-11>
-        <!--item android:state_activated="true" android:color="@android:color/white"/-->
-    </api-11>
-    <item android:state_pressed="true" android:color="@android:color/darker_gray"/>
-    <item android:color="@android:color/black"/>
-
-</selector>
