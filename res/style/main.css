@@ -1,0 +1,14 @@
+#mainButtonsBlock QPushButton {
+    border-image: url(:/res/img/main/btn_bg_off.svg) 1;
+    padding: 7px;
+    border-radius: 7px;
+    color: white;
+}
+
+#mainButtonsBlock QPushButton:hover {
+    border-image: url(:/res/img/main/btn_bg_active.svg) 1;
+}
+
+#mainButtonsBlock QPushButton:pressed {
+    border-image: url(:/res/img/main/btn_bg_on.svg) 1;
+}

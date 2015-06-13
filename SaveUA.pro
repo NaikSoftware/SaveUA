@@ -6,6 +6,8 @@
 
 QT       += core gui
 
+CONFIG += c++11
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = SaveUA
@@ -13,11 +15,18 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainmenu.cpp
+        mainmenu.cpp \
+    test/testform.cpp \
+    shared/screeninfo.cpp
 
-HEADERS  += mainmenu.h
+HEADERS  += mainmenu.h \
+    test/testform.h \
+    shared/screeninfo.h
 
-FORMS    += mainmenu.ui
+FORMS    += mainmenu.ui \
+    test/testform.ui
 
 RESOURCES += \
-    images.qrc
+    images.qrc \
+    fonts.qrc \
+    styles.qrc

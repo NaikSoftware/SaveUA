@@ -1,5 +1,13 @@
 <RCC>
     <qresource prefix="/">
         <file>res/img/main/bg0.jpg</file>
+        <file>res/img/main/bg1.jpg</file>
+        <file>res/img/main/bg2.jpg</file>
+        <file>res/img/main/bg3.jpg</file>
+        <file>res/img/main/ic_launcher.png</file>
+        <file>res/img/main/logo.png</file>
+        <file>res/img/main/btn_bg_off.svg</file>
+        <file>res/img/main/btn_bg_active.svg</file>
+        <file>res/img/main/btn_bg_on.svg</file>
     </qresource>
 </RCC>

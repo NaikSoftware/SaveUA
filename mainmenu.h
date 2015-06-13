@@ -19,7 +19,7 @@ public:
 
 private:
     Ui::MainMenu *ui;
-    QPixmap pixmapBg;
+    QPixmap pixmapBg, pixLogo;
 };
 
 #endif // MAINMENU_H
