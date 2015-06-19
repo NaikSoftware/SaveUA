@@ -15,16 +15,23 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainmenu.cpp \
-    test/testform.cpp \
-    shared/screeninfo.cpp
+    shared/screeninfo.cpp \
+    game/gamewidget.cpp \
+    menu/menuwidget.cpp \
+    mainwindow.cpp \
+    shared/mainwindowwidget.cpp
 
-HEADERS  += mainmenu.h \
-    test/testform.h \
-    shared/screeninfo.h
+HEADERS  += \
+    shared/screeninfo.h \
+    game/gamewidget.h \
+    menu/menuwidget.h \
+    mainwindow.h \
+    shared/mainwindowwidget.h
 
-FORMS    += mainmenu.ui \
-    test/testform.ui
+FORMS    += \
+    game/gamewidget.ui \
+    menu/menuwidget.ui \
+    mainwindow.ui
 
 RESOURCES += \
     images.qrc \

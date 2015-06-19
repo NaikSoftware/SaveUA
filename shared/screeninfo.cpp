@@ -30,3 +30,11 @@ const int ScreenInfo::largeFontSize()
 {
     return mLargeFontSize;
 }
+
+const int ScreenInfo::width() {
+    return mW;
+}
+
+const int ScreenInfo::height() {
+    return mH;
+}

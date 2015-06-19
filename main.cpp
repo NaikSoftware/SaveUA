@@ -1,4 +1,4 @@
-#include "mainmenu.h"
+#include "mainwindow.h"
 #include <QApplication>
 #include <QFontDatabase>
 #include <QFile>
@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     QString style = QLatin1String(file.readAll());
     a.setStyleSheet(style);
 
-    MainMenu w;
+    MainWindow w;
     w.showMaximized();
     //w.showFullScreen();
 
